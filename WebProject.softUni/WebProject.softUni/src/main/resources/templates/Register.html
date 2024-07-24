@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Register</title>
+    <link rel="stylesheet" th:href="@{/css/register.css}"/>
+    <link
+            href="https://fonts.googleapis.com/css2?family=REM:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+            rel="stylesheet"
+    />
+</head>
+<body>
+<form id="form" th:object="${registerUserDto}" th:method="POST" th:action="@{/register}">
+    <label for="username">Username:</label>
+    <input type="text" name="username" id="username" th:field="*{username}" th:errorclass="is-invalid"/>
+    <small th:errors="*{username}" id="usernameError"
+           class=" bg-danger text-white rounded"></small>
+    <label for="password">Password:</label>
+    <input type="password" name="password" id="password" th:field="*{password}"
+           th:errorclass="is-invalid"/>
+    <small
+            th:errors="*{password}" id="passwordError"
+            class="invalid-feedback text-white form-text bg-danger rounded">
+        Invalid password</small>
+    <label for="email">Email:</label>
+    <input type="text" name="email" id="email" th:field="*{email}" th:errorclass="is-invalid"/>
+    <small
+            th:errors="*{email}" id="emailError"
+            class="invalid-feedback form-text bg-danger text-white rounded"
+    >Invalid email</small>
+    <label for="firstName">First name:</label>
+    <input type="text" name="firstName" id="firstName" th:field="*{firstName}"
+           th:errorclass="is-invalid"/>
+    <small
+            th:errors="*{firstName}" id="firstNameError"
+            class=" bg-danger text-white rounded"
+    >Invalid first name</small>
+    <label for="lastName">Last name:</label>
+    <input type="text" name="lastName" id="lastName" th:field="*{lastName}" th:errorclass="is-invalid"/>
+    <small
+            th:errors="*{lastName}" id="lastNameError"
+            class=" bg-danger text-white rounded"
+    >Invalid last name</small>
+    <button type="submit">Register</button>
+</form>
+</body>
+</html>

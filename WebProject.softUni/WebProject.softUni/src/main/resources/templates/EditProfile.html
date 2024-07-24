@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="/css/EditProfile.css"/>
+    <link
+            href="https://fonts.googleapis.com/css2?family=REM:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+            rel="stylesheet"
+    />
+    <title>Edit profile</title>
+</head>
+<body>
+<div th:replace="Fragments/Navbar"></div>
+<form id="form" th:action="@{/editProfile}" th:object="${profileData}" th:method="post">
+    <label for="profile">Profile picture:</label>
+    <input type="file" name="profile" id="profile" th:field="*{profilePicUrl}"/>
+    <label for="username">Username:</label>
+    <input type="text" name="username" id="username" th:field="*{username}"/>
+    <label for="FirstName">First name:</label>
+    <input type="text" name="FirstName" id="FirstName" th:field="*{firstName}"/>
+    <label for="LastName">Last name:</label>
+    <input type="text" name="LastName" id="LastName" th:field="*{lastName}"/>
+    <label for="Bio">Bio:</label>
+    <textarea name="Bio" rows="6" cols="35" id="Bio" th:field="*{bio}"></textarea>
+    <button type="submit">Update profile</button>
+</form>
+</body>
+</html>

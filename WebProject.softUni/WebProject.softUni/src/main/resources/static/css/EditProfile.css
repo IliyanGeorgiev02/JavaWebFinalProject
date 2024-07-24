@@ -1,0 +1,80 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+#form {
+  margin-top: 100px;
+  border: 5px solid black;
+  background-color: #d3d3d3;
+  border-radius: 20px;
+  width: 400px;
+  height: 690px;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  padding: 15px;
+  margin-bottom:20px;
+}
+#form > input {
+  font-size: large;
+}
+body {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  font-size: large;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  margin: 0;
+  padding: 0;
+  font-family: REM;
+  background-color: #000000;
+  background-image: linear-gradient(147deg, #000000 0%, #2c3e50 74%);
+}
+#form > * {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+#form > input {
+  padding: 15px;
+  width: 250px;
+  border: black 2px solid;
+  border-radius: 20px;
+  margin-bottom: 30px;
+}
+#form > label {
+  text-align: center;
+  color:black;
+}
+#form > button {
+  border: 2px solid black;
+  padding: 10px 20px 10px 20px;
+  border-radius: 30px;
+  margin: 20px;
+  font-size: 20px;
+  display:block;
+  margin-left:auto;
+  margin-right:auto;
+}
+button {
+  background-color: dimgrey;
+  color: white;
+  padding: 12px;
+  border-radius: 20px;
+  border: none;
+  font-family: REM;
+}
+button:hover {
+  cursor: pointer;
+}
+textarea {
+  padding: 15px;
+  width: 250px;
+  border: black 2px solid;
+  border-radius: 20px;
+  margin-bottom: 30px;
+  font-size: larger;
+}

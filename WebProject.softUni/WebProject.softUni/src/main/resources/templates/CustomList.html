@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="CustomList.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=REM:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <title>Custom list</title>
+  </head>
+  <body>
+  <div th:replace="Fragments/Navbar"></div>
+  <h1 id="listTitle">List title</h1>
+    <div id="listDescription">
+      <p name="listDescription">List of movies I like</p>
+    </div>
+    <div id="mainBody">
+      <div id="movieRow">
+        <div id="movie">
+          <img
+            src="C:\Users\User\Desktop\WebProject.softUni\WebProject.softUni\src\main\resources\static\drive.jpg"
+            alt="movie poster"
+          />
+          <h3>Title</h3>
+          <h3>100/100</h3>
+        </div>
+        <div id="movie">
+          <img
+            src="C:\Users\User\Desktop\WebProject.softUni\WebProject.softUni\src\main\resources\static\drive.jpg"
+            alt="movie poster"
+          />
+          <h3>Title</h3>
+          <h3>100/100</h3>
+        </div>
+        <div id="movie">
+          <img
+            src="C:\Users\User\Desktop\WebProject.softUni\WebProject.softUni\src\main\resources\static\drive.jpg"
+            alt="movie poster"
+          />
+          <h3>Title</h3>
+          <h3>100/100</h3>
+        </div>
+        <div id="movie">
+          <img
+            src="C:\Users\User\Desktop\WebProject.softUni\WebProject.softUni\src\main\resources\static\drive.jpg"
+            alt="movie poster"
+          />
+          <h3>Title</h3>
+          <h3>100/100</h3>
+        </div>
+      </div>
+    </div>
+    <div id="addComment">
+      <p>Username</p>
+      <input type="text" placeholder="add a comment" />
+      <button>Add comment</button>
+    </div>
+    <div id="comments">
+      <div id="comment">
+        username <br />
+        <p>This is my comment</p>
+      </div>
+    </div>
+  </body>
+</html>

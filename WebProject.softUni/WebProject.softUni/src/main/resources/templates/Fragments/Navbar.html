@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="/css/Navbar.css"/>
+    <link
+            href="https://fonts.googleapis.com/css2?family=REM:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+            rel="stylesheet"
+    />
+    <title>Navbar</title>
+</head>
+<body>
+<header>
+    <div id="mainContent">
+        <a th:href="home" id="logo">
+            <img src="/images/logo-no-background.png" alt="logo"/>
+        </a>
+        <ul>
+            <li th:text="#{nav_bar_movies}">movies</li>
+            <a th:href="Reviews">
+                <li th:text="#{nav_bar_reviews}">reviews</li>
+            </a>
+            <a th:href="Lists">
+                <li th:text="#{nav_bar_lists}">lists</li>
+            </a>
+        </ul>
+        <form th:action="@{/search}" th:method="POST" th:object="${movieSearchDto}"
+        >
+            <div id="Search">
+                <input type="text" placeholder="Search" th:field="*{title}"/>
+            </div>
+            <button th:text="#{nav_bar_search}" type="submit">Search</button>
+        </form>
+        <a th:href="AddReview">
+            <button th:text="#{nav_bar_add_review}"> Add review</button>
+        </a>
+        <a th:href="editProfile">
+            <button th:text="#{nav_bar_edit_profile}">Edit Profile</button>
+        </a>
+        <a th:href="User">
+            <button th:text="#{nav_bar_view_profile}">View Profile</button>
+        </a>
+        <form
+                th:method="POST"
+                th:action="@{/logout}"
+        >
+            <button id="logout" th:text="#{nav_bar_logout}">Logout</button>
+        </form>
+        <form th:method="get">
+            <select
+                    id="lang"
+                    name="lang"
+                    onchange="this.form.submit()">
+                <option value="en_US" th:selected="${#locale.toString()} == 'en_US'">English</option>
+                <option value="bg_BG" th:selected="${#locale.toString()} == 'bg_BG'">Български</option>
+            </select>
+        </form>
+
+    </div>
+</header>
+</body>
+</html>

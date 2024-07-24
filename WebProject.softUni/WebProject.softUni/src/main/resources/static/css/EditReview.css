@@ -1,0 +1,76 @@
+body {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  font-size: large;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  margin: 0;
+  padding: 0;
+  font-family: REM;
+  background-color: #000000;
+  background-image: linear-gradient(147deg, #000000 0%, #2c3e50 74%);
+}
+form {
+  margin-top: 100px;
+  border: 5px solid black;
+  background-color: #d3d3d3;
+  border-radius: 20px;
+  width: 700px;
+  height: 800px;
+  padding: 15px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  margin-bottom: 50px;
+}
+form > input {
+  padding: 15px;
+  width: 400px;
+  border: black 2px solid;
+  border-radius: 20px;
+  margin-bottom: 30px;
+  font-size: large;
+}
+form > label {
+  text-align: center;
+}
+form > * {
+  margin: 10px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+textarea {
+  padding: 15px;
+  width: 500px;
+  border: black 2px solid;
+  border-radius: 20px;
+  margin-bottom: 30px;
+  font-size: large;
+}
+#updateReview {
+  border: 2px solid black;
+  padding: 10px 20px 10px 20px;
+  border-radius: 30px;
+  margin: 10px;
+  font-size: 20px;
+  color: white;
+  cursor: pointer;
+  background-color: dimgrey;
+  padding: 12px;
+  font-family: REM;
+  text-align: center;
+}
+#formButtonDiv {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+textarea {
+  font-family: REM;
+  font-size: large;
+}

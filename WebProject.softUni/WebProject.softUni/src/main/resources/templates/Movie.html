@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="/css/movie.css"/>
+    <link
+            href="https://fonts.googleapis.com/css2?family=REM:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+            rel="stylesheet"
+    />
+    <title>Movie</title>
+</head>
+<body>
+<div th:replace="Fragments/Navbar"></div>
+<div id="mainInfo">
+    <div id="poster">
+        <img
+                src="https://m.media-amazon.com/images/M/MV5BZjY5ZjQyMjMtMmEwOC00Nzc2LTllYTItMmU2MzJjNTg1NjY0XkEyXkFqcGdeQXVyNjQ1MTMzMDQ@._V1_SX300.jpg"
+                alt="Movie poster"
+        />
+    </div>
+    <div id="movieContents">
+        <h1 id="title">Drive</h1>
+        <h2>Director: Nicolas Winding-Refn</h2>
+        <h3>Genre: Action, Drama</h3>
+        <h3 id="releaseDate">Release date: 2011</h3>
+        <h3 id="runtime">Runtime: 100 minutes</h3>
+        <h3 id="description">
+            Description:
+            <br/>
+            A mysterious Hollywood action film stuntman gets in trouble with
+            gangsters when he tries to help his neighbor's husband rob a pawn shop
+            while serving as his getaway driver.
+        </h3>
+        <ul>
+            <h2>Cast:</h2>
+            <li>Ryan Gosling</li>
+            <li>Bryan Cranston</li>
+            <li>Carey Mulligan</li>
+        </ul>
+    </div>
+</div>
+<h1>User reviews:</h1>
+<div id="reviews">
+    <div id="review">
+        <div class="review">
+            <h1>"Gud muvi"<span> by: username</span></h1>
+            <div id="reviewText">
+                This muvi gud 10/10. Im literally Ryan Gosling
+            </div>
+            <div id="rating">90/100</div>
+            <div id="reviewButtons">
+                <button class="image-button">
+                    <img
+                            src="C:\Users\User\Desktop\WebProject.softUni\WebProject.softUni\src\main\resources\static\like.png"
+                            alt="Button Image"
+                            class="button-image"
+                    />
+                    Button Text
+                </button>
+                <button class="image-button">
+                    <img
+                            src="C:\Users\User\Desktop\WebProject.softUni\WebProject.softUni\src\main\resources\static\dislike.png"
+                            alt="Button Image"
+                            class="button-image"
+                    />
+                    Button Text
+                </button>
+            </div>
+        </div>
+    </div>
+    <div id="viewBtn">
+        <button id="viewMore">View more</button>
+    </div>
+</div>
+</body>
+</html>

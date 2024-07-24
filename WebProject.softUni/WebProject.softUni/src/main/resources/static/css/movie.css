@@ -1,0 +1,130 @@
+#poster > img {
+  border: 2px solid black;
+  border-radius: 10px;
+  margin-left: 5%;
+  margin-top: 5%;
+  height:inherit;
+  width:inherit;
+}
+body {
+  margin: 0;
+  padding: 0;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  font-family: REM;
+  color: white;
+  background-color: #000000;
+  background-image: linear-gradient(147deg, #000000 0%, #2c3e50 74%);
+}
+#mainInfo {
+  border: 2px solid black;
+  border-radius: 15px;
+  background-color: dimgray;
+  width: 90%;
+  display: flex;
+  align-items: start;
+  justify-content: space-around;
+}
+
+#mainInfo > * {
+  margin: 20px;
+}
+.review {
+  border: 2px solid black;
+  border-radius: 20px;
+  padding-left: 10px;
+  padding-right: 10px;
+  background-color: dimgray;
+  width: 60%;
+  display:block;
+  margin-left:auto;
+  margin-right:auto;
+}
+.review > h1 {
+  border: 2px solid black;
+  border-radius: 20px;
+  padding: 5px;
+  margin-bottom: 0;
+  width: 500px;
+}
+
+#reviewText {
+text-align:left;
+  margin-top: 3px;
+  border: 2px solid black;
+  border-radius: 20px;
+  padding: 10px;
+  height: 300px;
+}
+#movieContents>ul {
+  list-style: none;
+  display: flex;
+  flex-direction:column;
+   margin: 0;
+    padding: 0;
+}
+#reviewButtons {
+  display: flex;
+  flex-direction: row;
+}
+.image-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  border: 2px solid black;
+  border-radius: 10px;
+  background-color: dimgray;
+  margin: 10px;
+  color: white;
+  gap: 8px;
+}
+
+.button-image {
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+}
+#viewMore {
+  padding: 20px;
+  border: 2px solid black;
+  border-radius: 20px;
+  background-color: dimgray;
+  margin: 10px;
+  font-size: large;
+  color: white;
+}
+button:hover {
+  cursor: pointer;
+}
+#viewBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#reviews > h1 {
+  text-align: left;
+  width: 90%;
+}
+#rating {
+  border: 2px solid black;
+  border-radius: 10px;
+  background-color: DarkGoldenRod;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 5%;
+  padding: 8px;
+  margin: 10px;
+}
+#reviews {
+  width: 90%;
+}
+#movieContents{
+text-align:left;
+}

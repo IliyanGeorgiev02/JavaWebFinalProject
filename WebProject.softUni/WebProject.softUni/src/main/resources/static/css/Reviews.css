@@ -1,0 +1,100 @@
+body {
+  text-align: center;
+  color: white;
+  font-size: large;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  margin: 0;
+  text-decoration: none;
+  padding: 0;
+  font-family: REM;
+  background-color: #000000;
+  background-image: linear-gradient(147deg, #000000 0%, #2c3e50 74%);
+}
+.review {
+  border: 2px solid black;
+  border-radius: 20px;
+  padding: 10px;
+  background-color: gray;
+  width: 40%;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 20px;
+}
+#reviewText {
+  text-align: left;
+  margin-top: 3px;
+  border: 2px solid black;
+  border-radius: 20px;
+  padding: 10px;
+  height: 300px;
+}
+#reviewButtons {
+  display: flex;
+  flex-direction: row;
+}
+.image-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  border: 2px solid black;
+  border-radius: 10px;
+  background-color: dimgray;
+  margin: 10px;
+  color: white;
+  gap: 8px;
+}
+
+.button-image {
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+}
+#rating {
+  border: 2px solid black;
+  border-radius: 10px;
+  background-color: DarkGoldenRod;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  padding: 8px;
+  margin: 10px;
+}
+#user {
+  padding-left: 10px;
+  display: flex;
+  justify-content: start;
+  align-items: start;
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+a {
+  text-decoration: none;
+  color: white;
+  font-family: REM;
+  font-size: large;
+}
+#reviews {
+  display: flex;
+  flex-direction: column;
+}
+#textContent {
+  font-size: large;
+  color: white;
+  border: 2px solid black;
+  border-radius: 20px;
+  padding: 10px;
+  margin-bottom: 0;
+  width: 500px;
+  text-align: left;
+}
+a:hover {
+  text-decoration: underline;
+}
+button:hover {
+  cursor: pointer;
+}

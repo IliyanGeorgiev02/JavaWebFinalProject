@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="/css/index.css"/>
+    <link
+            href="https://fonts.googleapis.com/css2?family=REM:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+            rel="stylesheet"
+    />
+    <title>Home</title>
+</head>
+<body>
+<div id="contents">
+    <img
+            id="logo"
+            src="/images/logo-no-background.png"
+            alt="logo image"
+    />
+    <h1>
+        Welcome to the largest social media platform for film enthusiasts in the
+        world
+    </h1>
+    <div id="buttonGroup">
+        <a th:href="login"><button>Login</button></a>
+        <a th:href="register"><button>Register</button></a>
+    </div>
+</div>
+</body>
+</html>

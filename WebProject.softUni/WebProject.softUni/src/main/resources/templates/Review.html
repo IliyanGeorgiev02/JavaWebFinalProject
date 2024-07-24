@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="/css/Review.css"/>
+    <link
+            href="https://fonts.googleapis.com/css2?family=REM:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+            rel="stylesheet"
+    />
+    <title>Review</title>
+</head>
+<body>
+<div th:replace="Fragments/Navbar"></div>
+<div id="review">
+    <div class="review">
+        <h1>"Gud muvi"<span> by: username</span></h1>
+        <div id="reviewText">
+            This muvi gud 10/10. Im literally Ryan Gosling
+        </div>
+        <div id="rating">90/100</div>
+        <div id="reviewButtons">
+            <button class="image-button">
+                <img
+                        src="C:\Users\User\Desktop\WebProject.softUni\WebProject.softUni\src\main\resources\static\like.png"
+                        alt="Button Image"
+                        class="button-image"
+                />
+                Button Text
+            </button>
+            <button class="image-button">
+                <img
+                        src="C:\Users\User\Desktop\WebProject.softUni\WebProject.softUni\src\main\resources\static\dislike.png"
+                        alt="Button Image"
+                        class="button-image"
+                />
+                Button Text
+            </button>
+        </div>
+    </div>
+</div>
+<div id="comments">
+    <div id="comment">
+        <div id="user">username</div>
+        <br/>
+        <p>This is my comment</p>
+        <div id="reviewButtons">
+            <button class="image-button">
+                <img
+                        src="src/main/resources/static/images/like.png"
+                        alt="Button Image"
+                        class="button-image"
+                />
+                Button Text
+            </button>
+            <button class="image-button">
+                <img
+                        src="src/main/resources/static/images/dislike.png"
+                        alt="Button Image"
+                        class="button-image"
+                />
+                Button Text
+            </button>
+        </div>
+    </div>
+    <button id="viewMoreComments">View more comments</button>
+</div>
+</body>
+</html>

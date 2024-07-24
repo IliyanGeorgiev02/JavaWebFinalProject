@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="/css/ListOfMovies.css"/>
+    <link
+            href="https://fonts.googleapis.com/css2?family=REM:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+            rel="stylesheet"
+    />
+    <title>ListOfMovies</title>
+</head>
+<body>
+<div th:replace="Fragments/Navbar"></div>
+<div id="mainBody">
+    <div class="movieList" th:each="movie : ${result.search}">
+        <form th:action="/addReview" th:object="${movieData}" th:method="post">
+            <div id="movie">
+                <img th:src="${movie.poster}" alt="movie poster"/>
+                <h3 th:text="${movie.title}"></h3>
+                <h3 th:text="${movie.year}"></h3>
+                <a th:href="@{AddReview}">
+                    <button id="addReviewBtn" type="submit">Add review</button>
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

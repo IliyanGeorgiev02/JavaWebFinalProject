@@ -1,0 +1,250 @@
+body {
+  font-size: large;
+  margin: 0;
+  padding: 0;
+  font-family: REM;
+  background-color: #000000;
+  background-image: linear-gradient(147deg, #000000 0%, #2c3e50 74%);
+}
+.movieList {
+  display: flex;
+  text-align: center;
+  justify-content: space-evenly;
+  flex-direction: row;
+  align-items: center;
+}
+#movie > img {
+  border: 2px solid black;
+  border-radius: 10px;
+}
+#movie {
+  text-align: center;
+  border: 2px solid black;
+  border-radius: 10px;
+  padding: 30px;
+  gap: 10px;
+  position: relative;
+  top: 0;
+  transition: top ease 0.5s;
+  background-color: dimgray;
+}
+#movie:hover {
+  top: -10px;
+  cursor: pointer;
+}
+.listBox > img {
+  width: 100px;
+  height: 200px;
+  border: 2px solid black;
+  border-radius: 10px;
+}
+.listBox {
+  border: 2px solid black;
+  border-radius: 15px;
+  padding: 20px 70px 20px 70px;
+  background-color: dimgray;
+}
+#trendingLists {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+#listContent > button {
+  background-color: dimgrey;
+  color: white;
+  padding: 10px;
+  border-radius: 20px;
+  font-family: REM;
+  border: 2px solid black;
+  padding: 10px 20px 10px 20px;
+  cursor: pointer;
+  font-size: medium;
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+  align-items: center;
+  justify-content: center;
+}
+#listContent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+#pageContents {
+  width: 80%;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+hr {
+  margin-bottom: 15px;
+}
+.review {
+  border: 2px solid black;
+  border-radius: 20px;
+  width: 65%;
+  background-color: dimgray;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 20px;
+}
+#reviewTextContent > h1 {
+  border: 2px solid black;
+  border-radius: 20px;
+  margin-bottom: 5px;
+  padding: 15px;
+  width: 100%;
+  background-color: Gray;
+}
+
+#reviewText {
+  border: 2px solid black;
+  border-radius: 20px;
+  margin-top: 5px;
+  background-color: Gray;
+  font-size: large;
+  width: 100%;
+  min-height: 300px;
+  box-sizing: border-box;
+  font-family: REM;
+  font-size: large;
+  margin-bottom: 10px;
+  padding: 10px;
+}
+#reviews > h1 {
+  text-align: left;
+  left: 5%;
+}
+#rating {
+  border: 2px solid black;
+  border-radius: 10px;
+  background-color: DarkGoldenRod;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 15%;
+  margin-top: 10px;
+  padding: 15px;
+}
+.button-image {
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+}
+.image-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  border: 2px solid black;
+  border-radius: 10px;
+  background-color: dimgray;
+  margin: 10px;
+  color: white;
+  cursor: pointer;
+  gap: 8px;
+}
+#reviewMoviePoster {
+  border: 2px solid black;
+  border-radius: 10px;
+  width: 270px;
+  height: 370px;
+}
+#reviewTopContent {
+  display: flex;
+  flex-direction: row;
+  margin-left: 60px;
+  gap: 20px;
+  align-items: center;
+}
+#reviewTextContent > * {
+  width: 120%;
+}
+#reviews {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#viewMore {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: dimgrey;
+  color: white;
+  border-radius: 20px;
+  font-family: REM;
+  border: 2px solid black;
+  padding: 10px 20px 10px 20px;
+  cursor: pointer;
+  font-size: medium;
+  margin-top: 20px;
+}
+#comment {
+  border: 2px solid black;
+  background-color: Gray;
+  border-radius: 20px;
+  padding: 5px;
+}
+#comment > p {
+  border: 2px solid black;
+  border-radius: 20px;
+  padding: 10px;
+}
+#article {
+  border: 2px solid black;
+  background-color: dimgray;
+  border-radius: 20px;
+  width: 50%;
+}
+#article > h1 {
+  border: 2px solid black;
+  border-radius: 20px;
+  margin-bottom: 5px;
+  padding: 5px;
+  width: 70%;
+  background-color: Gray;
+  margin: 20px;
+}
+#news {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+h1 {
+  color: white;
+}
+#poster {
+  display: flex;
+  flex-direction: column;
+}
+#reviewButtons {
+  display: flex;
+  flex-direction: row;
+}
+#viewMoreComments {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: dimgrey;
+  color: white;
+  border-radius: 20px;
+  font-family: REM;
+  border: 2px solid black;
+  padding: 10px 20px 10px 20px;
+  cursor: pointer;
+  font-size: medium;
+  margin-top: 20px;
+}
+#user {
+  padding-left: 10px;
+  display: flex;
+  justify-content: start;
+  align-items: start;
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
