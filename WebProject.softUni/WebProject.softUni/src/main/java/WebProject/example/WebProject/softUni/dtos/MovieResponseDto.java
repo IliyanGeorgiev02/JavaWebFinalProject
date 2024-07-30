@@ -2,7 +2,9 @@ package WebProject.example.WebProject.softUni.dtos;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class MovieResponseDto {
+import java.io.Serializable;
+
+public class MovieResponseDto implements Serializable {
     @JsonProperty("Title")
     private String title;
 

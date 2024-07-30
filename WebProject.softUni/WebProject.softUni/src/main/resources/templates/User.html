@@ -25,81 +25,26 @@
     <div id="data">
         <h1 id="username" th:text="${profileData.username}"></h1>
         <h1 id="names" th:text="${profileData.firstName}  + ' ' + ${profileData.lastName}"></h1>
-        <h3 id="bio" th:text="${profileData.bio}">I am guy that likes movies</h3>
+        <h3 id="bio" th:text="${profileData.bio}"></h3>
         <div class="movieLists"></div>
-        <h3>Favourite movies</h3>
-        <span>
-          <div class="listContents">
+        <div class="movieList">
+            <h3>Lists</h3>
+            <span th:each="list : ${listsData}">
+            <h3 th:text="${list.title}"></h3>
+            <h3 th:text="${list.description}"></h3>
+          <div class="listContents" th:each="movie : ${list.movies}">
             <img
-                    src="C:\Users\User\Desktop\WebProject.softUni\WebProject.softUni\src\main\resources\static\drive.jpg"
+                    th:src="${movie.poster}"
                     alt="Movie poster"
             />
-            <h5>Drive</h5>
-          </div>
-          <div class="listContents">
-            <img
-                    src="C:\Users\User\Desktop\WebProject.softUni\WebProject.softUni\src\main\resources\static\drive.jpg"
-                    alt="Movie poster"
-            />
-            <h5>Drive</h5>
-          </div>
-          <div class="listContents">
-            <img
-                    src="C:\Users\User\Desktop\WebProject.softUni\WebProject.softUni\src\main\resources\static\drive.jpg"
-                    alt="Movie poster"
-            />
-            <h5>Drive</h5>
-          </div>
-          <div class="listContents">
-            <img
-                    src="C:\Users\User\Desktop\WebProject.softUni\WebProject.softUni\src\main\resources\static\drive.jpg"
-                    alt="Movie poster"
-            />
-            <h5>Drive</h5>
+            <h5 th:text="${movie.title}">Drive</h5>
           </div>
         </span>
-        <hr/>
+            <button class="viewAll">View all</button>
+            <hr/>
+        </div>
         <div class="movieList"></div>
         <h3>Recently reviewed</h3>
-        <span>
-          <div class="listContents">
-            <img
-                    src="C:\Users\User\Desktop\WebProject.softUni\WebProject.softUni\src\main\resources\static\drive.jpg"
-                    alt="Movie poster"
-            />
-            <h5>Drive</h5>
-            <h5>10/10</h5>
-          </div>
-
-          <div class="listContents">
-            <img
-                    src="C:\Users\User\Desktop\WebProject.softUni\WebProject.softUni\src\main\resources\static\drive.jpg"
-                    alt="Movie poster"
-            />
-            <h5>Drive</h5>
-            <h5>10/10</h5>
-          </div>
-          <div class="listContents">
-            <img
-                    src="C:\Users\User\Desktop\WebProject.softUni\WebProject.softUni\src\main\resources\static\drive.jpg"
-                    alt="Movie poster"
-            />
-            <h5>Drive</h5>
-            <h5>10/10</h5>
-          </div>
-          <div class="listContents">
-            <img
-                    src="C:\Users\User\Desktop\WebProject.softUni\WebProject.softUni\src\main\resources\static\drive.jpg"
-                    alt="Movie poster"
-            />
-            <h5>Drive</h5>
-            <h5>10/10</h5>
-          </div>
-        </span>
-        <button class="viewAll">View all</button>
-        <hr/>
-        <div class="movieList"></div>
-        <h3>Watchlist</h3>
         <span>
           <div class="listContents">
             <img

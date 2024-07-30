@@ -7,17 +7,13 @@ import WebProject.example.WebProject.softUni.services.UserHelperService;
 import WebProject.example.WebProject.softUni.services.UserService;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.logging.Logger;
 
 @Controller()
 public class UserController {
@@ -76,6 +72,7 @@ public class UserController {
     @GetMapping("/User")
     public String getUserProfile(Model model) {
         model.addAttribute("profileData", userService.getProfileData());
+        model.addAttribute("listsData", this.userService.getAllLists(this.userHelperService.getUser()));
         return "User";
     }
 

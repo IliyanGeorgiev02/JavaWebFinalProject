@@ -8,10 +8,14 @@ import java.util.List;
 @Entity
 @Table(name = "lists")
 public class CustomList extends BaseEntity {
+    @Column(unique = true)
     private String title;
     private String description;
     private int likes;
-    @ManyToMany
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "lists_movies",joinColumns = @JoinColumn(name = "list_id",referencedColumnName = "id"),
     inverseJoinColumns = @JoinColumn(name = "movie_id",referencedColumnName = "id"))
     private List<Movie> movies;
@@ -21,6 +25,14 @@ public class CustomList extends BaseEntity {
     public CustomList() {
         this.movies=new ArrayList<>();
         this.comments=new ArrayList<>();
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public int getLikes() {
@@ -61,5 +73,17 @@ public class CustomList extends BaseEntity {
 
     public void setComments(List<Comment> comments) {
         this.comments = comments;
+    }
+
+    @Override
+    public String toString() {
+        return "CustomList{" +
+                "title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", likes=" + likes +
+                ", user=" + user +
+                ", movies=" + movies +
+                ", comments=" + comments +
+                '}';
     }
 }

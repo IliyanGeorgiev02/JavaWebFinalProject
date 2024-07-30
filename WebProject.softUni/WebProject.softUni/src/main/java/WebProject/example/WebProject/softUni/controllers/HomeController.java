@@ -15,8 +15,5 @@ public class HomeController {
         return "Reviews";
     }
 
-    @GetMapping("/Lists")
-    public String getLists() {
-        return "Lists";
-    }
+
 }

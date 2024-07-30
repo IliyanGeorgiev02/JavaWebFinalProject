@@ -2,9 +2,10 @@ package WebProject.example.WebProject.softUni.dtos;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class OMDBSearchResponseDto {
+public class OMDBSearchResponseDto implements Serializable {
     @JsonProperty("Search")
     private List<MovieResponseDto> search;
 

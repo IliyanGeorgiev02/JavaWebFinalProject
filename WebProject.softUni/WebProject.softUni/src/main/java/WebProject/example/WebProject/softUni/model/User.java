@@ -27,13 +27,24 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private UserRoleEnum role;
     @OneToMany(mappedBy = "user")
+    private List<CustomList> lists;
+    @OneToMany(mappedBy = "user")
     private List<Comment> comments;
     @OneToMany(mappedBy = "user")
     private List<Review> reviews;
 
     public User() {
+        this.lists=new ArrayList<>();
         this.comments = new ArrayList<>();
         this.reviews = new ArrayList<>();
+    }
+
+    public List<CustomList> getLists() {
+        return lists;
+    }
+
+    public void setLists(List<CustomList> lists) {
+        this.lists = lists;
     }
 
     public UserRoleEnum getRole() {

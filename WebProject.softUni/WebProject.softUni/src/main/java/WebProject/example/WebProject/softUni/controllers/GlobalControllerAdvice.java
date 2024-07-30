@@ -11,4 +11,5 @@ public class GlobalControllerAdvice {
     public void globalAttribute(Model model) {
         model.addAttribute("movieSearchDto", new MovieSearchDto());
     }
+
 }

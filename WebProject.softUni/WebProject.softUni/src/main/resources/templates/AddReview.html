@@ -1,26 +1,38 @@
 <!DOCTYPE html>
-<html lang="en"  xmlns:th="http://www.thymeleaf.org">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="/css/AddReview.css" />
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="/css/AddReview.css"/>
     <link
-      href="https://fonts.googleapis.com/css2?family=REM:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
-      rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=REM:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+            rel="stylesheet"
     />
     <title>AddReview</title>
-  </head>
-  <body>
-  <div th:replace="Fragments/Navbar"></div>
-  <form id="form" action="">
-      <label></label>
-      <label for="reviewTitle">Enter review title:</label>
-      <input type="text" name="reviewTitle" id="reviewTitle" />
-      <label for="rating">Enter the rating you want to give this movie:</label>
-      <input type="text" name="rating" id="rating"/>
-      <label for="reviewContent">Share your opinion on the movie</label>
-      <textarea name="reviewContent" id="reviewContent" rows="12" cols="100"></textarea>
-      <button type="submit">Submit review</button>
-    </form>
-  </body>
+</head>
+<body>
+<div th:replace="Fragments/Navbar"></div>
+<form id="form" th:method="post" th:object="${movieDetails}" th:action="@{/AddReview}">
+    <div th:if="${movieDetails != null}">
+        <!-- Hidden input fields to bind the data -->
+        <input type="hidden" th:field="*{movieTitle}" th:value="${movieDetails.movieTitle}"/>
+        <input type="hidden" th:field="*{releaseYear}" th:value="${movieDetails.releaseYear}"/>
+
+        <h3 th:text="${movieDetails.movieTitle}"></h3>
+        <h3 th:text="${movieDetails.releaseYear}"></h3>
+
+        <label for="reviewTitle">Enter review title:</label>
+        <input type="text" name="reviewTitle" id="reviewTitle" th:field="*{reviewTitle}"/>
+
+        <label for="rating">Enter the rating you want to give this movie:</label>
+        <input type="text" name="rating" id="rating" th:field="*{reviewRating}"/>
+
+        <label for="reviewContent">Share your opinion on the movie</label>
+        <textarea name="reviewText" id="reviewContent" rows="12" cols="100" th:field="*{reviewText}"></textarea>
+
+        <button type="submit">Submit review</button>
+    </div>
+</form>
+
+</body>
 </html>

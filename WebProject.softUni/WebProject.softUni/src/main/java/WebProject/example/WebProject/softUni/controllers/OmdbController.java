@@ -1,33 +1,48 @@
 package WebProject.example.WebProject.softUni.controllers;
 
-import WebProject.example.WebProject.softUni.dtos.MovieSearchDto;
-import WebProject.example.WebProject.softUni.dtos.OMDBSearchResponseDto;
+import WebProject.example.WebProject.softUni.dtos.*;
 import WebProject.example.WebProject.softUni.services.OmdbService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+
 @Controller
 public class OmdbController {
 
     private final OmdbService omdbService;
+    private static final Logger logger = LoggerFactory.getLogger(MovieController.class);
+
 
     public OmdbController(OmdbService omdbService) {
         this.omdbService = omdbService;
     }
 
+    @GetMapping("/listOfMovies")
+    public String listOfMovies(Model model) {
+        // Add any necessary initial model attributes, or leave empty if no data is needed
+        model.addAttribute("result", new OMDBSearchResponseDto()); // Or null if preferred
+        model.addAttribute("movieResponseDto", new MovieFullInfoDto());
+        return "ListOfMovies";
+    }
 
     @PostMapping("/search")
     public String search(MovieSearchDto movieSearchDto, Model model) {
-        model.addAttribute("movieSearchDto",movieSearchDto);
-        String title=movieSearchDto.getTitle();
+        model.addAttribute("movieSearchDto", movieSearchDto);
+        String title = movieSearchDto.getTitle();
         if (title == null || title.trim().isEmpty()) {
             throw new IllegalArgumentException("Title cannot be empty");
         }
         OMDBSearchResponseDto result = omdbService.searchByTitle(title);
+        logger.info(result.getSearch().toString());
         model.addAttribute("result", result);
+        model.addAttribute("movieResponseDto", new MovieFullInfoDto());
         return "ListOfMovies";
     }
 
