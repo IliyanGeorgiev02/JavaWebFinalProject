@@ -12,32 +12,64 @@
 </head>
 <body>
 <div th:replace="Fragments/Navbar"></div>
+
 <h1 id="listTitle" th:text="${listData.title}">List title</h1>
-<div id="listDescription">
-    <p name="listDescription" th:text="${listData.description}">List of movies I like</p>
-</div>
-<div id="mainBody">
-    <div id="movieRow" th:each="movie : ${listData.movies}">
-        <div id="movie">
-            <img
-                    th:src="${movie.poster}"
-                    alt="movie poster"
-            />
-            <h3 th:text="${movie.title}">Title</h3>
-            <h3 th:text="${movie.description}">100/100</h3>
+<div id="totalContent">
+
+    <div id="listDescription">
+        <p name="listDescription" th:text="${listData.description}">List of movies I like</p>
+    </div>
+
+    <div id="mainBody">
+        <div id="movieRow" th:each="movie : ${listData.movies}">
+            <div id="movie">
+                <img th:src="${movie.poster}" alt="movie poster"/>
+                <h3 th:text="${movie.title}">Title</h3>
+                <h3 th:text="${movie.description}">Description</h3>
+            </div>
         </div>
     </div>
-    <button><a th:href="ListOfMovies">Add movie</a></button>
-</div>
-<div id="addComment">
-    <p>Username</p>
-    <input type="text" placeholder="add a comment"/>
-    <button>Add comment</button>
-</div>
-<div id="comments">
-    <div id="comment">
-        username <br/>
-        <p>This is my comment</p>
+
+    <button th:if="${#authentication.name == listData.user.username}">
+        <a th:href="@{/ListOfMovies}">Add movie</a>
+    </button>
+    <div class="sectionDivider">
+        <hr>
+        <h3>Add a comment</h3>
+        <hr>
+    </div>
+    <form th:object="${addCommentDto}" th:method="post" th:action="@{/CustomList/{id}(id=${listData.id})}" id="form">
+        <div id="addComment">
+            <input type="text" placeholder="Add a comment" th:field="*{text}"/>
+            <button type="submit">Add comment</button>
+        </div>
+    </form>
+    <div id="comments" th:if="${#lists.size(commentsData) > 0}">
+        <div class="sectionDivider">
+            <hr>
+            <h3>Comments</h3>
+            <hr>
+        </div>
+        <div th:each="comment : ${commentsData}">
+            <div id="comment">
+                <strong th:text="${comment.user.username}">Username</strong><br/>
+                <p th:text="${comment.text}">This is my comment</p>
+                <div id="reviewButtons">
+                    <form th:action="@{/comments/{id}/like(id=${comment.id})}" method="post">
+                        <button type="submit" class="image-button">
+                            <img src="/images/like.png" alt="Like" class="button-image"/>
+                            <span th:text="${comment.likes}"></span>
+                        </button>
+                    </form>
+                    <form th:action="@{/comments/{id}/dislike(id=${comment.id})}" method="post">
+                        <button type="submit" class="image-button">
+                            <img src="/images/dislike.png" alt="Dislike" class="button-image"/>
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
     </div>
 </div>
 </body>

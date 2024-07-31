@@ -2,6 +2,7 @@ package WebProject.example.WebProject.softUni.services;
 
 import WebProject.example.WebProject.softUni.dtos.CreateListDto;
 import WebProject.example.WebProject.softUni.dtos.FindListDto;
+import WebProject.example.WebProject.softUni.model.Comment;
 import WebProject.example.WebProject.softUni.model.CustomList;
 import WebProject.example.WebProject.softUni.model.Movie;
 import WebProject.example.WebProject.softUni.model.User;
@@ -49,4 +50,5 @@ public class ListService {
     public Optional<CustomList> findListById(Long id) {
         return this.customListRepository.findById(id);
     }
+
 }
