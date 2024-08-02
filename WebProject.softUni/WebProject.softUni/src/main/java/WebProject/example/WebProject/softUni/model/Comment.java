@@ -23,7 +23,6 @@ public class Comment extends BaseEntity {
     public Comment() {
     }
 
-
     public CustomList getCustomList() {
         return customList;
     }

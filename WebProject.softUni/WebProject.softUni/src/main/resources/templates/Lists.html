@@ -23,9 +23,9 @@
                         <img th:src="${movie.posterUrl}" alt="movie poster"/>
                     </div>
                     <div id="listContent">
-                        <h2 th:text="${list?.title}"></h2> <!-- Safe navigation operator -->
-                        <span th:text="${list?.description}"></span> <!-- Safe navigation operator -->
-                        <span th:text="${list?.user?.username}"></span> <!-- Safe navigation operator -->
+                        <h2 th:text="${list?.title}"></h2>
+                        <span th:text="${list?.description}"></span>
+                        <span th:text="${list?.user?.username}"></span>
                         <button type="submit">View list</button>
                     </div>
                 </div>

@@ -29,10 +29,14 @@
             </div>
         </div>
     </div>
-
     <button th:if="${#authentication.name == listData.user.username}">
-        <a th:href="@{/ListOfMovies}">Add movie</a>
+        <a th:href="@{/listOfMovies}">Add movie</a>
     </button>
+    <form th:action="@{/CustomList/{id}(id=${listData.id})}" method="post">
+        <input type="hidden" name="_method" value="delete"/>
+        <button id="deleteBtn" type="submit">Delete list</button>
+    </form>
+
     <div class="sectionDivider">
         <hr>
         <h3>Add a comment</h3>

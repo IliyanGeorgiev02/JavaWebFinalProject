@@ -51,4 +51,7 @@ public class ListService {
         return this.customListRepository.findById(id);
     }
 
+    public void deleteList(CustomList customList) {
+        this.customListRepository.delete(customList);
+    }
 }

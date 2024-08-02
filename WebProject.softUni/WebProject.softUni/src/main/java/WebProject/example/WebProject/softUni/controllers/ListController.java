@@ -98,4 +98,12 @@ public class ListController {
         logger.info("Received username: " + findListDto.getUsername());
         return "CustomList";
     }
+
+    @DeleteMapping("/CustomList/{id}")
+    public String deleteList(@PathVariable long id) {
+        Optional<CustomList> listById = this.listService.findListById(id);
+        listById.ifPresent(this.listService::deleteList);
+        return "redirect:/Lists";
+    }
+
 }

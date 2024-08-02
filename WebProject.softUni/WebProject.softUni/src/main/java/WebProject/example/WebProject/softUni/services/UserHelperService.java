@@ -67,11 +67,4 @@ public class UserHelperService {
             logger.warn("User not found");
         }
     }
-
-
-    private void updateField(String newValue, Consumer<String> setter) {
-        Optional.ofNullable(newValue)
-                .filter(value -> !value.isBlank())
-                .ifPresent(setter);
-    }
 }

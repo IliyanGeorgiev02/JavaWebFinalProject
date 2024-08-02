@@ -16,15 +16,15 @@ public class CustomList extends BaseEntity {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "lists_movies",joinColumns = @JoinColumn(name = "list_id",referencedColumnName = "id"),
-    inverseJoinColumns = @JoinColumn(name = "movie_id",referencedColumnName = "id"))
+    @JoinTable(name = "lists_movies", joinColumns = @JoinColumn(name = "list_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "movie_id", referencedColumnName = "id"))
     private List<Movie> movies;
-    @OneToMany(mappedBy = "customList")
+    @OneToMany(mappedBy = "customList", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Comment> comments;
 
     public CustomList() {
-        this.movies=new ArrayList<>();
-        this.comments=new ArrayList<>();
+        this.movies = new ArrayList<>();
+        this.comments = new ArrayList<>();
     }
 
     public User getUser() {
