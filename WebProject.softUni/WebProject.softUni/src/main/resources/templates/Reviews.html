@@ -14,71 +14,18 @@
 <body>
 <div th:replace="Fragments/Navbar"></div>
 <div id="reviews">
-    <div class="review">
+    <div class="review" th:each="review : ${ListData}">
         <div id="textContent">
-            <a href="Review.html"> "Gud muvi" </a>
-            <span> by: <a href="User.html"> username </a></span>
+            <a th:href="@{Review.html(reviewId=${review.id})}" th:text="${review.title}"> "Gud muvi" </a>
+            <span> by: <a th:href="@{User.html(userId=${review.user.id})}"
+                          th:text="${review.user.username}"> username </a></span>
         </div>
-        <div id="reviewText">
+        <div id="reviewText" th:text="${review.text}">
             This muvi gud 10/10. Im literally Ryan Gosling
         </div>
-        <div id="rating">90/100</div>
-        <div id="reviewButtons">
-            <button class="image-button">
-                <img
-                        src="\images\like.png"
-                        alt="Button Image"
-                        class="button-image"
-                />
-                Button Text
-            </button>
-            <button class="image-button">
-                <img
-                        src="\images\dislike.png"
-                        alt="Button Image"
-                        class="button-image"
-                />
-                Button Text
-            </button>
+        <div id="rating" th:text="${review.rating} + '/100'">
+            90/100
         </div>
-    </div>
-    <div class="review">
-        <div id="textContent">
-            <a href="Review.html"> "Gud muvi" </a>
-            <span> by: <a href="User.html"> username </a></span>
-        </div>
-        <div id="reviewText">
-            This muvi gud 10/10. Im literally Ryan Gosling
-        </div>
-        <div id="rating">90/100</div>
-        <div id="reviewButtons">
-            <button class="image-button">
-                <img
-                        src="\images\like.png"
-                        alt="Button Image"
-                        class="button-image"
-                />
-                Button Text
-            </button>
-            <button class="image-button">
-                <img
-                        src="\images\dislike.png"
-                        alt="Button Image"
-                        class="button-image"
-                />
-                Button Text
-            </button>
-        </div>
-    </div>
-    <div class="review">
-        <div id="textContent">
-            <a href="Review.html"> "Gud muvi" </a>
-            <span> by: <a href="User.html"> username </a></span>
-        </div>
-        <div id="reviewText">
-            This muvi gud 10/10. Im literally Ryan Gosling
-        </div>
-        <div id="rating">90/100</div>
         <div id="reviewButtons">
             <button class="image-button">
                 <img

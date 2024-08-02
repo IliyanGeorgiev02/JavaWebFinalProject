@@ -54,7 +54,7 @@ public class CommentsController {
         if (customListId != null) {
             return "redirect:/CustomList/" + customListId;
         } else {
-            return "redirect:/error"; 
+            return"redirect:/CustomList/" + customListId;
         }
     }
 
@@ -64,7 +64,7 @@ public class CommentsController {
         if (customListId != null) {
             return "redirect:/CustomList/" + customListId;
         } else {
-            return "redirect:/error";
+            return "redirect:/CustomList/" + customListId;
         }
     }
 

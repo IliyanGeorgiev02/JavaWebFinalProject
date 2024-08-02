@@ -1,6 +1,7 @@
 package WebProject.example.WebProject.softUni.repositories;
 
 import WebProject.example.WebProject.softUni.model.CustomList;
+import WebProject.example.WebProject.softUni.model.Review;
 import WebProject.example.WebProject.softUni.model.User;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,4 +19,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Transactional
     @Query("SELECT cl FROM CustomList cl WHERE cl.user.id = :userId")
     List<CustomList> findAllByUserId(@Param("userId") Long userId);
+
+    @Query("SELECT r FROM Review r WHERE r.user.username = :username")
+    List<Review> findAllReviewsByUser(@Param("username") String username);
+
+
 }

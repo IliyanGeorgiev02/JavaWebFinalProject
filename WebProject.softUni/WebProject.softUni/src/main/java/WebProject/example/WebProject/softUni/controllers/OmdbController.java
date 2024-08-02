@@ -26,8 +26,7 @@ public class OmdbController {
 
     @GetMapping("/listOfMovies")
     public String listOfMovies(Model model) {
-        // Add any necessary initial model attributes, or leave empty if no data is needed
-        model.addAttribute("result", new OMDBSearchResponseDto()); // Or null if preferred
+        model.addAttribute("result", new OMDBSearchResponseDto());
         model.addAttribute("movieResponseDto", new MovieFullInfoDto());
         return "ListOfMovies";
     }
@@ -36,9 +35,6 @@ public class OmdbController {
     public String search(MovieSearchDto movieSearchDto, Model model) {
         model.addAttribute("movieSearchDto", movieSearchDto);
         String title = movieSearchDto.getTitle();
-        if (title == null || title.trim().isEmpty()) {
-            throw new IllegalArgumentException("Title cannot be empty");
-        }
         OMDBSearchResponseDto result = omdbService.searchByTitle(title);
         logger.info(result.getSearch().toString());
         model.addAttribute("result", result);

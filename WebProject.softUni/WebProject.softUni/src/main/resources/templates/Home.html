@@ -13,39 +13,7 @@
 <body>
 <div th:replace="Fragments/Navbar"></div>
 <div id="pageContents">
-    <h1 th:text="#{home_recent_releases}"></h1>
-    <hr/>
-    <div class="movieList">
-        <a th:href="Movie">
-            <div id="movie">
-                <img src="/images/drive.jpg" alt="movie poster"/>
-                <h3>Title</h3>
-                <h3>100/100</h3>
-            </div>
-        </a>
-        <a th:href="Movie">
-            <div id="movie">
-                <img src="/images/drive.jpg" alt="movie poster"/>
-                <h3>Title</h3>
-                <h3>100/100</h3>
-            </div>
-        </a>
-        <a th:href="Movie">
-            <div id="movie">
-                <img src="/images/drive.jpg" alt="movie poster"/>
-                <h3>Title</h3>
-                <h3>100/100</h3>
-            </div>
-        </a>
-        <a th:href="Movie">
-            <div id="movie">
-                <img src="/images/drive.jpg" alt="movie poster"/>
-                <h3>Title</h3>
-                <h3>100/100</h3>
-            </div>
-        </a>
-    </div>
-    <div id="">
+    <div>
         <h1 th:text="#{home_popular_releases}"></h1>
     </div>
     <hr/>
@@ -74,113 +42,59 @@
     <h1 th:text="#{home_trending_lists}"></h1>
     <hr/>
     <div id="trendingLists">
-        <div class="listBox">
-            <img src="static/images/drive.jpg" alt="movie poster"/>
-            <img src="static/images/drive.jpg" alt="movie poster"/>
+        <div class="listBox" th:each="list : ${listsData}">
+            <div th:each="movie : ${list.movies}">
+                <img th:src="@{/uploads/movie_posters/{posterUrl}(posterUrl=${movie.posterUrl})}" alt="movie poster"/>
+            </div>
             <br/>
-            <img src="static/images/drive.jpg" alt="movie poster"/>
-            <img src="static/images/drive.jpg" alt="movie poster"/>
             <div id="listContent">
-                <h2>List title</h2>
-                <span>List desctiption</span>
+                <h2 th:text="${list.title}">List title</h2>
+                <span th:text="${list.description}">List description</span>
                 <button th:text="#{home_view_list}">View list</button>
             </div>
         </div>
-        <div class="listBox">
-            <img src="static/images/drive.jpg" alt="movie poster"/>
-            <img src="static/images/drive.jpg" alt="movie poster"/>
-            <br/>
-            <img src="static/images/drive.jpg" alt="movie poster"/>
-            <img src="static/images/drive.jpg" alt="movie poster"/>
-            <div id="listContent">
-                <h2>List title</h2>
-                <span>List desctiption</span>
-                <button>View list</button>
-            </div>
-        </div>
-        <div class="listBox">
-            <img src="static/images/drive.jpg" alt="movie poster"/>
-            <img src="static/images/drive.jpg" alt="movie poster"/>
-            <br/>
-            <img src="static/images/drive.jpg" alt="movie poster"/>
-            <img src="static/images/drive.jpg" alt="movie poster"/>
-            <div id="listContent">
-                <h2>List title</h2>
-                <span>List desctiption</span>
-                <button>View list</button>
-            </div>
-        </div>
-        <div class="listBox">
-            <img src="static/images/drive.jpg" alt="movie poster"/>
-            <img src="static/images/drive.jpg" alt="movie poster"/>
-            <br/>
-            <img src="static/images/drive.jpg" alt="movie poster"/>
-            <img src="static/images/drive.jpg" alt="movie poster"/>
-            <div id="listContent">
-                <h2>List title</h2>
-                <span>List desctiption</span>
-                <button>View list</button>
-            </div>
-        </div>
     </div>
+    <button th:if="${listsData.size() > 4}" th:text="#{home_view_more}" th:href="@{/more-lists}" class="viewMoreButton">
+        View more
+    </button>
+    <h1 th:text="#{home_popular_reviews}"></h1>
     <div id="popularReviews">
         <div id="reviews">
-            <h1 th:text="#{home_popular_reviews}"></h1>
             <hr/>
-            <div class="review">
+            <div class="review" th:each="review : ${reviewsData}">
                 <div id="reviewTopContent">
                     <div id="poster">
                         <img
                                 id="reviewMoviePoster"
-                                src="static/images/drive.jpg"
+                                th:src="@{/uploads/movie_posters/{posterUrl}(posterUrl=${review.movie.posterUrl})}"
                                 alt="movie poster"
                         />
-                        <div id="rating">90/100</div>
+                        <div id="rating" th:text="${review.rating}/100">Rating</div>
                         <div id="reviewButtons">
                             <button class="image-button">
-                                <img
-                                        src="/images/like.png"
-                                        alt="Button Image"
-                                        class="button-image"
-                                />
-                                Button Text
+                                <img src="/images/like.png" alt="Like" class="button-image"/>
+                                <span th:text="${review.likes}"></span>
                             </button>
                             <button class="image-button">
-                                <img
-                                        src="/images/dislike.png"
-                                        alt="Button Image"
-                                        class="button-image"
-                                />
-                                Button Text
+                                <img src="/images/dislike.png" alt="Dislike" class="button-image"/>
                             </button>
                         </div>
                     </div>
                     <div id="reviewTextContent">
-                        <h1>"Gud muvi" by: <span>username</span></h1>
-                        <div id="reviewText">
-                            This muvi gud 10/10. Im literally Ryan Gosling
-                        </div>
+                        <h1 th:text="|${review.reviewTitle} by: ${review.user.username}|"></h1>
+                        <div id="reviewText" th:text="${review.reviewText}">Review text</div>
                         <div id="comments">
-                            <div id="comment">
-                                <div id="user">username</div>
+                            <div id="comment" th:each="comment : ${review.comments}">
+                                <div id="user" th:text="${comment.user.username}">username</div>
                                 <br/>
-                                <p>This is my comment</p>
+                                <p th:text="${comment.text}">This is my comment</p>
                                 <div id="reviewButtons">
                                     <button class="image-button">
-                                        <img
-                                                src="/images/like.png"
-                                                alt="Button Image"
-                                                class="button-image"
-                                        />
-                                        Button Text
+                                        <img src="/images/like.png" alt="Like" class="button-image"/>
+                                        <span th:text="${comment.likes}"></span>
                                     </button>
                                     <button class="image-button">
-                                        <img
-                                                src="/images/dislike.png"
-                                                alt="Button Image"
-                                                class="button-image"
-                                        />
-                                        Button Text
+                                        <img src="/images/dislike.png" alt="Dislike" class="button-image"/>
                                     </button>
                                 </div>
                             </div>
@@ -190,10 +104,11 @@
                     </div>
                 </div>
             </div>
-            <div id="viewBtn">
-                <button id="viewMore" th:text="#{home_view_more_reviews}">View more reviews</button>
-            </div>
         </div>
+    </div>
+    <div id="viewBtn">
+        <button id="viewMore" th:text="#{home_view_more_reviews}" th:if="${reviewsData.size() > 4}">View more reviews
+        </button>
     </div>
 </div>
 </body>

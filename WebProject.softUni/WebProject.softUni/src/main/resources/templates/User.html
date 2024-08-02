@@ -19,17 +19,17 @@
 <div id="mainBody">
     <img
             id="Profile"
-            src="${profileData.profilePicUrl}"
+            th:src="@{/uploads/profile_pictures/{profilePicUrl}(profilePicUrl=${profileData.profilePicUrl})}"
             alt="Profile picture"
     />
     <div id="data">
         <h1 id="username" th:text="${profileData.username}"></h1>
         <h1 id="names" th:text="${profileData.firstName}  + ' ' + ${profileData.lastName}"></h1>
         <h3 id="bio" th:text="${profileData.bio}"></h3>
-        <div class="movieLists"></div>
-        <div class="movieList">
+        <div class="movieLists">
             <h3>Lists</h3>
-            <span th:each="list : ${listsData}">
+            <div class="movieList" th:each="list : ${listsData}">
+                <span id="customListData">
             <h3 th:text="${list.title}"></h3>
             <h3 th:text="${list.description}"></h3>
           <div class="listContents" th:each="movie : ${list.movies}">
@@ -40,42 +40,24 @@
             <h5 th:text="${movie.title}">Drive</h5>
           </div>
         </span>
-            <button class="viewAll">View all</button>
-            <hr/>
+                <button class="viewAll">View all</button>
+                <hr/>
+            </div>
         </div>
         <div class="movieList"></div>
         <h3>Recently reviewed</h3>
         <span>
-          <div class="listContents">
-            <img
-                    src="C:\Users\User\Desktop\WebProject.softUni\WebProject.softUni\src\main\resources\static\drive.jpg"
-                    alt="Movie poster"
-            />
-            <h5>Drive</h5>
-          </div>
-          <div class="listContents">
-            <img
-                    src="C:\Users\User\Desktop\WebProject.softUni\WebProject.softUni\src\main\resources\static\drive.jpg"
-                    alt="Movie poster"
-            />
-            <h5>Drive</h5>
-          </div>
-          <div class="listContents">
-            <img
-                    src="C:\Users\User\Desktop\WebProject.softUni\WebProject.softUni\src\main\resources\static\drive.jpg"
-                    alt="Movie poster"
-            />
-            <h5>Drive</h5>
-          </div>
-          <div class="listContents">
-            <img
-                    src="C:\Users\User\Desktop\WebProject.softUni\WebProject.softUni\src\main\resources\static\drive.jpg"
-                    alt="Movie poster"
-            />
-            <h5>Drive</h5>
+          <div class="listContents" th:each="review : ${reviewsData}">
+            <img th:src="${review.movie.posterUrl}"
+                 alt="Movie poster"/>
+            <h5 th:text="${review.movie.title}"></h5>
           </div>
         </span>
-        <button class="viewAll">View all</button>
+        <a th:href="@{/Reviews/{username}(username=${profileData.username})}">
+            <button class="viewAll">
+                View all
+            </button>
+        </a>
         <hr/>
     </div>
 </div>

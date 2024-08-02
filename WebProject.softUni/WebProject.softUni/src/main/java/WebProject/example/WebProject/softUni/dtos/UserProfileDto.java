@@ -1,19 +1,23 @@
 package WebProject.example.WebProject.softUni.dtos;
 
 import WebProject.example.WebProject.softUni.validation.annotation.UniqueUsername;
+import jakarta.validation.constraints.Size;
 
 public class UserProfileDto {
+
     private String profilePicUrl;
 
     @UniqueUsername
+    @Size(min = 3, max = 30, message = "the length of your username must be between 3 and 30 characters")
     private String username;
 
+    @Size(min = 3, max = 30, message = "the length of your username must be between 3 and 30 characters")
     private String firstName;
 
+    @Size(min = 3, max = 30, message = "the length of your username must be between 3 and 30 characters")
     private String lastName;
 
     private String bio;
-
 
     public String getProfilePicUrl() {
         return profilePicUrl;

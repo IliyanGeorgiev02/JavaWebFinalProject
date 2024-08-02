@@ -45,6 +45,7 @@ public class UserHelperService {
         User user = getUser();
         if (user != null) {
             logger.info(user.getUsername());
+            logger.info(userProfileDto.getProfilePicUrl());
             if (!userProfileDto.getProfilePicUrl().isBlank()) {
                 user.setProfilePicture(userProfileDto.getProfilePicUrl());
             }
@@ -62,10 +63,11 @@ public class UserHelperService {
             }
             userRepository.save(user);
             logger.info(user.getUsername());
-        }else {
-            logger.warn("bad shit");
+        } else {
+            logger.warn("User not found");
         }
     }
+
 
     private void updateField(String newValue, Consumer<String> setter) {
         Optional.ofNullable(newValue)

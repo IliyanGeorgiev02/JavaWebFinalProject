@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 
 @ControllerAdvice
 public class GlobalControllerAdvice {
+
     @ModelAttribute("movieSearchDto")
     public void globalAttribute(Model model) {
         model.addAttribute("movieSearchDto", new MovieSearchDto());

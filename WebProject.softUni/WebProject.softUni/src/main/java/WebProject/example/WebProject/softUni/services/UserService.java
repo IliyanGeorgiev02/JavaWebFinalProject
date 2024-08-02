@@ -4,6 +4,7 @@ import WebProject.example.WebProject.softUni.controllers.MovieController;
 import WebProject.example.WebProject.softUni.dtos.RegisterUserDto;
 import WebProject.example.WebProject.softUni.dtos.UserProfileDto;
 import WebProject.example.WebProject.softUni.model.CustomList;
+import WebProject.example.WebProject.softUni.model.Review;
 import WebProject.example.WebProject.softUni.model.User;
 import WebProject.example.WebProject.softUni.model.enums.UserRoleEnum;
 import WebProject.example.WebProject.softUni.repositories.UserRepository;
@@ -14,6 +15,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 
@@ -68,5 +74,29 @@ public class UserService {
         List<CustomList> lists = this.userRepository.findAllByUserId(user.getId());
         logger.info("Retrieved lists: " + lists.toString());
         return lists;
+    }
+
+    public List<Review> findAllReviewsByUser(String username) {
+        return this.userRepository.findAllReviewsByUser(username);
+    }
+
+    public String saveProfilePicture(String file) {
+        try {
+            String uploadDir = "uploads/profile_pictures/";
+            File uploadDirFile = new File(uploadDir);
+            if (!uploadDirFile.exists()) {
+                boolean dirsCreated = uploadDirFile.mkdirs();
+                if (!dirsCreated) {
+                    System.err.println("Failed to create upload directory!");
+                    return null;
+                }
+            }
+            Path path = Paths.get(uploadDir, file);
+            Files.write(path, file.getBytes());
+            return uploadDir + file;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }
