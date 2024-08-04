@@ -45,11 +45,11 @@ public class OmdbService {
         }
     }
 
-    public MovieResponseDto searchByTitleAndYear(String title, String year) {
+    public MovieFullInfoDto searchByTitleAndYear(String title, String year) {
         RestTemplate restTemplate = new RestTemplate();
         String url = baseUrl + "&t=" + title + "&y=" + year;
         try {
-            return restTemplate.getForObject(url, MovieResponseDto.class);
+            return restTemplate.getForObject(url, MovieFullInfoDto.class);
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             throw new RuntimeException("OMDB API error: " + e.getResponseBodyAsString());
         } catch (Exception e) {

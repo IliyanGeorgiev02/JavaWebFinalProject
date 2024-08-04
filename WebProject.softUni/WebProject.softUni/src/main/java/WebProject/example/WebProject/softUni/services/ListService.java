@@ -54,4 +54,8 @@ public class ListService {
     public void deleteList(CustomList customList) {
         this.customListRepository.delete(customList);
     }
+
+    public List<CustomList> findListByUsername(String username) {
+      return this.customListRepository.findByUsername(username);
+    }
 }

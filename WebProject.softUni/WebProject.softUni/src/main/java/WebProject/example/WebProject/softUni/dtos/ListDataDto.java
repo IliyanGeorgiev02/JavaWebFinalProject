@@ -6,6 +6,15 @@ public class ListDataDto {
     private String title;
     private String description;
     private List<Movie> movies;
+    private String user;
+
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
 
     public String getTitle() {
         return title;

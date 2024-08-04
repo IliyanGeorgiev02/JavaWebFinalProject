@@ -12,14 +12,14 @@
 </head>
 <body>
 <div th:replace="Fragments/Navbar"></div>
-<form id="form" th:method="post" th:object="${movieDetails}" th:action="@{/AddReview}">
+<form id="form" th:method="post" th:object="${reviewDetails}" th:action="@{/AddReview}">
     <div th:if="${movieDetails != null}">
         <!-- Hidden input fields to bind the data -->
-        <input type="hidden" th:field="*{movieTitle}" th:value="${movieDetails.movieTitle}"/>
-        <input type="hidden" th:field="*{releaseYear}" th:value="${movieDetails.releaseYear}"/>
+        <input type="hidden" th:field="*{movieTitle}" th:value="${reviewDetails.movie.title}"/>
+        <input type="hidden" th:field="*{releaseYear}" th:value="${reviewDetails.movie.year}"/>
 
-        <h3 th:text="${movieDetails.movieTitle}"></h3>
-        <h3 th:text="${movieDetails.releaseYear}"></h3>
+        <h3 th:text="${reviewDetails.movie.title}"></h3>
+        <h3 th:text="${reviewDetails.movie.year}"></h3>
 
         <label for="reviewTitle">Enter review title:</label>
         <input type="text" name="reviewTitle" id="reviewTitle" th:field="*{reviewTitle}"/>

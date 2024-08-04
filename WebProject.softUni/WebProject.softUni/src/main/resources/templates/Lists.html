@@ -17,22 +17,19 @@
 <div id="mainBody">
     <div id="lists">
         <div id="trendingLists" th:each="list : ${allLists}">
-            <form th:action="@{/Lists}" th:method="post" th:object="${findListDto}">
-                <div class="listBox">
-                    <div th:each="movie, iterStat : ${list.movies}" th:if="${iterStat.index < 4}">
-                        <img th:src="${movie.posterUrl}" alt="movie poster"/>
-                    </div>
-                    <div id="listContent">
-                        <h2 th:text="${list?.title}"></h2>
-                        <span th:text="${list?.description}"></span>
-                        <span th:text="${list?.user?.username}"></span>
-                        <button type="submit">View list</button>
-                    </div>
+            <div class="listBox">
+                <div th:each="movie, iterStat : ${list.movies}" th:if="${iterStat.index < 4}">
+                    <img th:src="${movie.posterUrl}" alt="movie poster"/>
                 </div>
-                <input type="hidden" th:field="*{title}"/>
-                <input type="hidden" th:field="*{description}"/>
-                <input type="hidden" th:field="*{username}"/>
-            </form>
+                <div id="listContent">
+                    <h2 th:text="${list?.title}"></h2>
+                    <span th:text="${list?.description}"></span>
+                    <span th:text="${list?.user?.username}"></span>
+                    <a th:href="@{/CustomList/{id}(id=${list.id})}">
+                        <button th:text="#{home_view_list}">View list</button>
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 </div>

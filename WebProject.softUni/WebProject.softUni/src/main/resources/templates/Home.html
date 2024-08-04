@@ -50,13 +50,12 @@
             <div id="listContent">
                 <h2 th:text="${list.title}">List title</h2>
                 <span th:text="${list.description}">List description</span>
-                <button th:text="#{home_view_list}">View list</button>
+                <a th:href="@{/CustomList/{id}(id=${list.id})}">
+                    <button th:text="#{home_view_list}">View list</button>
+                </a>
             </div>
         </div>
     </div>
-    <button th:if="${listsData.size() > 4}" th:text="#{home_view_more}" th:href="@{/more-lists}" class="viewMoreButton">
-        View more
-    </button>
     <h1 th:text="#{home_popular_reviews}"></h1>
     <div id="popularReviews">
         <div id="reviews">

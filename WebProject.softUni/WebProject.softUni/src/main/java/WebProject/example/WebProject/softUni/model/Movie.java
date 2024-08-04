@@ -28,6 +28,8 @@ public class Movie extends BaseEntity {
     private String awards;
     @Column(name = "poster_URL")
     private String posterUrl;
+    @Column(name = "imdb_id")
+    private String imdbId;
     private List<String> scores;
     private String type;
     @Column(name = "box_office")
@@ -40,8 +42,16 @@ public class Movie extends BaseEntity {
     private List<Review> reviews;
 
     public Movie() {
-        this.customLists=new ArrayList<>();
-        this.reviews=new ArrayList<>();
+        this.customLists = new ArrayList<>();
+        this.reviews = new ArrayList<>();
+    }
+
+    public String getImdbId() {
+        return imdbId;
+    }
+
+    public void setImdbId(String imdbId) {
+        this.imdbId = imdbId;
     }
 
     public String getTitle() {

@@ -14,22 +14,32 @@
 <div th:replace="Fragments/Navbar"></div>
 <div id="mainBody">
     <div class="movieList">
-        <div th:if="${result.search != null and #lists.size(result.search) > 0}">
-            <form th:each="movie : ${result.search}" th:action="@{/AddReview}" th:object="${movieResponseDto}"
-                  th:method="post" id="form">
-                <div id="movie">
-                    <img th:src="${movie.poster}" alt="movie poster"/>
-                    <input type="hidden" th:field="*{title}" th:value="${movie.title}" id="title"/>
-                    <label th:text="${movie.title}"></label>
-                    <input type="hidden" th:field="*{year}" th:value="${movie.year}" id="year"/>
-                    <label th:text="${movie.year}"></label>
+        <div th:if="${result.search != null and #lists.size(result.search) > 0}" th:each="movie : ${result.search}">
+            <div id="movie">
+                <img th:src="${movie.poster}" alt="movie poster"/>
+                <h3 th:text="${movie.title}"></h3>
+                <h3 th:text="${movie.year}"></h3>
+                <form th:action="@{/AddReview}" th:object="${movieData}" th:method="post">
+                    <input type="hidden" th:field="*{title}" th:value="${movie.title}"/>
+                    <input type="hidden" th:field="*{year}" th:value="${movie.year}"/>
                     <button id="addReviewBtn" type="submit">Add review</button>
-                </div>
-            </form>
+                </form>
+                <form th:action="@{/AddToList}" th:object="${movieAndListData}" th:method="post">
+                    <small th:errors="*{listId}" class="bg-danger text-white rounded"></small>
+                    <small th:errors="*{movieTitle}" class="bg-danger text-white rounded"></small>
+                    <small th:errors="*{movieYear}" class="bg-danger text-white rounded"></small>
+                    <input type="hidden" th:field="*{movieTitle}" th:value="${movie.title}"/>
+                    <input type="hidden" th:field="*{movieYear}" th:value="${movie.year}"/>
+                    <select name="listSelect" id="listSelect" th:field="*{listId}">
+                        <option th:each="list : ${lists}" th:value="${list.id}" th:text="${list.title}"></option>
+                    </select>
+                    <button id="addToListBtn" type="submit">Add to list</button>
+                </form>
+            </div>
         </div>
-        <div th:if="${result.search == null or #lists.size(result.search) == 0}">
-            <p>Search for movies to add to the list.</p>
-        </div>
+    </div>
+    <div th:if="${result.search == null or #lists.size(result.search) == 0}">
+        <p>Search for movies to add to the list.</p>
     </div>
 </div>
 </body>

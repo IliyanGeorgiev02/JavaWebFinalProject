@@ -1,46 +1,69 @@
 package WebProject.example.WebProject.softUni.controllers;
 
 import WebProject.example.WebProject.softUni.dtos.*;
+import WebProject.example.WebProject.softUni.model.CustomList;
+import WebProject.example.WebProject.softUni.services.ListService;
 import WebProject.example.WebProject.softUni.services.OmdbService;
+import WebProject.example.WebProject.softUni.services.UserHelperService;
+import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 public class OmdbController {
 
     private final OmdbService omdbService;
     private static final Logger logger = LoggerFactory.getLogger(MovieController.class);
+    private final UserHelperService userHelperService;
+    private final ListService listService;
 
 
-    public OmdbController(OmdbService omdbService) {
+    public OmdbController(OmdbService omdbService, UserHelperService userHelperService, ListService listService) {
         this.omdbService = omdbService;
-    }
-
-    @GetMapping("/listOfMovies")
-    public String listOfMovies(Model model) {
-        model.addAttribute("result", new OMDBSearchResponseDto());
-        model.addAttribute("movieResponseDto", new MovieFullInfoDto());
-        return "ListOfMovies";
+        this.userHelperService = userHelperService;
+        this.listService = listService;
     }
 
     @PostMapping("/search")
-    public String search(MovieSearchDto movieSearchDto, Model model) {
-        model.addAttribute("movieSearchDto", movieSearchDto);
+    public String search(MovieSearchDto movieSearchDto, HttpSession session, RedirectAttributes redirectAttributes) {
         String title = movieSearchDto.getTitle();
         OMDBSearchResponseDto result = omdbService.searchByTitle(title);
-        logger.info(result.getSearch().toString());
+        List<CustomList> listByUsername = this.listService.findListByUsername(this.userHelperService.getUser().getUsername());
+        session.setAttribute("movieSearchDto", movieSearchDto);
+        session.setAttribute("result", result);
+        session.setAttribute("lists", listByUsername);
+        session.setAttribute("movieData", new MovieFullInfoDto());
+        session.setAttribute("movieAndListData", new AddMovieToListDto());
+
+        return "redirect:/ListOfMovies";
+    }
+
+
+    @GetMapping("/ListOfMovies")
+    public String loadMoviesPage(HttpSession session, Model model) {
+        MovieSearchDto movieSearchDto = (MovieSearchDto) session.getAttribute("movieSearchDto");
+        OMDBSearchResponseDto result = (OMDBSearchResponseDto) session.getAttribute("result");
+        List<CustomList> lists = (List<CustomList>) session.getAttribute("lists");
+        MovieFullInfoDto movieData = (MovieFullInfoDto) session.getAttribute("movieData");
+        AddMovieToListDto movieAndListData = (AddMovieToListDto) session.getAttribute("movieAndListData");
+        model.addAttribute("movieSearchDto", movieSearchDto);
         model.addAttribute("result", result);
-        model.addAttribute("movieResponseDto", new MovieFullInfoDto());
+        model.addAttribute("lists", lists);
+        model.addAttribute("movieData", movieData);
+        model.addAttribute("movieAndListData", movieAndListData);
+
         return "ListOfMovies";
     }
+
 
     @ExceptionHandler(IllegalArgumentException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)

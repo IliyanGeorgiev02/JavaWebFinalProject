@@ -86,4 +86,5 @@ public class CustomList extends BaseEntity {
                 ", comments=" + comments +
                 '}';
     }
+
 }

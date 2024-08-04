@@ -1,5 +1,8 @@
 package WebProject.example.WebProject.softUni.controllers;
 
+import WebProject.example.WebProject.softUni.dtos.AddReviewDto;
+import WebProject.example.WebProject.softUni.dtos.MovieFullInfoDto;
+import WebProject.example.WebProject.softUni.dtos.MovieResponseDto;
 import WebProject.example.WebProject.softUni.dtos.MovieReviewInfoDto;
 import WebProject.example.WebProject.softUni.model.Review;
 import WebProject.example.WebProject.softUni.services.OmdbService;
@@ -9,10 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -30,15 +30,14 @@ public class ReviewController {
     }
 
     @PostMapping("/AddReview")
-    public String addReview(@RequestParam("title") String title,
-                            @RequestParam("year") String year,
-                            Model model) {
-        MovieReviewInfoDto movieResponseDto = new MovieReviewInfoDto();
-        movieResponseDto.setMovieTitle(title);
-        movieResponseDto.setReleaseYear(year);
-        model.addAttribute("movieDetails", movieResponseDto);
+    public String addReview(@ModelAttribute("movieData") MovieFullInfoDto movieInfo, Model model) {
+        MovieFullInfoDto movieFullInfo = this.omdbService.searchByTitleAndYear(movieInfo.getTitle(), movieInfo.getYear());
+        AddReviewDto addReviewDto = new AddReviewDto();
+        addReviewDto.setMovie(movieFullInfo);
+        model.addAttribute("reviewDetails", addReviewDto);
         return "AddReview";
     }
+
 
     @GetMapping("/Reviews")
     public String getReviews(Model model) {
@@ -48,7 +47,7 @@ public class ReviewController {
     }
 
     @GetMapping("/Reviews/{username}")
-    public String getReviewsByUsername(@PathVariable("username")String username, Model model) {
+    public String getReviewsByUsername(@PathVariable("username") String username, Model model) {
         List<Review> allReviewsByUsername = this.userService.findAllReviewsByUser(username);
         model.addAttribute("ListData", allReviewsByUsername);
         return "Reviews";

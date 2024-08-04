@@ -4,6 +4,15 @@ public class AddReviewDto {
     private String title;
     private String rating;
     private String reviewText;
+    private MovieFullInfoDto movie;
+
+    public MovieFullInfoDto getMovie() {
+        return movie;
+    }
+
+    public void setMovie(MovieFullInfoDto movie) {
+        this.movie = movie;
+    }
 
     public String getTitle() {
         return title;
