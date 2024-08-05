@@ -41,9 +41,6 @@ public class OmdbController {
         session.setAttribute("movieSearchDto", movieSearchDto);
         session.setAttribute("result", result);
         session.setAttribute("lists", listByUsername);
-        session.setAttribute("movieData", new MovieFullInfoDto());
-        session.setAttribute("movieAndListData", new AddMovieToListDto());
-
         return "redirect:/ListOfMovies";
     }
 
@@ -53,13 +50,9 @@ public class OmdbController {
         MovieSearchDto movieSearchDto = (MovieSearchDto) session.getAttribute("movieSearchDto");
         OMDBSearchResponseDto result = (OMDBSearchResponseDto) session.getAttribute("result");
         List<CustomList> lists = (List<CustomList>) session.getAttribute("lists");
-        MovieFullInfoDto movieData = (MovieFullInfoDto) session.getAttribute("movieData");
-        AddMovieToListDto movieAndListData = (AddMovieToListDto) session.getAttribute("movieAndListData");
         model.addAttribute("movieSearchDto", movieSearchDto);
         model.addAttribute("result", result);
         model.addAttribute("lists", lists);
-        model.addAttribute("movieData", movieData);
-        model.addAttribute("movieAndListData", movieAndListData);
 
         return "ListOfMovies";
     }

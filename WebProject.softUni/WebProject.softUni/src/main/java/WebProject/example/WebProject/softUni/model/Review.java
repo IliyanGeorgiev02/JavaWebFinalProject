@@ -8,11 +8,12 @@ import java.util.List;
 @Entity
 @Table(name = "reviews")
 public class Review extends BaseEntity {
-    @Column(name = "review_title")
+    @Column(name = "review_title", nullable = false)
     private String reviewTitle;
-    @Column(name = "review_text")
+    @Column(name = "review_text", nullable = false)
     private String reviewText;
     private int rating;
+    @Column(nullable = false)
     private int likes;
     @ManyToOne
     @JoinColumn(name = "movie_id", referencedColumnName = "id")
@@ -20,7 +21,7 @@ public class Review extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
-    @OneToMany(mappedBy = "review")
+    @OneToMany(mappedBy = "review", fetch = FetchType.EAGER)
     private List<Comment> comments;
 
     public Review() {

@@ -33,12 +33,10 @@
             </div>
         </div>
 
-        <!-- Button to add movie, only visible if current user is the owner -->
         <button th:if="${#authentication.name == listData.user.username}">
             <a th:href="@{/listOfMovies}">Add movie</a>
         </button>
 
-        <!-- Form to delete list, visible to admins or list owner -->
         <form th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') || listData.user.username == #authentication.name}"
               th:action="@{/CustomList/{id}(id=${listData.id})}" method="post">
             <input type="hidden" name="_method" value="delete"/>
@@ -57,7 +55,6 @@
             </div>
         </form>
 
-        <!-- Display comments if there are any -->
         <div id="comments" th:if="${#lists.size(commentsData) > 0}">
             <div class="sectionDivider">
                 <hr>

@@ -44,4 +44,8 @@ public class CommentsService {
         }
         return null;
     }
+
+    public List<Comment> findAllCommentsInReview(Long reviewId) {
+       return this.commentRepository.findAllByReviewId(reviewId);
+    }
 }

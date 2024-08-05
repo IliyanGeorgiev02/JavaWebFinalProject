@@ -8,6 +8,7 @@ import WebProject.example.WebProject.softUni.services.*;
 import jakarta.validation.Valid;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Repository;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
@@ -97,7 +98,7 @@ public class ListController {
         return "Lists";
     }
 
-    @PostMapping("/Lists")
+    @PostMapping("/GetList")
     public String getSpecificList(Model model, @ModelAttribute("findListDto") FindListDto findListDto) {
         CustomList customList = listService.findListByTitleAndDescription(findListDto);
         model.addAttribute("listData", customList);
@@ -115,25 +116,18 @@ public class ListController {
     }
 
     @PostMapping("/AddToList")
-    private String addMovieToList(@ModelAttribute("movieAndListData") @Valid AddMovieToListDto addMovieToListDto, BindingResult bindingResult,RedirectAttributes redirectAttributes) {
-        if (bindingResult.hasErrors()) {
-            redirectAttributes.addFlashAttribute("movieAndListData", addMovieToListDto);
-            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.movieAndListData", bindingResult);
-            return "redirect:/ListOfMovies";
-        }
+    private String addMovieToList(@RequestParam("title") String title,
+                                  @RequestParam("year") String year,
+                                  @RequestParam("listId") String listId) {
 
-        long id = addMovieToListDto.getListId();
+        long id = Long.parseLong(listId);
         Optional<CustomList> listById = this.listService.findListById(id);
         if (listById.isEmpty()) {
-            redirectAttributes.addFlashAttribute("movieAndListData", addMovieToListDto);
-            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.movieAndListData", bindingResult);
             return "redirect:/ListOfMovies";
         }
 
-        MovieFullInfoDto movieFullInfoDto = this.omdbService.searchByTitleAndYear(addMovieToListDto.getMovieTitle(), addMovieToListDto.getMovieYear());
+        MovieFullInfoDto movieFullInfoDto = this.omdbService.searchByTitleAndYear(title, year);
         if (movieFullInfoDto == null) {
-            redirectAttributes.addFlashAttribute("movieAndListData", addMovieToListDto);
-            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.movieAndListData", bindingResult);
             return "redirect:/ListOfMovies";
         }
         Movie mappedMovie = this.modelMapper.map(movieFullInfoDto, Movie.class);

@@ -1,33 +1,49 @@
 package WebProject.example.WebProject.softUni.dtos;
 
+import jakarta.validation.constraints.*;
+
 public class AddReviewDto {
-    private String title;
-    private String rating;
+    @NotEmpty(message = "Your review must contain a title")
+    private String reviewTitle;
+    @NotNull(message = "Your review must contain a rating")
+    @Min(1)
+    @Max(100)
+    private int reviewRating;
+    @NotEmpty(message = "Your review must contain text")
     private String reviewText;
-    private MovieFullInfoDto movie;
+    private String movieTitle;
+    private String movieYear;
 
-    public MovieFullInfoDto getMovie() {
-        return movie;
+    public String getMovieTitle() {
+        return movieTitle;
     }
 
-    public void setMovie(MovieFullInfoDto movie) {
-        this.movie = movie;
+    public void setMovieTitle(String movieTitle) {
+        this.movieTitle = movieTitle;
     }
 
-    public String getTitle() {
-        return title;
+    public String getMovieYear() {
+        return movieYear;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setMovieYear(String movieYear) {
+        this.movieYear = movieYear;
     }
 
-    public String getRating() {
-        return rating;
+    public String getReviewTitle() {
+        return reviewTitle;
     }
 
-    public void setRating(String rating) {
-        this.rating = rating;
+    public void setReviewTitle(String reviewTitle) {
+        this.reviewTitle = reviewTitle;
+    }
+
+    public int getReviewRating() {
+        return reviewRating;
+    }
+
+    public void setReviewRating(int reviewRating) {
+        this.reviewRating = reviewRating;
     }
 
     public String getReviewText() {

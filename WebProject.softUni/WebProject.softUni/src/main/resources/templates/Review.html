@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"
-      xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -15,52 +14,58 @@
 <div th:replace="Fragments/Navbar"></div>
 <div id="review">
     <div class="review">
-        <h1>"Gud muvi"<span> by: username</span></h1>
-        <div id="reviewText">
-            This muvi gud 10/10. Im literally Ryan Gosling
+        <h1 th:text="|${reviewData.reviewTitle}|">
+            <span th:text="' by: ' + ${reviewData.user.username}"> </span>
+        </h1>
+        <div>
+            <h2 th:text="${reviewData.movie.title} + ' (' + ${reviewData.movie.released} + ')'"></h2>
         </div>
-        <div id="rating">90/100</div>
+        <div id="reviewText" th:text="${reviewData.reviewText}">
+        </div>
+        <div id="rating" th:text="${reviewData.rating + '/100'}">
+        </div>
         <div id="reviewButtons">
             <button class="image-button">
                 <img
-                        src="C:\Users\User\Desktop\WebProject.softUni\WebProject.softUni\src\main\resources\static\like.png"
+                        th:src="@{/images/like.png}"
                         alt="Button Image"
                         class="button-image"
                 />
-                Button Text
+                Like
             </button>
             <button class="image-button">
                 <img
-                        src="C:\Users\User\Desktop\WebProject.softUni\WebProject.softUni\src\main\resources\static\dislike.png"
+                        th:src="@{/images/dislike.png}"
                         alt="Button Image"
                         class="button-image"
                 />
-                Button Text
+                Dislike
             </button>
         </div>
     </div>
 </div>
 <div id="comments">
-    <div id="comment">
-        <div id="user">username</div>
+    <div id="comment" th:each="comment : ${reviewData.comments}">
+        <div id="user" th:text="${comment.user.username}">
+            username
+        </div>
         <br/>
-        <p>This is my comment</p>
+        <p th:text="${comment.text}">This is my comment</p>
         <div id="reviewButtons">
             <button class="image-button">
                 <img
-                        src="src/main/resources/static/images/like.png"
+                        th:src="@{/images/like.png}"
                         alt="Button Image"
                         class="button-image"
                 />
-                Button Text
+                <span th:text="${review.likes}"></span>
             </button>
             <button class="image-button">
                 <img
-                        src="src/main/resources/static/images/dislike.png"
+                        th:src="@{/images/dislike.png}"
                         alt="Button Image"
                         class="button-image"
                 />
-                Button Text
             </button>
         </div>
     </div>

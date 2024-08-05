@@ -2,19 +2,26 @@ package WebProject.example.WebProject.softUni.controllers;
 
 import WebProject.example.WebProject.softUni.dtos.AddReviewDto;
 import WebProject.example.WebProject.softUni.dtos.MovieFullInfoDto;
-import WebProject.example.WebProject.softUni.dtos.MovieResponseDto;
-import WebProject.example.WebProject.softUni.dtos.MovieReviewInfoDto;
+import WebProject.example.WebProject.softUni.model.Comment;
+import WebProject.example.WebProject.softUni.model.Movie;
 import WebProject.example.WebProject.softUni.model.Review;
-import WebProject.example.WebProject.softUni.services.OmdbService;
-import WebProject.example.WebProject.softUni.services.ReviewService;
-import WebProject.example.WebProject.softUni.services.UserService;
+import WebProject.example.WebProject.softUni.services.*;
+import jakarta.validation.Valid;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.LocalDate;
+import java.time.Year;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
 
 @Controller
 public class ReviewController {
@@ -22,20 +29,71 @@ public class ReviewController {
     private static final Logger logger = LoggerFactory.getLogger(MovieController.class);
     private final ReviewService reviewService;
     private final UserService userService;
-
-    public ReviewController(OmdbService omdbService, ReviewService reviewService, UserService userService) {
+    private final MovieService movieService;
+    private final ModelMapper modelMapper;
+    private final UserHelperService userHelperService;
+    private final CommentsService commentsService;
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy", Locale.ENGLISH);
+    public ReviewController(OmdbService omdbService, ReviewService reviewService, UserService userService, MovieService movieService, ModelMapper modelMapper, UserHelperService userHelperService, CommentsService commentsService) {
         this.omdbService = omdbService;
         this.reviewService = reviewService;
         this.userService = userService;
+        this.movieService = movieService;
+        this.modelMapper = modelMapper;
+        this.userHelperService = userHelperService;
+        this.commentsService = commentsService;
     }
 
     @PostMapping("/AddReview")
-    public String addReview(@ModelAttribute("movieData") MovieFullInfoDto movieInfo, Model model) {
-        MovieFullInfoDto movieFullInfo = this.omdbService.searchByTitleAndYear(movieInfo.getTitle(), movieInfo.getYear());
+    public String getAddReview(@RequestParam("title") String title,
+                               @RequestParam("year") String year, Model model) {
         AddReviewDto addReviewDto = new AddReviewDto();
-        addReviewDto.setMovie(movieFullInfo);
+        addReviewDto.setMovieTitle(title);
+        addReviewDto.setMovieYear(year);
         model.addAttribute("reviewDetails", addReviewDto);
         return "AddReview";
+    }
+
+
+    @PostMapping("/Review")
+    public String postReview(@Valid @ModelAttribute("reviewDetails") AddReviewDto addReviewDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("registerUserDto", addReviewDto);
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.addReviewDto", bindingResult);
+        }
+        MovieFullInfoDto movieFullInfoDto = this.omdbService.searchByTitleAndYear(addReviewDto.getMovieTitle(), addReviewDto.getMovieYear());
+        Movie mappedMovie = new Movie();
+        mappedMovie = this.modelMapper.map(movieFullInfoDto, Movie.class);
+        mappedMovie.setImdbId(movieFullInfoDto.getImdbId());
+        mappedMovie.setReleased(LocalDate.parse(movieFullInfoDto.getReleaseDate(),formatter));
+        mappedMovie.setYear(Year.parse(movieFullInfoDto.getYear()));
+        mappedMovie.setWriters(movieFullInfoDto.getWriter());
+        Optional<Movie> movie = this.movieService.findMovie(mappedMovie);
+        if (movie.isEmpty()) {
+            this.movieService.saveMovie(mappedMovie);
+        }
+        Review review = new Review();
+        review.setReviewTitle(addReviewDto.getReviewTitle());
+        review.setReviewText(addReviewDto.getReviewText());
+        review.setRating(addReviewDto.getReviewRating());
+        review.setLikes(0);
+        review.setMovie(mappedMovie);
+        review.setUser(this.userHelperService.getUser());
+        this.reviewService.saveReview(review);
+        model.addAttribute("reviewData", review);
+        return "redirect:/Review/" + review.getId();
+    }
+
+    @GetMapping("/Review/{id}")
+    public String getReview(@PathVariable("id") Long reviewId, Model model) {
+        Optional<Review> review = this.reviewService.findReviewById(reviewId);
+        List<Comment> allCommentsInReview = this.commentsService.findAllCommentsInReview(reviewId);
+        if (review.isPresent()) {
+            model.addAttribute("reviewData", review.get());
+            return "Review";
+        } else {
+            return "redirect:/error";
+        }
     }
 
 
@@ -43,7 +101,7 @@ public class ReviewController {
     public String getReviews(Model model) {
         List<Review> allReviews = this.reviewService.findALLReviews();
         model.addAttribute("ListData", allReviews);
-        return "Reviews";
+        return "redirect:/Reviews";
     }
 
     @GetMapping("/Reviews/{username}")
@@ -52,5 +110,4 @@ public class ReviewController {
         model.addAttribute("ListData", allReviewsByUsername);
         return "Reviews";
     }
-
 }

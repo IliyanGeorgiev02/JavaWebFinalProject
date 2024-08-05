@@ -114,6 +114,7 @@ hr {
   font-size: large;
   margin-bottom: 10px;
   padding: 10px;
+  text-align:left;
 }
 #reviews > h1 {
   text-align: left;

@@ -16,7 +16,7 @@ public class MovieFullInfoDto implements Serializable {
     private String rated;
 
     @JsonProperty("Released")
-    private String released;
+    private String releaseDate;
 
     @JsonProperty("Runtime")
     private String runtime;
@@ -46,7 +46,7 @@ public class MovieFullInfoDto implements Serializable {
     private String awards;
 
     @JsonProperty("Poster")
-    private String poster;
+    private String posterUrl;
 
     @JsonProperty("Ratings")
     private List<RatingDto> ratings;
@@ -61,7 +61,7 @@ public class MovieFullInfoDto implements Serializable {
     private String imdbVotes;
 
     @JsonProperty("imdbID")
-    private String imdbID;
+    private String imdbId;
 
     @JsonProperty("Type")
     private String type;
@@ -105,13 +105,6 @@ public class MovieFullInfoDto implements Serializable {
         this.rated = rated;
     }
 
-    public String getReleased() {
-        return released;
-    }
-
-    public void setReleased(String released) {
-        this.released = released;
-    }
 
     public String getRuntime() {
         return runtime;
@@ -185,12 +178,20 @@ public class MovieFullInfoDto implements Serializable {
         this.awards = awards;
     }
 
-    public String getPoster() {
-        return poster;
+    public String getReleaseDate() {
+        return releaseDate;
     }
 
-    public void setPoster(String poster) {
-        this.poster = poster;
+    public void setReleaseDate(String releaseDate) {
+        this.releaseDate = releaseDate;
+    }
+
+    public String getPosterUrl() {
+        return posterUrl;
+    }
+
+    public void setPosterUrl(String posterUrl) {
+        this.posterUrl = posterUrl;
     }
 
     public List<RatingDto> getRatings() {
@@ -225,12 +226,12 @@ public class MovieFullInfoDto implements Serializable {
         this.imdbVotes = imdbVotes;
     }
 
-    public String getImdbID() {
-        return imdbID;
+    public String getImdbId() {
+        return imdbId;
     }
 
-    public void setImdbID(String imdbID) {
-        this.imdbID = imdbID;
+    public void setImdbId(String imdbId) {
+        this.imdbId = imdbId;
     }
 
     public String getType() {
@@ -287,7 +288,7 @@ public class MovieFullInfoDto implements Serializable {
                 "title='" + title + '\'' +
                 ", year='" + year + '\'' +
                 ", rated='" + rated + '\'' +
-                ", released='" + released + '\'' +
+                ", released='" + releaseDate + '\'' +
                 ", runtime='" + runtime + '\'' +
                 ", genre='" + genre + '\'' +
                 ", director='" + director + '\'' +
@@ -297,12 +298,12 @@ public class MovieFullInfoDto implements Serializable {
                 ", language='" + language + '\'' +
                 ", country='" + country + '\'' +
                 ", awards='" + awards + '\'' +
-                ", poster='" + poster + '\'' +
+                ", poster='" + posterUrl + '\'' +
                 ", ratings=" + ratings +
                 ", metascore='" + metascore + '\'' +
                 ", imdbRating='" + imdbRating + '\'' +
                 ", imdbVotes='" + imdbVotes + '\'' +
-                ", imdbID='" + imdbID + '\'' +
+                ", imdbID='" + imdbId + '\'' +
                 ", type='" + type + '\'' +
                 ", dvd='" + dvd + '\'' +
                 ", boxOffice='" + boxOffice + '\'' +

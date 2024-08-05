@@ -48,7 +48,7 @@
             </div>
             <br/>
             <div id="listContent">
-                <h2 th:text="${list.title}">List title</h2>
+                <h4 th:text="${list.title}">List title</h4>
                 <span th:text="${list.description}">List description</span>
                 <a th:href="@{/CustomList/{id}(id=${list.id})}">
                     <button th:text="#{home_view_list}">View list</button>
@@ -65,10 +65,10 @@
                     <div id="poster">
                         <img
                                 id="reviewMoviePoster"
-                                th:src="@{/uploads/movie_posters/{posterUrl}(posterUrl=${review.movie.posterUrl})}"
+                                th:src="@{movie.posterUrl}"
                                 alt="movie poster"
                         />
-                        <div id="rating" th:text="${review.rating}/100">Rating</div>
+                        <div id="rating" th:text="${review.rating}+'/100'">Rating</div>
                         <div id="reviewButtons">
                             <button class="image-button">
                                 <img src="/images/like.png" alt="Like" class="button-image"/>

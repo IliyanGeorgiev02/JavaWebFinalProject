@@ -5,6 +5,7 @@ import WebProject.example.WebProject.softUni.repositories.ReviewRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ReviewService {
@@ -16,5 +17,13 @@ public class ReviewService {
 
     public List<Review> findALLReviews() {
         return this.reviewRepository.findAll();
+    }
+
+    public void saveReview(Review review) {
+        this.reviewRepository.save(review);
+    }
+
+    public Optional<Review> findReviewById(Long reviewId) {
+        return this.reviewRepository.findById(reviewId);
     }
 }

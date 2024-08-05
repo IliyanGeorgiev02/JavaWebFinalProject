@@ -12,25 +12,25 @@ import java.util.List;
 public class Movie extends BaseEntity {
     private String title;
     @Column(name = "release_year")
-    private Year releaseYear;
+    private Year year;
     @Column(name = "audience_rating")
     private String audienceRating;
     @Column(name = "release_date")
-    private LocalDate releaseDate;
+    private LocalDate released;
     private String runtime;
     private String genre;
     private String director;
-    private List<String> writers;
-    private List<String> actors;
+    private String writers;
+    private String actors;
     private String description;
-    private List<String> languages;
+    private String languages;
     private String country;
     private String awards;
     @Column(name = "poster_URL")
     private String posterUrl;
     @Column(name = "imdb_id")
     private String imdbId;
-    private List<String> scores;
+    private String scores;
     private String type;
     @Column(name = "box_office")
     private String boxOffice;
@@ -44,6 +44,22 @@ public class Movie extends BaseEntity {
     public Movie() {
         this.customLists = new ArrayList<>();
         this.reviews = new ArrayList<>();
+    }
+
+    public LocalDate getReleased() {
+        return released;
+    }
+
+    public void setReleased(LocalDate released) {
+        this.released = released;
+    }
+
+    public String getLanguages() {
+        return languages;
+    }
+
+    public String getScores() {
+        return scores;
     }
 
     public String getImdbId() {
@@ -62,12 +78,12 @@ public class Movie extends BaseEntity {
         this.title = title;
     }
 
-    public Year getReleaseYear() {
-        return releaseYear;
+    public Year getYear() {
+        return year;
     }
 
-    public void setReleaseYear(Year releaseYear) {
-        this.releaseYear = releaseYear;
+    public void setYear(Year year) {
+        this.year = year;
     }
 
     public String getAudienceRating() {
@@ -78,13 +94,7 @@ public class Movie extends BaseEntity {
         this.audienceRating = audienceRating;
     }
 
-    public LocalDate getReleaseDate() {
-        return releaseDate;
-    }
 
-    public void setReleaseDate(LocalDate releaseDate) {
-        this.releaseDate = releaseDate;
-    }
 
     public String getRuntime() {
         return runtime;
@@ -110,20 +120,28 @@ public class Movie extends BaseEntity {
         this.director = director;
     }
 
-    public List<String> getWriters() {
+    public String getWriters() {
         return writers;
     }
 
-    public void setWriters(List<String> writers) {
+    public void setWriters(String writers) {
         this.writers = writers;
     }
 
-    public List<String> getActors() {
+    public String getActors() {
         return actors;
     }
 
-    public void setActors(List<String> actors) {
+    public void setActors(String actors) {
         this.actors = actors;
+    }
+
+    public void setLanguages(String languages) {
+        this.languages = languages;
+    }
+
+    public void setScores(String scores) {
+        this.scores = scores;
     }
 
     public String getDescription() {
@@ -132,14 +150,6 @@ public class Movie extends BaseEntity {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public List<String> getLanguages() {
-        return languages;
-    }
-
-    public void setLanguages(List<String> languages) {
-        this.languages = languages;
     }
 
     public String getCountry() {
@@ -166,13 +176,6 @@ public class Movie extends BaseEntity {
         this.posterUrl = posterUrl;
     }
 
-    public List<String> getScores() {
-        return scores;
-    }
-
-    public void setScores(List<String> scores) {
-        this.scores = scores;
-    }
 
     public String getType() {
         return type;
