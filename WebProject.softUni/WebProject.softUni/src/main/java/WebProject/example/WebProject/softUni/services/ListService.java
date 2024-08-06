@@ -44,7 +44,7 @@ public class ListService {
     }
 
     public CustomList findListByTitleAndDescription(FindListDto findListDto) {
-        return this.customListRepository.findByTitleAndDescription(findListDto.getTitle(),findListDto.getDescription());
+        return this.customListRepository.findByTitleAndDescription(findListDto.getTitle(), findListDto.getDescription());
     }
 
     public Optional<CustomList> findListById(Long id) {
@@ -56,6 +56,10 @@ public class ListService {
     }
 
     public List<CustomList> findListByUsername(String username) {
-      return this.customListRepository.findByUsername(username);
+        return this.customListRepository.findByUsername(username);
+    }
+
+    public void saveMovie(CustomList customList) {
+        this.customListRepository.save(customList);
     }
 }

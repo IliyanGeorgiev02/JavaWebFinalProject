@@ -15,8 +15,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.modelmapper.ModelMapper;
 
+import java.time.LocalDate;
+import java.time.Year;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -30,6 +34,7 @@ public class ListController {
     private final UserHelperService userHelperService;
     private final OmdbService omdbService;
     private final MovieService movieService;
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy", Locale.ENGLISH);
 
     public ListController(ListService listService, CommentsService commentsService, ModelMapper modelMapper, UserHelperService userHelperService, OmdbService omdbService, MovieService movieService) {
         this.listService = listService;
@@ -102,9 +107,6 @@ public class ListController {
     public String getSpecificList(Model model, @ModelAttribute("findListDto") FindListDto findListDto) {
         CustomList customList = listService.findListByTitleAndDescription(findListDto);
         model.addAttribute("listData", customList);
-        logger.info("Received title: " + findListDto.getTitle());
-        logger.info("Received description: " + findListDto.getDescription());
-        logger.info("Received username: " + findListDto.getUsername());
         return "CustomList";
     }
 
@@ -120,25 +122,30 @@ public class ListController {
                                   @RequestParam("year") String year,
                                   @RequestParam("listId") String listId) {
 
-        long id = Long.parseLong(listId);
-        Optional<CustomList> listById = this.listService.findListById(id);
-        if (listById.isEmpty()) {
+        try {
+            long id = Long.parseLong(listId);
+            Optional<CustomList> listById = this.listService.findListById(id);
+            if (listById.isEmpty()) {
+                return "redirect:/ListOfMovies";
+            }
+            MovieFullInfoDto movieFullInfoDto = this.omdbService.searchByTitleAndYear(title, year);
+            if (movieFullInfoDto == null) {
+                return "redirect:/ListOfMovies";
+            }
+            Movie mappedMovie = this.movieService.mapMovie(movieFullInfoDto);
+            Optional<Movie> movie = this.movieService.findMovie(mappedMovie);
+            if (movie.isEmpty()) {
+                this.movieService.saveMovie(mappedMovie);
+            }
+            CustomList customList = listById.get();
+            if (!customList.getMovies().contains(mappedMovie)) {
+                customList.getMovies().add(mappedMovie);
+                this.listService.saveMovie(customList);
+            }
+            return "redirect:/ListOfMovies";
+        } catch (NumberFormatException e) {
             return "redirect:/ListOfMovies";
         }
-
-        MovieFullInfoDto movieFullInfoDto = this.omdbService.searchByTitleAndYear(title, year);
-        if (movieFullInfoDto == null) {
-            return "redirect:/ListOfMovies";
-        }
-        Movie mappedMovie = this.modelMapper.map(movieFullInfoDto, Movie.class);
-        Optional<Movie> movie = this.movieService.findMovie(mappedMovie);
-        if (movie.isEmpty()) {
-            this.movieService.saveMovie(mappedMovie);
-        }
-        CustomList customList = listById.get();
-        if (!customList.getMovies().contains(mappedMovie)) {
-            customList.getMovies().add(mappedMovie);
-        }
-        return "redirect:/ListOfMovies";
     }
+
 }

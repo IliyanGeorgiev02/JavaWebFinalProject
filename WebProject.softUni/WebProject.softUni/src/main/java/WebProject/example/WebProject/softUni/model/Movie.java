@@ -28,7 +28,7 @@ public class Movie extends BaseEntity {
     private String awards;
     @Column(name = "poster_URL")
     private String posterUrl;
-    @Column(name = "imdb_id")
+    @Column(name = "imdb_id", unique = true)
     private String imdbId;
     private String scores;
     private String type;
@@ -93,7 +93,6 @@ public class Movie extends BaseEntity {
     public void setAudienceRating(String audienceRating) {
         this.audienceRating = audienceRating;
     }
-
 
 
     public String getRuntime() {

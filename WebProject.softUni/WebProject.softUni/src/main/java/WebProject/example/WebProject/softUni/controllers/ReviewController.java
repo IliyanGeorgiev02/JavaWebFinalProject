@@ -1,6 +1,6 @@
 package WebProject.example.WebProject.softUni.controllers;
-
 import WebProject.example.WebProject.softUni.dtos.AddReviewDto;
+import WebProject.example.WebProject.softUni.dtos.EditReviewDto;
 import WebProject.example.WebProject.softUni.dtos.MovieFullInfoDto;
 import WebProject.example.WebProject.softUni.model.Comment;
 import WebProject.example.WebProject.softUni.model.Movie;
@@ -15,7 +15,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import java.time.LocalDate;
 import java.time.Year;
 import java.time.format.DateTimeFormatter;
@@ -33,7 +32,6 @@ public class ReviewController {
     private final ModelMapper modelMapper;
     private final UserHelperService userHelperService;
     private final CommentsService commentsService;
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy", Locale.ENGLISH);
     public ReviewController(OmdbService omdbService, ReviewService reviewService, UserService userService, MovieService movieService, ModelMapper modelMapper, UserHelperService userHelperService, CommentsService commentsService) {
         this.omdbService = omdbService;
         this.reviewService = reviewService;
@@ -62,32 +60,23 @@ public class ReviewController {
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.addReviewDto", bindingResult);
         }
         MovieFullInfoDto movieFullInfoDto = this.omdbService.searchByTitleAndYear(addReviewDto.getMovieTitle(), addReviewDto.getMovieYear());
-        Movie mappedMovie = new Movie();
-        mappedMovie = this.modelMapper.map(movieFullInfoDto, Movie.class);
-        mappedMovie.setImdbId(movieFullInfoDto.getImdbId());
-        mappedMovie.setReleased(LocalDate.parse(movieFullInfoDto.getReleaseDate(),formatter));
-        mappedMovie.setYear(Year.parse(movieFullInfoDto.getYear()));
-        mappedMovie.setWriters(movieFullInfoDto.getWriter());
+        Movie mappedMovie;
+        mappedMovie = this.movieService.mapMovie(movieFullInfoDto);
         Optional<Movie> movie = this.movieService.findMovie(mappedMovie);
         if (movie.isEmpty()) {
             this.movieService.saveMovie(mappedMovie);
         }
-        Review review = new Review();
-        review.setReviewTitle(addReviewDto.getReviewTitle());
-        review.setReviewText(addReviewDto.getReviewText());
-        review.setRating(addReviewDto.getReviewRating());
-        review.setLikes(0);
-        review.setMovie(mappedMovie);
-        review.setUser(this.userHelperService.getUser());
+        Review review = this.reviewService.mapReview(addReviewDto, mappedMovie);
         this.reviewService.saveReview(review);
         model.addAttribute("reviewData", review);
         return "redirect:/Review/" + review.getId();
     }
 
+
+
     @GetMapping("/Review/{id}")
     public String getReview(@PathVariable("id") Long reviewId, Model model) {
         Optional<Review> review = this.reviewService.findReviewById(reviewId);
-        List<Comment> allCommentsInReview = this.commentsService.findAllCommentsInReview(reviewId);
         if (review.isPresent()) {
             model.addAttribute("reviewData", review.get());
             return "Review";
@@ -96,6 +85,34 @@ public class ReviewController {
         }
     }
 
+    @DeleteMapping("/Review/{id}")
+    public String deleteReview(@PathVariable("id") Long reviewId, Model model) {
+        Optional<Review> review = this.reviewService.findReviewById(reviewId);
+        if (review.isPresent()) {
+            Review presentReview = review.get();
+            this.reviewService.deleteReview(presentReview);
+        }
+        return "redirect:/Reviews";
+    }
+
+
+    @GetMapping("/EditReview/{id}")
+    public String getEditReview(@PathVariable("id") Long reviewId, Model model) {
+        Optional<Review> review = this.reviewService.findReviewById(reviewId);
+        if (review.isPresent()){
+            model.addAttribute("reviewData",review.get());
+            model.addAttribute("newReviewData", new  EditReviewDto());
+            return "EditReview";
+        }
+        model.addAttribute("reviewNotFound");
+        return "redirect:/EditReview";
+    }
+
+    @PostMapping("/EditReview")
+    public String editReview(@ModelAttribute("newReviewData")EditReviewDto newReviewData ,@ModelAttribute("reviewData")Review review, Model model) {
+       this.reviewService.updateReview(newReviewData,review);
+
+    }
 
     @GetMapping("/Reviews")
     public String getReviews(Model model) {

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 @Service
 public class UserHelperService {
@@ -43,28 +44,26 @@ public class UserHelperService {
 
     public void updateUser(UserProfileDto userProfileDto) {
         User user = getUser();
-        if (user != null) {
-            logger.info(user.getUsername());
-            logger.info(userProfileDto.getProfilePicUrl());
-            if (!userProfileDto.getProfilePicUrl().isBlank()) {
-                user.setProfilePicture(userProfileDto.getProfilePicUrl());
-            }
-            if (!userProfileDto.getUsername().isBlank()) {
-                user.setUsername(userProfileDto.getUsername());
-            }
-            if (!userProfileDto.getFirstName().isBlank()) {
-                user.setFirstName(userProfileDto.getFirstName());
-            }
-            if (!userProfileDto.getLastName().isBlank()) {
-                user.setLastName(userProfileDto.getLastName());
-            }
-            if (!userProfileDto.getBio().isBlank()) {
-                user.setBio(userProfileDto.getBio());
-            }
-            userRepository.save(user);
-            logger.info(user.getUsername());
-        } else {
+
+        if (user == null) {
             logger.warn("User not found");
+            return;
+        }
+        logger.info("Updating profile for user: {}", user.getUsername());
+        updateFieldIfNotBlank(userProfileDto::getProfilePicUrl, user::setProfilePicture, "Profile Picture");
+        updateFieldIfNotBlank(userProfileDto::getUsername, user::setUsername, "Username");
+        updateFieldIfNotBlank(userProfileDto::getFirstName, user::setFirstName, "First Name");
+        updateFieldIfNotBlank(userProfileDto::getLastName, user::setLastName, "Last Name");
+        updateFieldIfNotBlank(userProfileDto::getBio, user::setBio, "Bio");
+        userRepository.save(user);
+    }
+
+    private void updateFieldIfNotBlank(Supplier<String> newValueSupplier, Consumer<String> updateFunction, String fieldName) {
+        String newValue = newValueSupplier.get();
+        if (!newValue.isBlank()) {
+            updateFunction.accept(newValue);
+            logger.info("{} updated to: {}", fieldName, newValue);
         }
     }
+
 }

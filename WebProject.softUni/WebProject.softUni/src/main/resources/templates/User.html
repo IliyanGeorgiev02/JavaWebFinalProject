@@ -34,7 +34,7 @@
             <h3 th:text="${list.description}"></h3>
           <div class="listContents" th:each="movie : ${list.movies}">
             <img
-                    th:src="${movie.poster}"
+                    th:src="${movie.posterUrl}"
                     alt="Movie poster"
             />
             <h5 th:text="${movie.title}">Drive</h5>

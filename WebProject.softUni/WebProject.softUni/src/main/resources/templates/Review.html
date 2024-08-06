@@ -31,7 +31,6 @@
                         alt="Button Image"
                         class="button-image"
                 />
-                Like
             </button>
             <button class="image-button">
                 <img
@@ -39,10 +38,19 @@
                         alt="Button Image"
                         class="button-image"
                 />
-                Dislike
             </button>
         </div>
     </div>
+</div>
+<div id="changeReviewBtns">
+    <form th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') || reviewData.user.username == #authentication.name}"
+          th:action="@{/Review/{id}(id=${reviewData.id})}" method="post">
+        <input type="hidden" name="_method" value="delete"/>
+        <button id="deleteBtn" type="submit">Delete review</button>
+    </form>
+    <a th:href="@{/EditReview/{id}(id=${reviewData.id})}">
+        <button id="editBtn" type="submit">Edit review</button>
+    </a>
 </div>
 <div id="comments">
     <div id="comment" th:each="comment : ${reviewData.comments}">

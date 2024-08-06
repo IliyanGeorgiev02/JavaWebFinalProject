@@ -25,9 +25,9 @@
                     <button id="addReviewBtn" type="submit">Add review</button>
                 </form>
                 <form th:action="@{/AddToList}" th:method="post">
-                    <input type="hidden" th:value="${movie.title}"/>
-                    <input type="hidden" th:value="${movie.year}"/>
-                    <select name="listSelect" id="listSelect">
+                    <input type="hidden" name="title" th:value="${movie.title}"/>
+                    <input type="hidden" name="year" th:value="${movie.year}"/>
+                    <select name="listId" id="listSelect">
                         <option th:each="list : ${lists}" th:value="${list.id}" th:text="${list.title}"></option>
                     </select>
                     <button id="addToListBtn" type="submit">Add to list</button>

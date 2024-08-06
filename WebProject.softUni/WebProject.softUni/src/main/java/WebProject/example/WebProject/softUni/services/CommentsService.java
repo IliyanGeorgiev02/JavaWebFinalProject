@@ -29,7 +29,7 @@ public class CommentsService {
             Comment comment = optionalComment.get();
             comment.setLikes(comment.getLikes() + 1);
             commentRepository.save(comment);
-            return comment.getCustomList().getId();  // Return the CustomList ID
+            return comment.getCustomList().getId();
         }
         return null;
     }
@@ -40,7 +40,7 @@ public class CommentsService {
             Comment comment = optionalComment.get();
             comment.setLikes(comment.getLikes() - 1);
             commentRepository.save(comment);
-            return comment.getCustomList().getId();  // Return the CustomList ID
+            return comment.getCustomList().getId();
         }
         return null;
     }
