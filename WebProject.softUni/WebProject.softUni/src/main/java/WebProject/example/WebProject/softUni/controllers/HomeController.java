@@ -1,6 +1,7 @@
 package WebProject.example.WebProject.softUni.controllers;
 
 import WebProject.example.WebProject.softUni.model.CustomList;
+import WebProject.example.WebProject.softUni.model.Movie;
 import WebProject.example.WebProject.softUni.model.Review;
 import WebProject.example.WebProject.softUni.services.ListService;
 import WebProject.example.WebProject.softUni.services.MovieService;
@@ -40,9 +41,11 @@ public class HomeController {
                 .limit(4)
                 .toList();
         model.addAttribute("reviewsData", sortedReviews);
-
+        List<Movie> allMovies = this.movieService.findAllMovies();
+        allMovies.sort(Comparator.comparingInt((Movie m) -> m.getReviews().size())
+                .thenComparingInt(m -> m.getCustomLists().size())
+                .reversed());
+        model.addAttribute("moviesData", allMovies);
         return "home";
     }
-
-
 }

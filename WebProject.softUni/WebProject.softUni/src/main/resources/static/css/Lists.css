@@ -10,74 +10,59 @@ body {
   background-color: #000000;
   background-image: linear-gradient(147deg, #000000 0%, #2c3e50 74%);
 }
-#movie > img {
-  border: 2px solid black;
-  border-radius: 10px;
+
+#lists {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  flex-direction:column;
+  margin: 0 auto;
 }
-#movie {
-  text-align: center;
-  border: 2px solid black;
-  border-radius: 10px;
-  padding: 30px;
-  gap: 10px;
-  position: relative;
-  top: 0;
-  transition: top ease 0.5s;
-  background-color: dimgray;
-}
-.listBox > img {
-  min-width: 500px;
-  width:auto;
-  height: 200px;
-  border: 2px solid black;
-  border-radius: 10px;
+
+#frame > img {
+  border:1px solid black;
+  border-radius:10px;
 }
 .listBox {
   border: 2px solid black;
   border-radius: 15px;
   padding: 20px 70px 20px 70px;
   background-color: dimgray;
-  margin:20px;
+  width: 200px;
+  }
+
+.movie-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 10px;
+    width: fit-content;
+    margin: 0 auto;
 }
-#trendingLists {
+
+.movie-grid img {
+    width: 100%;
+    height: auto;
+}
+
+
+#listContent {
   display: flex;
   align-items: center;
-  justify-content: space-evenly;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
 }
-#listContent > button {
+
+#listContent button {
   background-color: dimgrey;
   color: white;
   padding: 10px;
   border-radius: 20px;
   font-family: REM;
   border: 2px solid black;
-  padding: 10px 20px 10px 20px;
   cursor: pointer;
   font-size: medium;
-  display: flex;
-  flex-direction: column;
   margin-top: 10px;
-  align-items: center;
-  justify-content: center;
-}
-#listContent {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-}
-hr {
-  margin-bottom: 15px;
-  width: 90%;
-}
-#mainBody {
-  border: 2px solid black;
-  background-color: #d3d3d3;
-  border-radius: 20px;
-  width:50%;
-  padding: 15px;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  text-align: center;
 }

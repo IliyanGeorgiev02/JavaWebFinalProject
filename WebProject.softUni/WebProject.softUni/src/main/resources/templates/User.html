@@ -28,20 +28,22 @@
         <h3 id="bio" th:text="${profileData.bio}"></h3>
         <div class="movieLists">
             <h3>Lists</h3>
-            <div class="movieList" th:each="list : ${listsData}">
-                <span id="customListData">
-            <h3 th:text="${list.title}"></h3>
-            <h3 th:text="${list.description}"></h3>
-          <div class="listContents" th:each="movie : ${list.movies}">
-            <img
-                    th:src="${movie.posterUrl}"
-                    alt="Movie poster"
-            />
-            <h5 th:text="${movie.title}">Drive</h5>
-          </div>
-                </span>
-                <button class="viewAll">View all</button>
-                <hr/>
+            <div id="trendingLists">
+                <div class="listBox" th:each="list : ${listsData}">
+                    <div class="movie-grid">
+                        <div th:each="movie, iter : ${list.movies}" th:if="${iter.index < 4}">
+                            <img th:src="${movie.posterUrl}" alt="movie poster"/>
+                        </div>
+                    </div>
+                    <br/>
+                    <div id="listContent">
+                        <h4 th:text="${list.title}">List title</h4>
+                        <span th:text="${list.description}">List description</span>
+                        <a th:href="@{/CustomList/{id}(id=${list.id})}">
+                            <button th:text="#{home_view_list}">View list</button>
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="movieList"></div>

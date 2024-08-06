@@ -26,7 +26,7 @@
         <div id="mainBody">
             <div id="movieRow" th:each="movie : ${listData.movies}">
                 <div id="movie">
-                    <img th:src="${movie.poster}" alt="movie poster"/>
+                    <img th:src="${movie.posterUrl}" alt="movie poster"/>
                     <h3 th:text="${movie.title}">Title</h3>
                     <h3 th:text="${movie.description}">Description</h3>
                 </div>

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.Year;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
@@ -41,4 +42,11 @@ public class MovieService {
         return mappedMovie;
     }
 
+    public List<Movie> findAllMovies() {
+        return this.movieRepository.findAll();
+    }
+
+    public Optional<Movie> findMovieById(long id) {
+        return this.movieRepository.findById(id);
+    }
 }

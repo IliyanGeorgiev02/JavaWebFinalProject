@@ -14,63 +14,47 @@
 <div th:replace="Fragments/Navbar"></div>
 <div id="mainInfo">
     <div id="poster">
-        <img
-                src="https://m.media-amazon.com/images/M/MV5BZjY5ZjQyMjMtMmEwOC00Nzc2LTllYTItMmU2MzJjNTg1NjY0XkEyXkFqcGdeQXVyNjQ1MTMzMDQ@._V1_SX300.jpg"
-                alt="Movie poster"
-        />
+        <img th:src="${movieData.posterUrl}" alt="Movie poster"/>
     </div>
     <div id="movieContents">
-        <h1 id="title">Drive</h1>
-        <h2>Director: Nicolas Winding-Refn</h2>
-        <h3>Genre: Action, Drama</h3>
-        <h3 id="releaseDate">Release date: 2011</h3>
-        <h3 id="runtime">Runtime: 100 minutes</h3>
+        <h1 id="title" th:text="${movieData.title}">Movie Title</h1>
+        <h2 th:text="'Director: ' + ${movieData.director}">Director: Director Name</h2>
+        <h3 th:text="'Genre: ' + ${movieData.genre}">Genre: Genre</h3>
+        <h3 id="releaseDate" th:text="'Release date: ' + ${movieData.released}">Release date: Year</h3>
+        <h3 id="runtime" th:text="'Runtime: ' + ${movieData.runtime}">Runtime: Runtime</h3>
         <h3 id="description">
             Description:
             <br/>
-            A mysterious Hollywood action film stuntman gets in trouble with
-            gangsters when he tries to help his neighbor's husband rob a pawn shop
-            while serving as his getaway driver.
+            <span th:text="${movieData.description}">Movie description here.</span>
         </h3>
         <ul>
             <h2>Cast:</h2>
-            <li>Ryan Gosling</li>
-            <li>Bryan Cranston</li>
-            <li>Carey Mulligan</li>
+            <li>
+                <span th:text="${movieData.actors}"></span>
+            </li>
         </ul>
     </div>
 </div>
 <h1>User reviews:</h1>
 <div id="reviews">
-    <div id="review">
+    <div id="review" th:each="review : ${movieData.reviews}">
         <div class="review">
-            <h1>"Gud muvi"<span> by: username</span></h1>
-            <div id="reviewText">
-                This muvi gud 10/10. Im literally Ryan Gosling
-            </div>
-            <div id="rating">90/100</div>
+            <h1>
+                <span th:text="|${review.reviewTitle}|"></span>
+                <span th:text="' by: ' + ${review.user.username}"> by: username</span>
+            </h1>
+            <div id="reviewText" th:text="${review.reviewText}">Review text here</div>
+            <div id="rating" th:text="${review.rating} + '/100'">Rating</div>
             <div id="reviewButtons">
                 <button class="image-button">
-                    <img
-                            src="C:\Users\User\Desktop\WebProject.softUni\WebProject.softUni\src\main\resources\static\like.png"
-                            alt="Button Image"
-                            class="button-image"
-                    />
-                    Button Text
+                    <img src="/images/like.png" alt="Button Image" class="button-image"/>
+                    <span th:text="${review.likes}">Like Count</span>
                 </button>
                 <button class="image-button">
-                    <img
-                            src="C:\Users\User\Desktop\WebProject.softUni\WebProject.softUni\src\main\resources\static\dislike.png"
-                            alt="Button Image"
-                            class="button-image"
-                    />
-                    Button Text
+                    <img src="/images/dislike.png" alt="Button Image" class="button-image"/>
                 </button>
             </div>
         </div>
-    </div>
-    <div id="viewBtn">
-        <button id="viewMore">View more</button>
     </div>
 </div>
 </body>

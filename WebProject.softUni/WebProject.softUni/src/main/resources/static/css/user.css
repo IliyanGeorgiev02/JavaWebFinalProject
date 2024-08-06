@@ -120,3 +120,36 @@ display:block;
 margin-left:auto;
 margin-right:auto;
 }
+.listBox > img {
+  width: 100px;
+  height: 200px;
+border:1px solid black;
+border-radius:10px;
+}
+.listBox {
+  border: 2px solid black;
+  border-radius: 15px;
+  padding: 20px 70px 20px 70px;
+  background-color: dimgray;
+  width: 200px;
+  }
+#trendingLists {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+.movie-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 10px;
+    width: fit-content;
+    margin: 0 auto;
+}
+
+.movie-grid img {
+    width: 100%;
+    height: auto;
+     border: 2px solid black;
+      border-radius: 10px;
+}

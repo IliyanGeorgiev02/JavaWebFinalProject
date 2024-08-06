@@ -16,19 +16,19 @@
 <hr/>
 <div id="mainBody">
     <div id="lists">
-        <div id="trendingLists" th:each="list : ${allLists}">
-            <div class="listBox">
-                <div th:each="movie, iterStat : ${list.movies}" th:if="${iterStat.index < 4}">
+        <div class="listBox" th:each="list : ${allLists}">
+            <div class="movie-grid">
+                <div id="frame" th:each="movie : ${list.movies}">
                     <img th:src="${movie.posterUrl}" alt="movie poster"/>
                 </div>
-                <div id="listContent">
-                    <h2 th:text="${list?.title}"></h2>
-                    <span th:text="${list?.description}"></span>
-                    <span th:text="${list?.user?.username}"></span>
-                    <a th:href="@{/CustomList/{id}(id=${list.id})}">
-                        <button th:text="#{home_view_list}">View list</button>
-                    </a>
-                </div>
+            </div>
+            <br/>
+            <div id="listContent">
+                <h4 th:text="${list.title}">List title</h4>
+                <span th:text="${list.description}">List description</span>
+                <a th:href="@{/CustomList/{id}(id=${list.id})}">
+                    <button th:text="#{home_view_list}">View list</button>
+                </a>
             </div>
         </div>
     </div>
