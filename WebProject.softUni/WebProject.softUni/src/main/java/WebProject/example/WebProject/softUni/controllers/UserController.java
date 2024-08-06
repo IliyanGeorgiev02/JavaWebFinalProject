@@ -105,8 +105,4 @@ public class UserController {
         userHelperService.updateUser(userProfileDto);
         return "redirect:/User";
     }
-
-
-
-
 }

@@ -51,7 +51,6 @@ public class ReviewService {
     }
 
     public void updateReview(EditReviewDto newReviewData, Review review) {
-
         updateFieldIfNotBlank(newReviewData::getReviewTitle, review::setReviewTitle);
         updateFieldIfValidRating(newReviewData.getReviewRating(), review::setRating);
         updateFieldIfNotBlank(newReviewData::getReviewText, review::setReviewText);

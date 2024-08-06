@@ -1,4 +1,5 @@
 package WebProject.example.WebProject.softUni.controllers;
+
 import WebProject.example.WebProject.softUni.dtos.AddReviewDto;
 import WebProject.example.WebProject.softUni.dtos.EditReviewDto;
 import WebProject.example.WebProject.softUni.dtos.MovieFullInfoDto;
@@ -15,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import java.time.LocalDate;
 import java.time.Year;
 import java.time.format.DateTimeFormatter;
@@ -32,6 +34,7 @@ public class ReviewController {
     private final ModelMapper modelMapper;
     private final UserHelperService userHelperService;
     private final CommentsService commentsService;
+
     public ReviewController(OmdbService omdbService, ReviewService reviewService, UserService userService, MovieService movieService, ModelMapper modelMapper, UserHelperService userHelperService, CommentsService commentsService) {
         this.omdbService = omdbService;
         this.reviewService = reviewService;
@@ -73,7 +76,6 @@ public class ReviewController {
     }
 
 
-
     @GetMapping("/Review/{id}")
     public String getReview(@PathVariable("id") Long reviewId, Model model) {
         Optional<Review> review = this.reviewService.findReviewById(reviewId);
@@ -99,19 +101,28 @@ public class ReviewController {
     @GetMapping("/EditReview/{id}")
     public String getEditReview(@PathVariable("id") Long reviewId, Model model) {
         Optional<Review> review = this.reviewService.findReviewById(reviewId);
-        if (review.isPresent()){
-            model.addAttribute("reviewData",review.get());
-            model.addAttribute("newReviewData", new  EditReviewDto());
+        if (review.isPresent()) {
+            model.addAttribute("reviewData", review.get());
+            model.addAttribute("newReviewData", new EditReviewDto());
             return "EditReview";
         }
         model.addAttribute("reviewNotFound");
         return "redirect:/EditReview";
     }
 
-    @PostMapping("/EditReview")
-    public String editReview(@ModelAttribute("newReviewData")EditReviewDto newReviewData ,@ModelAttribute("reviewData")Review review, Model model) {
-       this.reviewService.updateReview(newReviewData,review);
-
+    @PutMapping("/EditReview/{id}")
+    public String editReview(@PathVariable("id") Long reviewId,
+                             @Valid @ModelAttribute("newReviewData") EditReviewDto newReviewData,
+                             BindingResult bindingResult,
+                             RedirectAttributes redirectAttributes) {
+        Review existingReview = reviewService.findReviewById(reviewId).orElseThrow(() -> new RuntimeException("Review not found"));
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("newReviewData", newReviewData);
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.newReviewData", bindingResult);
+            return "redirect:/Review/" + reviewId;
+        }
+        reviewService.updateReview(newReviewData, existingReview);
+        return "redirect:/Review/" + reviewId;
     }
 
     @GetMapping("/Reviews")

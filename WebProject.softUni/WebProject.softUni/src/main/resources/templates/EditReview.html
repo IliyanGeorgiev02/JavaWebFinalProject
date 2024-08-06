@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <link rel="stylesheet" href="EditReview.css"/>
+    <link rel="stylesheet" href="css/EditReview.css"/>
     <link
             href="https://fonts.googleapis.com/css2?family=REM:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
             rel="stylesheet"
@@ -12,25 +12,20 @@
 </head>
 <body>
 <div th:replace="Fragments/Navbar"></div>
-<form id="form" th:action="@{/editReview}" th:object="${newReviewData}" th:method="post">
+<form id="form" th:action="@{/EditReview/{id}(id=${reviewData.id})}" th:object="${newReviewData}" th:method="post">
+    <input type="hidden" name="_method" value="PUT">
     <input type="hidden" name="reviewId" th:value="${reviewData.id}">
     <h1 th:text="${reviewData.movie.title}"></h1>
     <label for="reviewTitle">Review title:</label>
     <input type="text" name="reviewTitle" id="reviewTitle" th:field="*{reviewTitle}"/>
     <label for="reviewRating">Review rating:</label>
-    <input type="text" name="reviewRating" id="reviewRating" th:field="*{reviewTitle}"/>
+    <input type="text" name="reviewRating" id="reviewRating" th:field="*{reviewRating}"/>
     <label for="reviewText">Review text:</label>
-    <textarea
-            id="review-text"
-            name="review-text"
-            rows="15"
-            cols="100"
-            id="reviewText"
-            th:field="*{reviewText}"
-    ></textarea>
+    <textarea id="reviewText" name="review-text" rows="15" cols="100" th:field="*{reviewText}"></textarea>
     <div id="formButtonDiv">
         <button id="updateReview">Update review</button>
     </div>
 </form>
+
 </body>
 </html>
