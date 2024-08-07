@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -25,5 +26,12 @@ public class MovieController {
             return "Movie";
         }
         return "Home";
+    }
+
+    @GetMapping("/Movies")
+    public String getMoviesPage(Model model) {
+        List<Movie> allMovies = this.movieService.findAllMovies();
+        model.addAttribute("moviesData", allMovies);
+        return "Movies";
     }
 }

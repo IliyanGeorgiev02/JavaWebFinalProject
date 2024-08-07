@@ -25,11 +25,13 @@
 
         <div id="mainBody">
             <div id="movieRow" th:each="movie : ${listData.movies}">
-                <div id="movie">
-                    <img th:src="${movie.posterUrl}" alt="movie poster"/>
-                    <h3 th:text="${movie.title}">Title</h3>
-                    <h3 th:text="${movie.description}">Description</h3>
-                </div>
+                <a th:href="@{/Movie/{id}(id=${movie.id})}">
+                    <div id="movie">
+                        <img th:src="${movie.posterUrl}" alt="movie poster"/>
+                        <h3 th:text="${movie.title}">Title</h3>
+                        <h3 th:text="${movie.description}">Description</h3>
+                    </div>
+                </a>
             </div>
         </div>
 
@@ -48,7 +50,8 @@
             <h3>Add a comment</h3>
             <hr>
         </div>
-        <form th:object="${addCommentDto}" th:method="post" th:action="@{/CustomList/{id}(id=${listData.id})}" id="form">
+        <form th:object="${addCommentDto}" th:method="post" th:action="@{/CustomList/{id}(id=${listData.id})}"
+              id="form">
             <div id="addComment">
                 <input type="text" placeholder="Add a comment" th:field="*{text}"/>
                 <button type="submit">Add comment</button>
