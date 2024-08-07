@@ -13,16 +13,14 @@
 <body>
 <div th:replace="Fragments/Navbar"></div>
 <div class="movieList">
-    <div
-            id="movie"
-            th:each="movie, iterStat : ${moviesData}"
-            th:if="${iterStat.index < 4}"
-    >
-        <a th:href="@{/Movie/{id}(id=${movie.id})}">
-            <img th:src="${movie.posterUrl}" alt="movie poster"/>
-            <h3 th:text="${movie.title}"></h3>
-            <h3 th:text="${movie.year}"></h3>
-        </a>
+    <div class="movieRow" th:each="movie, iterStat : ${moviesData}">
+        <div id="movie">
+            <a th:href="@{/Movie/{id}(id=${movie.id})}">
+                <img th:src="${movie.posterUrl}" alt="movie poster"/>
+                <h3 th:text="${movie.title}"></h3>
+                <h3 th:text="${movie.year}"></h3>
+            </a>
+        </div>
     </div>
 </div>
 </body>

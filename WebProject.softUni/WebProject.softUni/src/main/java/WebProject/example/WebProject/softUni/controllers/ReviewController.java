@@ -129,7 +129,7 @@ public class ReviewController {
     public String getReviews(Model model) {
         List<Review> allReviews = this.reviewService.findALLReviews();
         model.addAttribute("ListData", allReviews);
-        return "redirect:/Reviews";
+        return "Reviews";
     }
 
     @GetMapping("/Reviews/{username}")
@@ -137,5 +137,17 @@ public class ReviewController {
         List<Review> allReviewsByUsername = this.userService.findAllReviewsByUser(username);
         model.addAttribute("ListData", allReviewsByUsername);
         return "Reviews";
+    }
+
+    @PostMapping("Review/{reviewId}/like")
+    public String likeReview(@PathVariable("reviewId") Long reviewId,@PathVariable("commentId") Long commentId) {
+        this.commentsService.likeComment(commentId);
+        return "/Review/" + reviewId;
+    }
+
+    @PostMapping("Review/{reviewId}/dislike")
+    public String dislikeReview(@PathVariable("reviewId") Long reviewId,@PathVariable("commentId") Long commentId) {
+        this.commentsService.dislikeComment(commentId);
+        return "/Review/" + reviewId;
     }
 }

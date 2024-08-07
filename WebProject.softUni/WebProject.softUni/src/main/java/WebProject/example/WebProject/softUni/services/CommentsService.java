@@ -1,6 +1,7 @@
 package WebProject.example.WebProject.softUni.services;
 
 import WebProject.example.WebProject.softUni.model.Comment;
+import WebProject.example.WebProject.softUni.model.CustomList;
 import WebProject.example.WebProject.softUni.repositories.CommentRepository;
 import org.springframework.stereotype.Service;
 
@@ -19,9 +20,6 @@ public class CommentsService {
         this.commentRepository.saveAndFlush(mappedComment);
     }
 
-    public List<Comment> findAllCommentsInList(long id) {
-       return this.commentRepository.findAllByCustomListId(id);
-    }
 
     public Long likeComment(Long commentId) {
         Optional<Comment> optionalComment = commentRepository.findById(commentId);
@@ -34,18 +32,26 @@ public class CommentsService {
         return null;
     }
 
-    public Long dislikeComment(Long commentId) {
+    public void dislikeComment(Long commentId) {
         Optional<Comment> optionalComment = commentRepository.findById(commentId);
         if (optionalComment.isPresent()) {
             Comment comment = optionalComment.get();
-            comment.setLikes(comment.getLikes() - 1);
+            if (comment.getLikes() - 1 >= 0) {
+                comment.setLikes(comment.getLikes() - 1);
+            }
             commentRepository.save(comment);
-            return comment.getCustomList().getId();
         }
-        return null;
     }
 
     public List<Comment> findAllCommentsInReview(Long reviewId) {
-       return this.commentRepository.findAllByReviewId(reviewId);
+        return this.commentRepository.findAllByReviewId(reviewId);
+    }
+
+    public Optional<Comment> findCommentById(Long id) {
+        return this.commentRepository.findById(id);
+    }
+
+    public void saveComment(Comment comment) {
+        this.commentRepository.save(comment);
     }
 }

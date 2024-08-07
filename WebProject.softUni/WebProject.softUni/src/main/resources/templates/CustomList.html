@@ -33,6 +33,19 @@
                     </div>
                 </a>
             </div>
+            <div id="reviewButtons">
+                <form th:action="@{/CustomList/{listId}/like(listId=${listData.id})}" method="post">
+                    <button type="submit" class="image-button">
+                        <img src="/images/like.png" alt="Like" class="button-image"/>
+                        <span th:text="${listData.likes}"></span>
+                    </button>
+                </form>
+                <form th:action="@{/CustomList/{listId}/dislike(listId=${listData.id})}" method="post">
+                    <button type="submit" class="image-button">
+                        <img src="/images/dislike.png" alt="Dislike" class="button-image"/>
+                    </button>
+                </form>
+            </div>
         </div>
 
         <button th:if="${#authentication.name == listData.user.username}">
@@ -58,24 +71,24 @@
             </div>
         </form>
 
-        <div id="comments" th:if="${#lists.size(commentsData) > 0}">
+        <div id="comments" th:if="${#lists.size(listData.comments) > 0}">
             <div class="sectionDivider">
                 <hr>
                 <h3>Comments</h3>
                 <hr>
             </div>
-            <div th:each="comment : ${commentsData}">
+            <div th:each="comment : ${listData.comments}">
                 <div id="comment">
                     <strong th:text="${comment.user.username}">Username</strong><br/>
                     <p th:text="${comment.text}">This is my comment</p>
                     <div id="reviewButtons">
-                        <form th:action="@{/comments/{id}/like(id=${comment.id})}" method="post">
+                        <form th:action="@{/List/Comments/{commentId}/{listId}/like(commentId=${comment.id}, listId=${listData.id})}" method="post">
                             <button type="submit" class="image-button">
                                 <img src="/images/like.png" alt="Like" class="button-image"/>
                                 <span th:text="${comment.likes}"></span>
                             </button>
                         </form>
-                        <form th:action="@{/comments/{id}/dislike(id=${comment.id})}" method="post">
+                        <form th:action="@{/List/Comments/{commentId}/{listId}/dislike(commentId=${comment.id}, listId=${listData.id})}" method="post">
                             <button type="submit" class="image-button">
                                 <img src="/images/dislike.png" alt="Dislike" class="button-image"/>
                             </button>

@@ -18,25 +18,30 @@ body {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 20px;
-  text-align: center;
-  justify-content: center;
-}
-
-#movie > img {
-  border: 2px solid black;
-  border-radius: 10px;
+  width: 80%;
+  margin: auto;
 }
 
 #movie {
   text-align: center;
   border: 2px solid black;
   border-radius: 10px;
-  padding: 30px;
-  gap: 10px;
-  position: relative;
-  top: 0;
-  transition: top ease 0.5s;
+  padding: 20px;
   background-color: dimgray;
+  transition: top ease 0.5s;
+  height: 600px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+#movie > img {
+  border: 2px solid black;
+  border-radius: 10px;
+  width: 100%;
+  height: auto;
+  max-height: 300px;
+  object-fit: cover;
 }
 
 #movie:hover {

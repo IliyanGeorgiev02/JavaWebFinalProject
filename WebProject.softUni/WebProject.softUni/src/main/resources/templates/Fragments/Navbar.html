@@ -19,7 +19,9 @@
             <img src="/images/logo-no-background.png" alt="logo"/>
         </a>
         <ul>
-            <li th:text="#{nav_bar_movies}">movies</li>
+            <a th:href="Movies">
+                <li th:text="#{nav_bar_movies}">movies</li>
+            </a>
             <a th:href="Reviews">
                 <li th:text="#{nav_bar_reviews}">reviews</li>
             </a>

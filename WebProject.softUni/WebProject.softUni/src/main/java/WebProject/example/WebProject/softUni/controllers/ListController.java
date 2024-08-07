@@ -62,8 +62,6 @@ public class ListController {
     public String viewListById(@PathVariable("id") Long id, Model model) {
         Optional<CustomList> customList = listService.findListById(id);
         if (customList.isPresent()) {
-            List<Comment> allCommentsInList = commentsService.findAllCommentsInList(customList.get().getId());
-            model.addAttribute("commentsData", allCommentsInList);
             model.addAttribute("listData", customList.get());
             model.addAttribute("addCommentDto", new AddCommentDto());
             return "CustomList";
@@ -148,4 +146,15 @@ public class ListController {
         }
     }
 
+    @PostMapping("/CustomList/{listId}/like")
+    public String likeList(@PathVariable("listId") Long listId, Model model) {
+        this.listService.likeList(listId);
+        return "redirect:/CustomList/" + listId;
+    }
+
+    @PostMapping("/CustomList/{listId}/dislike")
+    public String dislikeList(@PathVariable("listId") Long listId, Model model) {
+        this.listService.dislikeList(listId);
+        return "redirect:/CustomList/" + listId;
+    }
 }

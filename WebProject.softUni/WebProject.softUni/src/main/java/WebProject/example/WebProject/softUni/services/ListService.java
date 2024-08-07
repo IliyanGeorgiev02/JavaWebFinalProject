@@ -62,4 +62,26 @@ public class ListService {
     public void saveMovie(CustomList customList) {
         this.customListRepository.save(customList);
     }
+
+    public void likeList(Long listId) {
+        Optional<CustomList> byId = this.customListRepository.findById(listId);
+        if (byId.isPresent()) {
+            CustomList customList = byId.get();
+            customList.setLikes(customList.getLikes() + 1);
+            customListRepository.save(customList);
+        }
+    }
+
+    public void dislikeList(Long listId) {
+        Optional<CustomList> byId = this.customListRepository.findById(listId);
+        if (byId.isPresent()) {
+            CustomList customList = byId.get();
+            int likes = customList.getLikes();
+            if (likes - 1 >= 0) {
+                customList.setLikes(customList.getLikes() - 1);
+                customListRepository.save(customList);
+            }
+        }
+    }
 }
+

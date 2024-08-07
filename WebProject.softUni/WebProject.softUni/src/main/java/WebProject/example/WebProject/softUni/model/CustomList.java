@@ -19,7 +19,7 @@ public class CustomList extends BaseEntity {
     @JoinTable(name = "lists_movies", joinColumns = @JoinColumn(name = "list_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "movie_id", referencedColumnName = "id"))
     private List<Movie> movies;
-    @OneToMany(mappedBy = "customList", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "customList", cascade = CascadeType.REMOVE, orphanRemoval = true,fetch = FetchType.EAGER)
     private List<Comment> comments;
 
     public CustomList() {

@@ -48,24 +48,40 @@ public class CommentsController {
         return "redirect:/CustomList/" + id;
     }
 
-    @PostMapping("/{id}/like")
-    public String likeComment(@PathVariable("id") Long commentId) {
-        Long customListId = commentsService.likeComment(commentId);
-        if (customListId != null) {
-            return "redirect:/CustomList/" + customListId;
-        } else {
-            return"redirect:/CustomList/" + customListId;
-        }
+    @PostMapping("Home/Comments/{commentId}/like")
+    public String likeHomeComment(@PathVariable("commentId") Long commentId) {
+        this.commentsService.likeComment(commentId);
+        return "redirect:/home";
     }
 
-    @PostMapping("/{id}/dislike")
-    public String dislikeComment(@PathVariable("id") Long commentId) {
-        Long customListId = commentsService.dislikeComment(commentId);
-        if (customListId != null) {
-            return "redirect:/CustomList/" + customListId;
-        } else {
-            return "redirect:/CustomList/" + customListId;
-        }
+    @PostMapping("Home/Comments/{commentId}/dislike")
+    public String dislikeHomeComment(@PathVariable("id") Long commentId) {
+        this.commentsService.dislikeComment(commentId);
+        return "redirect:/home";
+    }
+
+    @PostMapping("List/Comments/{commentId}/{listId}/like")
+    public String likeListComment(@PathVariable("commentId") Long commentId, @PathVariable("listId") Long id) {
+        this.commentsService.likeComment(commentId);
+        return "redirect:/CustomList/" + id;
+    }
+
+    @PostMapping("List/Comments/{commentId}/{listId}/dislike")
+    public String dislikeListComment(@PathVariable("commentId") Long commentId, @PathVariable("listId") Long id) {
+        this.commentsService.dislikeComment(commentId);
+        return "redirect:/CustomList/" + id;
+    }
+
+    @PostMapping("Review/Comments/{commentId}/{reviewId}/like")
+    public String likeReviewComment(@PathVariable("commentId") Long commentId, @PathVariable("reviewId") Long reviewId) {
+        this.commentsService.likeComment(commentId);
+        return "redirect:/Review/" + reviewId;
+    }
+
+    @PostMapping("Review/Comments/{commentId}/{reviewId}/dislike")
+    public String dislikeReviewComment(@PathVariable("commentId") Long commentId, @PathVariable("reviewId") Long reviewId) {
+        this.commentsService.dislikeComment(commentId);
+        return "redirect:/Review/" + reviewId;
     }
 
 }
