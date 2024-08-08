@@ -54,4 +54,8 @@ public class CommentsService {
     public void saveComment(Comment comment) {
         this.commentRepository.save(comment);
     }
+
+    public void dislikeReview(Long commentId) {
+
+    }
 }

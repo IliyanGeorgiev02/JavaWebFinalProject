@@ -17,10 +17,11 @@ body {
     background-color: #d3d3d3;
     border-radius: 20px;
     width: 700px;
-    padding: 15px;
+    padding: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content:center;
     margin-bottom: 50px;
     text-align: left;
 }
@@ -41,6 +42,15 @@ body {
     max-width: 500px;
     margin-bottom: 10px;
     font-size: medium;
+    text-align: left;
+}
+
+#form > small {
+    width: 100%;
+    max-width: 500px;
+    margin-bottom: 20px;
+    color: red;
+    font-size: small;
     text-align: left;
 }
 

@@ -106,7 +106,7 @@ public class ReviewController {
             model.addAttribute("newReviewData", new EditReviewDto());
             return "EditReview";
         }
-        model.addAttribute("reviewNotFound");
+        model.addAttribute("reviewData", null);
         return "redirect:/EditReview";
     }
 
@@ -119,7 +119,7 @@ public class ReviewController {
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("newReviewData", newReviewData);
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.newReviewData", bindingResult);
-            return "redirect:/Review/" + reviewId;
+            return "redirect:/EditReview/" + reviewId;
         }
         reviewService.updateReview(newReviewData, existingReview);
         return "redirect:/Review/" + reviewId;
@@ -139,15 +139,39 @@ public class ReviewController {
         return "Reviews";
     }
 
-    @PostMapping("Review/{reviewId}/like")
-    public String likeReview(@PathVariable("reviewId") Long reviewId,@PathVariable("commentId") Long commentId) {
+    @PostMapping("Review/{reviewId}/{commentId}/like")
+    public String likeReviewComment(@PathVariable("reviewId") Long reviewId,@PathVariable("commentId") Long commentId) {
         this.commentsService.likeComment(commentId);
-        return "/Review/" + reviewId;
+        return "redirect:/Review/" + reviewId;
     }
 
-    @PostMapping("Review/{reviewId}/dislike")
-    public String dislikeReview(@PathVariable("reviewId") Long reviewId,@PathVariable("commentId") Long commentId) {
+    @PostMapping("Review/{reviewId}/{commentId}/dislike")
+    public String dislikeReviewComment(@PathVariable("reviewId") Long reviewId,@PathVariable("commentId") Long commentId) {
         this.commentsService.dislikeComment(commentId);
-        return "/Review/" + reviewId;
+        return "redirect:/Review/" + reviewId;
+    }
+
+    @PostMapping("/Review/{reviewId}/like")
+    public String likeReview(@PathVariable("reviewId") Long reviewId) {
+        this.reviewService.likeReview(reviewId);
+        return "redirect:/Review/" + reviewId;
+    }
+
+    @PostMapping("/Review/{reviewId}/dislike")
+    public String dislikeReview(@PathVariable("reviewId") Long reviewId) {
+        this.reviewService.dislikeReview(reviewId);
+        return "redirect:/Review/" + reviewId;
+    }
+
+    @PostMapping("Home/Review/{reviewId}/like")
+    public String likeHomeReview(@PathVariable("reviewId") Long reviewId) {
+        this.reviewService.likeReview(reviewId);
+        return "redirect:/home";
+    }
+
+    @PostMapping("Home/Review/{reviewId}/dislike")
+    public String dislikeHomeReview(@PathVariable("reviewId") Long reviewId) {
+        this.reviewService.dislikeReview(reviewId);
+        return "redirect:/home";
     }
 }

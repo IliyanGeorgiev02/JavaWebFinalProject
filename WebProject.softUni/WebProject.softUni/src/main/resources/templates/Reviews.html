@@ -16,34 +16,28 @@
 <div id="reviews">
     <div class="review" th:each="review : ${ListData}">
         <div id="textContent">
-            <a th:href="@{Review.html(reviewId=${review.id})}" th:text="${review.title}"> "Gud muvi" </a>
+            <a th:href="@{Review.html(reviewId=${review.id})}" th:text="${review.reviewTitle}"> "Gud muvi" </a>
             <span> by: <a th:href="@{User.html(userId=${review.user.id})}"
                           th:text="${review.user.username}"> username </a></span>
         </div>
-        <div id="reviewText" th:text="${review.text}">
-            This muvi gud 10/10. Im literally Ryan Gosling
+        <div id="reviewText" th:text="${review.reviewText}">
         </div>
         <div id="rating" th:text="${review.rating} + '/100'">
-            90/100
         </div>
         <div id="reviewButtons">
-            <button class="image-button">
-                <img
-                        src="\images\like.png"
-                        alt="Button Image"
-                        class="button-image"
-                />
-                Button Text
-            </button>
-            <button class="image-button">
-                <img
-                        src="\images\dislike.png"
-                        alt="Button Image"
-                        class="button-image"
-                />
-                Button Text
-            </button>
+            <form th:action="@{/Review/{reviewId}/like(reviewId=${review.id})}" method="post">
+                <button type="submit" class="image-button">
+                    <img src="/images/like.png" alt="Like" class="button-image"/>
+                    <span th:text="${review.likes}"></span>
+                </button>
+            </form>
+            <form th:action="@{/Review/{reviewId}/dislike(reviewId=${review.id})}" method="post">
+                <button type="submit" class="image-button">
+                    <img src="/images/dislike.png" alt="Dislike" class="button-image"/>
+                </button>
+            </form>
         </div>
+
     </div>
 </div>
 </body>

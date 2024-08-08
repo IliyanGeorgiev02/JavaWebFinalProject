@@ -12,20 +12,30 @@
 </head>
 <body>
 <div th:replace="Fragments/Navbar"></div>
+<div th:if="${reviewData == null}" class="alert alert-warning">
+    <p>No review data available. The requested review could not be found.</p>
+</div>
 <form id="form" th:action="@{/EditReview/{id}(id=${reviewData.id})}" th:object="${newReviewData}" th:method="post">
     <input type="hidden" name="_method" value="PUT">
     <input type="hidden" name="reviewId" th:value="${reviewData.id}">
+
     <h1 th:text="${reviewData.movie.title}"></h1>
+
     <label for="reviewTitle">Review title:</label>
     <input type="text" name="reviewTitle" id="reviewTitle" th:field="*{reviewTitle}"/>
+    <small th:errors="*{reviewTitle}" id="reviewTitleError" class="bg-danger text-white rounded"></small>
+
     <label for="reviewRating">Review rating:</label>
     <input type="text" name="reviewRating" id="reviewRating" th:field="*{reviewRating}"/>
+    <small th:errors="*{reviewRating}" id="reviewRatingError" class="bg-danger text-white rounded"></small>
+
     <label for="reviewText">Review text:</label>
     <textarea id="reviewText" name="review-text" rows="15" cols="100" th:field="*{reviewText}"></textarea>
+    <small th:errors="*{reviewText}" id="reviewTextError" class="bg-danger text-white rounded"></small>
+
     <div id="formButtonDiv">
         <button id="updateReview">Update review</button>
     </div>
 </form>
-
 </body>
 </html>

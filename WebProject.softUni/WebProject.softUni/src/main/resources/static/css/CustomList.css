@@ -24,20 +24,18 @@ h1 {
   font-size: larger;
   width:500px;
 }
-#movie > img {
-  border: 2px solid black;
+#movie img {
+  width: 100%;
   border-radius: 10px;
 }
 #movie {
   text-align: center;
   border: 2px solid black;
   border-radius: 10px;
-  padding: 30px;
-  gap: 10px;
-  position: relative;
-  top: 0;
-  transition: top ease 0.5s;
+  padding: 20px;
   background-color: dimgray;
+  width: 200px;
+  height:400px;
 }
 #movie:hover {
   top: -10px;
@@ -151,4 +149,10 @@ width:40px;
 }
 #deleteBtn{
 background-color:FireBrick;
+}
+#moviesContainer {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  justify-items: center;
 }

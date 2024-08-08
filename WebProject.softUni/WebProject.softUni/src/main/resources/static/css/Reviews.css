@@ -60,7 +60,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 50px;
+  width: 60px;
   padding: 8px;
   margin: 10px;
 }
@@ -98,3 +98,5 @@ a:hover {
 button:hover {
   cursor: pointer;
 }
+#deleteBtn{
+background-color:firebrick}

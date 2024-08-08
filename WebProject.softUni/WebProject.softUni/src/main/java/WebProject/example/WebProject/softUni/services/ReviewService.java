@@ -36,7 +36,7 @@ public class ReviewService {
     }
 
     public Review mapReview(AddReviewDto addReviewDto, Movie mappedMovie) {
-        Review review=new Review();
+        Review review = new Review();
         review.setReviewTitle(addReviewDto.getReviewTitle());
         review.setReviewText(addReviewDto.getReviewText());
         review.setRating(addReviewDto.getReviewRating());
@@ -71,4 +71,24 @@ public class ReviewService {
         }
     }
 
+    public void likeReview(Long reviewId) {
+        Optional<Review> byId = this.reviewRepository.findById(reviewId);
+        if (byId.isPresent()) {
+            Review review = byId.get();
+            review.setLikes(review.getLikes() + 1);
+            this.reviewRepository.save(review);
+        }
+    }
+
+    public void dislikeReview(Long reviewId) {
+        Optional<Review> byId = this.reviewRepository.findById(reviewId);
+        if (byId.isPresent()) {
+            Review review = byId.get();
+            int likes = review.getLikes();
+            if (likes - 1 >= 0) {
+                review.setLikes(review.getLikes() - 1);
+                this.reviewRepository.save(review);
+            }
+        }
+    }
 }
