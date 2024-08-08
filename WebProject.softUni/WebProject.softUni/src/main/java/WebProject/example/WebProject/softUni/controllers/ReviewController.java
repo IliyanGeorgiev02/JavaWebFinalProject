@@ -1,5 +1,6 @@
 package WebProject.example.WebProject.softUni.controllers;
 
+import WebProject.example.WebProject.softUni.dtos.AddCommentDto;
 import WebProject.example.WebProject.softUni.dtos.AddReviewDto;
 import WebProject.example.WebProject.softUni.dtos.EditReviewDto;
 import WebProject.example.WebProject.softUni.dtos.MovieFullInfoDto;
@@ -16,12 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import java.time.LocalDate;
-import java.time.Year;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 
 @Controller
@@ -81,6 +77,7 @@ public class ReviewController {
         Optional<Review> review = this.reviewService.findReviewById(reviewId);
         if (review.isPresent()) {
             model.addAttribute("reviewData", review.get());
+            model.addAttribute("addCommentDto", new AddCommentDto());
             return "Review";
         } else {
             return "redirect:/error";
@@ -139,14 +136,14 @@ public class ReviewController {
         return "Reviews";
     }
 
-    @PostMapping("Review/{reviewId}/{commentId}/like")
-    public String likeReviewComment(@PathVariable("reviewId") Long reviewId,@PathVariable("commentId") Long commentId) {
+    @PostMapping("Review/Comments/{commentId}/{reviewId}/like")
+    public String likeReviewComment(@PathVariable("reviewId") Long reviewId, @PathVariable("commentId") Long commentId) {
         this.commentsService.likeComment(commentId);
         return "redirect:/Review/" + reviewId;
     }
 
-    @PostMapping("Review/{reviewId}/{commentId}/dislike")
-    public String dislikeReviewComment(@PathVariable("reviewId") Long reviewId,@PathVariable("commentId") Long commentId) {
+    @PostMapping("Review/Comments/{commentId}/{reviewId}/dislike")
+    public String dislikeReviewComment(@PathVariable("reviewId") Long reviewId, @PathVariable("commentId") Long commentId) {
         this.commentsService.dislikeComment(commentId);
         return "redirect:/Review/" + reviewId;
     }
@@ -173,5 +170,20 @@ public class ReviewController {
     public String dislikeHomeReview(@PathVariable("reviewId") Long reviewId) {
         this.reviewService.dislikeReview(reviewId);
         return "redirect:/home";
+    }
+
+    @PostMapping("/Review/{reviewId}")
+    public String postComment(@ModelAttribute("addCommentDto") AddCommentDto addCommentDto,@PathVariable("reviewId")long id) {
+        Optional<Review> reviewById = this.reviewService.findReviewById(id);
+        if (reviewById.isEmpty()) {
+            return "redirect:/home";
+        }
+        Review review = reviewById.get();
+        Comment mappedComment = this.modelMapper.map(addCommentDto, Comment.class);
+        mappedComment.setLikes(0);
+        mappedComment.setReview(review);
+        mappedComment.setUser(userHelperService.getUser());
+        this.commentsService.addComment(mappedComment);
+        return "redirect:/Review/"+id;
     }
 }

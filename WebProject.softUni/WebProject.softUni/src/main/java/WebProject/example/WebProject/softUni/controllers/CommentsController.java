@@ -72,16 +72,4 @@ public class CommentsController {
         return "redirect:/CustomList/" + id;
     }
 
-    @PostMapping("Review/Comments/{commentId}/{reviewId}/like")
-    public String likeReviewComment(@PathVariable("commentId") Long commentId, @PathVariable("reviewId") Long reviewId) {
-        this.commentsService.likeComment(commentId);
-        return "redirect:/Review/" + reviewId;
-    }
-
-    @PostMapping("Review/Comments/{commentId}/{reviewId}/dislike")
-    public String dislikeReviewComment(@PathVariable("commentId") Long commentId, @PathVariable("reviewId") Long reviewId) {
-        this.commentsService.dislikeComment(commentId);
-        return "redirect:/Review/" + reviewId;
-    }
-
 }

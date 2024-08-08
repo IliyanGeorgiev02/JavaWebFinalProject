@@ -9,7 +9,7 @@
             href="https://fonts.googleapis.com/css2?family=REM:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
             rel="stylesheet"
     />
-    <title>Document</title>
+    <title>Reviews</title>
 </head>
 <body>
 <div th:replace="Fragments/Navbar"></div>
@@ -24,20 +24,7 @@
         </div>
         <div id="rating" th:text="${review.rating} + '/100'">
         </div>
-        <div id="reviewButtons">
-            <form th:action="@{/Review/{reviewId}/like(reviewId=${review.id})}" method="post">
-                <button type="submit" class="image-button">
-                    <img src="/images/like.png" alt="Like" class="button-image"/>
-                    <span th:text="${review.likes}"></span>
-                </button>
-            </form>
-            <form th:action="@{/Review/{reviewId}/dislike(reviewId=${review.id})}" method="post">
-                <button type="submit" class="image-button">
-                    <img src="/images/dislike.png" alt="Dislike" class="button-image"/>
-                </button>
-            </form>
-        </div>
-
+        <a th:href="@{/Review/{reviewId}(reviewId=${review.id})}"><button>View review</button></a>
     </div>
 </div>
 </body>

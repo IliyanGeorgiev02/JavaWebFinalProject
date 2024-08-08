@@ -21,15 +21,13 @@ public class CommentsService {
     }
 
 
-    public Long likeComment(Long commentId) {
+    public void likeComment(Long commentId) {
         Optional<Comment> optionalComment = commentRepository.findById(commentId);
         if (optionalComment.isPresent()) {
             Comment comment = optionalComment.get();
             comment.setLikes(comment.getLikes() + 1);
             commentRepository.save(comment);
-            return comment.getCustomList().getId();
         }
-        return null;
     }
 
     public void dislikeComment(Long commentId) {

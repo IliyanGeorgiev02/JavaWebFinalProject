@@ -42,15 +42,27 @@
     </div>
 </div>
 <div id="changeReviewBtns">
+    <a th:href="@{/EditReview/{id}(id=${reviewData.id})}">
+        <button id="editBtn" type="submit">Edit review</button>
+    </a>
     <form th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') || reviewData.user.username == #authentication.name}"
           th:action="@{/Review/{id}(id=${reviewData.id})}" method="post">
         <input type="hidden" name="_method" value="delete"/>
         <button id="deleteBtn" type="submit">Delete review</button>
     </form>
-    <a th:href="@{/EditReview/{id}(id=${reviewData.id})}">
-        <button id="editBtn" type="submit">Edit review</button>
-    </a>
 </div>
+<div class="sectionDivider">
+    <hr>
+    <h3>Add a comment</h3>
+    <hr>
+</div>
+<form th:object="${addCommentDto}" th:method="post" th:action="@{/Review/{id}(id=${reviewData.id})}"
+      id="form">
+    <div id="addComment">
+        <input type="text" placeholder="Add a comment" th:field="*{text}"/>
+        <button type="submit">Add comment</button>
+    </div>
+</form>
 <div id="comments">
     <div id="comment" th:each="comment : ${reviewData.comments}">
         <div id="user" th:text="${comment.user.username}">
@@ -59,19 +71,20 @@
         <br/>
         <p th:text="${comment.text}">This is my comment</p>
         <div id="reviewButtons">
-            <form th:action="@{Review/Comments/{commentId}/{reviewId}/like(commentId=${comment.id} reviewId=${reviewData.id})}"
+            <form th:action="@{/Review/Comments/{commentId}/{reviewId}/like(commentId=${comment.id}, reviewId=${reviewData.id})}"
                   method="post">
                 <button type="submit" class="image-button">
                     <img src="/images/like.png" alt="Like" class="button-image"/>
                     <span th:text="${comment.likes}"></span>
                 </button>
             </form>
-            <form th:action="@{Review/Comments/{commentId}/dislike(commentId=${comment.id} reviewId=${reviewData.id)}"
+            <form th:action="@{/Review/Comments/{commentId}/{reviewId}/dislike(commentId=${comment.id}, reviewId=${reviewData.id})}"
                   method="post">
                 <button type="submit" class="image-button">
                     <img src="/images/dislike.png" alt="Dislike" class="button-image"/>
                 </button>
             </form>
+
         </div>
     </div>
 </div>
