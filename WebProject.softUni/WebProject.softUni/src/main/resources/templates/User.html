@@ -17,21 +17,25 @@
 <body>
 <div th:replace="Fragments/Navbar"></div>
 <div id="mainBody">
+    <div th:if="${userData == null}" class="hidden-user-warning">
+        <span>User not found</span>
+    </div>
+
     <img
             id="Profile"
-            th:src="@{/uploads/profile_pictures/{profilePicUrl}(profilePicUrl=${profileData.profilePicUrl})}"
-            alt="Profile picture"
+            th:src="${userData.profilePicture}"
+    alt="Profile picture"
     />
     <div id="data">
-        <h1 id="username" th:text="${profileData.username}"></h1>
-        <h1 id="names" th:text="${profileData.firstName}  + ' ' + ${profileData.lastName}"></h1>
-        <h3 id="bio" th:text="${profileData.bio}"></h3>
+        <h1 id="username" th:text="${userData.username}">Username</h1>
+        <h1 id="names" th:text="${userData.firstName} + ' ' + ${userData.lastName}">Full Name</h1>
+        <h3 id="bio" th:text="${userData.bio}">Bio</h3>
         <div class="movieLists">
             <h3>Lists</h3>
             <div id="trendingLists">
-                <div class="listBox" th:each="list : ${listsData}">
-                    <div class="movie-grid">
-                        <div th:each="movie, iter : ${list.movies}" th:if="${iter.index < 4}">
+                <div class="listBox" th:each="list : ${userData.lists}">
+                    <div class="movie-grid" th:if="${iter.index < 4}">
+                        <div th:each="movie, iter : ${list.movies}">
                             <img th:src="${movie.posterUrl}" alt="movie poster"/>
                         </div>
                     </div>
@@ -49,19 +53,17 @@
         <div class="movieList"></div>
         <h3>Recently reviewed</h3>
         <span>
-          <div class="listContents" th:each="review : ${reviewsData}">
-            <img th:src="${review.movie.posterUrl}"
-                 alt="Movie poster"/>
-            <h5 th:text="${review.movie.title}"></h5>
-          </div>
+              <div class="listContents" th:each="review, iter : ${userData.reviews}" th:if="${iter.index < 4}">
+                <img th:src="${review.movie.posterUrl}" alt="Movie poster"/>
+                <h5 th:text="${review.movie.title}">Movie Title</h5>
+              </div>
         </span>
-        <a th:href="@{/Reviews/{username}(username=${profileData.username})}">
-            <button class="viewAll">
-                View all
-            </button>
+        <a th:href="@{/Reviews/{username}(username=${userData.username})}">
+            <button class="viewAll">View all</button>
         </a>
         <hr/>
     </div>
 </div>
 </body>
+
 </html>

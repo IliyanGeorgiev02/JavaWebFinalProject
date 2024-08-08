@@ -24,8 +24,8 @@ public class MovieService {
         this.modelMapper = modelMapper;
     }
 
-    public void saveMovie(Movie mappedMovie) {
-        this.movieRepository.saveAndFlush(mappedMovie);
+    public Movie saveMovie(Movie mappedMovie) {
+        return this.movieRepository.saveAndFlush(mappedMovie);
     }
 
     public Optional<Movie> findMovie(Movie mappedMovie) {
@@ -39,6 +39,8 @@ public class MovieService {
         mappedMovie.setYear(Year.parse(movieFullInfoDto.getYear()));
         mappedMovie.setWriters(movieFullInfoDto.getWriter());
         mappedMovie.setAudienceRating(movieFullInfoDto.getRatings().toString());
+        mappedMovie.setDescription(movieFullInfoDto.getPlot());
+        mappedMovie.setLanguages(movieFullInfoDto.getLanguage());
         return mappedMovie;
     }
 

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <link rel="stylesheet" href="css/EditReview.css"/>
+    <link rel="stylesheet" href="/css/EditReview.css"/>
     <link
             href="https://fonts.googleapis.com/css2?family=REM:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
             rel="stylesheet"
@@ -15,27 +15,31 @@
 <div th:if="${reviewData == null}" class="alert alert-warning">
     <p>No review data available. The requested review could not be found.</p>
 </div>
-<form id="form" th:action="@{/EditReview/{id}(id=${reviewData.id})}" th:object="${newReviewData}" th:method="post">
-    <input type="hidden" name="_method" value="PUT">
-    <input type="hidden" name="reviewId" th:value="${reviewData.id}">
+<div id="mainBody">
+    <form id="form" th:action="@{/EditReview/{id}(id=${reviewData.id})}" th:object="${newReviewData}" th:method="post">
+        <div id="formContent">
+            <input type="hidden" name="_method" value="PUT">
+            <input type="hidden" name="reviewId" th:value="${reviewData.id}">
 
-    <h1 th:text="${reviewData.movie.title}"></h1>
+            <h1 th:text="${reviewData.movie.title}"></h1>
 
-    <label for="reviewTitle">Review title:</label>
-    <input type="text" name="reviewTitle" id="reviewTitle" th:field="*{reviewTitle}"/>
-    <small th:errors="*{reviewTitle}" id="reviewTitleError" class="bg-danger text-white rounded"></small>
+            <label for="reviewTitle">Review title:</label>
+            <input type="text" name="reviewTitle" id="reviewTitle" th:field="*{reviewTitle}"/>
+            <small th:errors="*{reviewTitle}" id="reviewTitleError" class="bg-danger text-white rounded"></small>
 
-    <label for="reviewRating">Review rating:</label>
-    <input type="text" name="reviewRating" id="reviewRating" th:field="*{reviewRating}"/>
-    <small th:errors="*{reviewRating}" id="reviewRatingError" class="bg-danger text-white rounded"></small>
+            <label for="reviewRating">Review rating:</label>
+            <input type="text" name="reviewRating" id="reviewRating" th:field="*{reviewRating}"/>
+            <small th:errors="*{reviewRating}" id="reviewRatingError" class="bg-danger text-white rounded"></small>
 
-    <label for="reviewText">Review text:</label>
-    <textarea id="reviewText" name="review-text" rows="15" cols="100" th:field="*{reviewText}"></textarea>
-    <small th:errors="*{reviewText}" id="reviewTextError" class="bg-danger text-white rounded"></small>
+            <label for="reviewText">Review text:</label>
+            <textarea id="reviewText" name="review-text" rows="12" cols="60" th:field="*{reviewText}"></textarea>
+            <small th:errors="*{reviewText}" id="reviewTextError" class="bg-danger text-white rounded"></small>
 
-    <div id="formButtonDiv">
-        <button id="updateReview">Update review</button>
-    </div>
-</form>
+            <div id="formButtonDiv">
+                <button id="updateReview" type="submit">Update review</button>
+            </div>
+        </div>
+    </form>
+</div>
 </body>
 </html>

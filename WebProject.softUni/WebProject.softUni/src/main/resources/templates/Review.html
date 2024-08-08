@@ -25,20 +25,19 @@
         <div id="rating" th:text="${reviewData.rating + '/100'}">
         </div>
         <div id="reviewButtons">
-            <form th:action="@{Review/{reviewId}/like(reviewId=${reviewData.id})}"
-                  method="post">
+            <form th:action="@{/Review/{reviewId}/like(reviewId=${reviewData.id})}" method="post">
                 <button type="submit" class="image-button">
                     <img src="/images/like.png" alt="Like" class="button-image"/>
                     <span th:text="${reviewData.likes}"></span>
                 </button>
             </form>
-            <form th:action="@{Review/{reviewId}/dislike(reviewId=${reviewData.id})}"
-                  method="post">
+            <form th:action="@{/Review/{reviewId}/dislike(reviewId=${reviewData.id})}" method="post">
                 <button type="submit" class="image-button">
                     <img src="/images/dislike.png" alt="Dislike" class="button-image"/>
                 </button>
             </form>
         </div>
+
     </div>
 </div>
 <div id="changeReviewBtns">

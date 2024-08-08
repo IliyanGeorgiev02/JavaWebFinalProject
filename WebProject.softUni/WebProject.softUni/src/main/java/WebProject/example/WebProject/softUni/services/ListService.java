@@ -27,12 +27,13 @@ public class ListService {
         this.userHelperService = userHelperService;
     }
 
-    public void addList(CreateListDto listDto) {
+    public CustomList addList(CreateListDto listDto) {
         CustomList mappedList = this.modelMapper.map(listDto, CustomList.class);
         mappedList.setLikes(0);
         User user = this.userHelperService.getUser();
         mappedList.setUser(user);
         customListRepository.saveAndFlush(mappedList);
+        return mappedList;
     }
 
     public Optional<List<Movie>> findAllInMovieList(String title, String description) {
@@ -60,7 +61,7 @@ public class ListService {
     }
 
     public void saveList(CustomList customList) {
-        this.customListRepository.save(customList);
+        this.customListRepository.saveAndFlush(customList);
     }
 
     public void likeList(Long listId) {

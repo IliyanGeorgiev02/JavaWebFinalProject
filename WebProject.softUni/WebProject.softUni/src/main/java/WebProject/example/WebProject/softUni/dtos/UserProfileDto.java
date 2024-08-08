@@ -2,10 +2,12 @@ package WebProject.example.WebProject.softUni.dtos;
 
 import WebProject.example.WebProject.softUni.validation.annotation.UniqueUsername;
 import jakarta.validation.constraints.Size;
+import org.springframework.web.multipart.MultipartFile;
 
 public class UserProfileDto {
 
     private String profilePicUrl;
+    private MultipartFile profilePicture;
 
     @UniqueUsername
     @Size(min = 3, max = 30, message = "the length of your username must be between 3 and 30 characters")
@@ -57,5 +59,13 @@ public class UserProfileDto {
 
     public void setBio(String bio) {
         this.bio = bio;
+    }
+
+    public MultipartFile getProfilePicture() {
+        return profilePicture;
+    }
+
+    public void setProfilePicture(MultipartFile profilePicture) {
+        this.profilePicture = profilePicture;
     }
 }

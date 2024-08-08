@@ -8,7 +8,6 @@ import java.util.List;
 @Entity
 @Table(name = "lists")
 public class CustomList extends BaseEntity {
-    @Column(unique = true)
     private String title;
     private String description;
     private int likes;

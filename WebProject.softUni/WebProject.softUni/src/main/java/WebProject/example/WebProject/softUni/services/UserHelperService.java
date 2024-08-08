@@ -50,7 +50,6 @@ public class UserHelperService {
             return;
         }
         logger.info("Updating profile for user: {}", user.getUsername());
-        updateFieldIfNotBlank(userProfileDto::getProfilePicUrl, user::setProfilePicture, "Profile Picture");
         updateFieldIfNotBlank(userProfileDto::getUsername, user::setUsername, "Username");
         updateFieldIfNotBlank(userProfileDto::getFirstName, user::setFirstName, "First Name");
         updateFieldIfNotBlank(userProfileDto::getLastName, user::setLastName, "Last Name");

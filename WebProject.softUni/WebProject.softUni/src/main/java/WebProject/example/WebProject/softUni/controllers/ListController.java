@@ -75,20 +75,10 @@ public class ListController {
     @PostMapping("/CreateList")
     public String createList(@Valid CreateListDto listDto, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
         if (!bindingResult.hasErrors()) {
-            this.listService.addList(listDto);
-            CustomList mappedList = modelMapper.map(listDto, CustomList.class);
-            mappedList.setUser(userHelperService.getUser());
-            Optional<List<Movie>> allInMovieList = this.listService.findAllInMovieList(mappedList.getTitle(), mappedList.getDescription());
-            if (allInMovieList.isPresent()) {
-                mappedList.setMovies(allInMovieList.get());
-            } else {
-                mappedList.setMovies(new ArrayList<>());
-            }
-            model.addAttribute("addCommentDto", new AddCommentDto());
-            model.addAttribute("listData", mappedList);
-            return "/CustomList";
+            CustomList mappedList = this.listService.addList(listDto);
+            return "redirect:/CustomList/"+mappedList.getId();
         }
-        redirectAttributes.addFlashAttribute("listDto", listDto);
+        redirectAttributes.addFlashAttribute("listData", listDto);
         redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.listDto", bindingResult);
         return "redirect:/CreateList";
     }
@@ -117,9 +107,9 @@ public class ListController {
     }
 
     @PostMapping("/AddToList")
-    private String addMovieToList(@RequestParam("title") String title,
-                                  @RequestParam("year") String year,
-                                  @RequestParam("listId") String listId) {
+    public String addMovieToList(@RequestParam("title") String title,
+                                 @RequestParam("year") String year,
+                                 @RequestParam("listId") String listId) {
 
         try {
             long id = Long.parseLong(listId);
@@ -133,12 +123,15 @@ public class ListController {
             }
             Movie mappedMovie = this.movieService.mapMovie(movieFullInfoDto);
             Optional<Movie> movie = this.movieService.findMovie(mappedMovie);
+
+            Movie movieToAdd;
             if (movie.isEmpty()) {
-                this.movieService.saveMovie(mappedMovie);
+               this.movieService.saveMovie(mappedMovie);
             }
+                movieToAdd = movie.get();
             CustomList customList = listById.get();
-            if (!customList.getMovies().contains(movie.get())) {
-                customList.getMovies().add(movie.get());
+            if (!customList.getMovies().contains(movieToAdd)) {
+                customList.getMovies().add(movieToAdd);
                 this.listService.saveList(customList);
             }
             return "redirect:/ListOfMovies";
@@ -146,6 +139,7 @@ public class ListController {
             return "redirect:/ListOfMovies";
         }
     }
+
 
     @PostMapping("/CustomList/{listId}/like")
     public String likeList(@PathVariable("listId") Long listId, Model model) {

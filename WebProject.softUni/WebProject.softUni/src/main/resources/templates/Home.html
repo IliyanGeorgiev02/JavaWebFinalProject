@@ -59,13 +59,13 @@
                         />
                         <div id="rating" th:text="${review.rating}+'/100'">Rating</div>
                         <div id="reviewButtons">
-                            <form th:action="@{Review/{reviewId}/like(reviewId=${review.id})}" method="post">
+                            <form th:action="@{Home/Review/{reviewId}/like(reviewId=${review.id})}" method="post">
                                 <button type="submit" class="image-button">
                                     <img src="/images/like.png" alt="Like" class="button-image"/>
                                     <span th:text="${review.likes}"></span>
                                 </button>
                             </form>
-                            <form th:action="@{Review/{reviewId}/dislike(reviewId=${review.id})}" method="post">
+                            <form th:action="@{Home/Review/{reviewId}/dislike(reviewId=${review.id})}" method="post">
                                 <button type="submit" class="image-button">
                                     <img src="/images/dislike.png" alt="Dislike" class="button-image"/>
                                 </button>
@@ -73,12 +73,19 @@
                         </div>
                     </div>
                     <div id="reviewTextContent">
-                        <h1 th:text="|${review.reviewTitle} by: ${review.user.username}|"></h1>
+                        <h1>
+                            <span th:text="${review.reviewTitle}"></span>
+                            <span> by: </span>
+                            <a th:href="@{/User/{id}(id=${review.user.id})}" th:text="${review.user.username}"></a>
+                        </h1>
                         <div id="reviewText" th:text="${review.reviewText}">Review text</div>
                         <div id="comments">
                             <div th:each="comment : ${review.comments}">
                                 <div id="comment">
-                                    <strong th:text="${comment.user.username}">Username</strong><br/>
+                                    <a th:href="@{/User/comment.user.id}">
+                                        <strong th:text="${comment.user.username}">Username</strong>
+                                    </a>
+                                    <br/>
                                     <p th:text="${comment.text}">This is my comment</p>
                                     <div id="reviewButtons">
                                         <form th:action="@{Home/Comments/{commentId}/like(commentId=${comment.id})}"
@@ -104,8 +111,10 @@
         </div>
     </div>
     <div id="viewBtn">
-        <button id="viewMore" th:text="#{home_view_more_reviews}" th:if="${reviewsData.size() > 4}">View more reviews
-        </button>
+        <a th:href="@{/Reviews}">
+            <button id="viewMore" th:text="#{home_view_more_reviews}">View more reviews
+            </button>
+        </a>
     </div>
 </div>
 </body>

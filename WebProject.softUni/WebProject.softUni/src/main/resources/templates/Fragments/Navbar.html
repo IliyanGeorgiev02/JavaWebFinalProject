@@ -19,13 +19,13 @@
             <img src="/images/logo-no-background.png" alt="logo"/>
         </a>
         <ul>
-            <a th:href="Movies">
+            <a th:href="@{/Movies}">
                 <li th:text="#{nav_bar_movies}">movies</li>
             </a>
-            <a th:href="Reviews">
+            <a th:href="@{/Reviews}">
                 <li th:text="#{nav_bar_reviews}">reviews</li>
             </a>
-            <a th:href="Lists">
+            <a th:href="@{/Lists}">
                 <li th:text="#{nav_bar_lists}">lists</li>
             </a>
         </ul>
@@ -36,13 +36,13 @@
             </div>
             <button th:text="#{nav_bar_search}" type="submit">Search</button>
         </form>
-        <a th:href="CreateList">
+        <a th:href="@{/CreateList}">
             <button th:text="#{nav_bar_add_review}"> Create list</button>
         </a>
-        <a th:href="editProfile">
+        <a th:href="@{/editProfile}">
             <button th:text="#{nav_bar_edit_profile}">Edit Profile</button>
         </a>
-        <a th:href="User">
+        <a th:href="@{/User}">
             <button th:text="#{nav_bar_view_profile}">View Profile</button>
         </a>
         <form

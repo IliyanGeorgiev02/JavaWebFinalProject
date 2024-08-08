@@ -21,7 +21,9 @@
 
         <div id="listDescription">
             <p name="listDescription" th:text="${listData.description}"></p>
-            <p name="byUser" th:text="${listData.user.username}"></p>
+            <a th:href="/User/listData.user.id">
+                <p name="byUser" th:text="${listData.user.username}"></p>
+            </a>
         </div>
 
         <div id="mainBody">
