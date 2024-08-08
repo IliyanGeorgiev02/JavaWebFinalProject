@@ -148,13 +148,13 @@ public class ReviewController {
         return "redirect:/Review/" + reviewId;
     }
 
-    @PostMapping("/Review/{reviewId}/like")
+    @PostMapping("Review/{reviewId}/like")
     public String likeReview(@PathVariable("reviewId") Long reviewId) {
         this.reviewService.likeReview(reviewId);
         return "redirect:/Review/" + reviewId;
     }
 
-    @PostMapping("/Review/{reviewId}/dislike")
+    @PostMapping("Review/{reviewId}/dislike")
     public String dislikeReview(@PathVariable("reviewId") Long reviewId) {
         this.reviewService.dislikeReview(reviewId);
         return "redirect:/Review/" + reviewId;

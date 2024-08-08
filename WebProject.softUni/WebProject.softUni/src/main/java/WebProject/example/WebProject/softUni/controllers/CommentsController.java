@@ -55,7 +55,7 @@ public class CommentsController {
     }
 
     @PostMapping("Home/Comments/{commentId}/dislike")
-    public String dislikeHomeComment(@PathVariable("id") Long commentId) {
+    public String dislikeHomeComment(@PathVariable("commentId") Long commentId) {
         this.commentsService.dislikeComment(commentId);
         return "redirect:/home";
     }

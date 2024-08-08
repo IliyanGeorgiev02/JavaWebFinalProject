@@ -187,6 +187,7 @@ hr {
   background-color: Gray;
   border-radius: 20px;
   padding: 5px;
+    text-align:left;
 }
 #comment > p {
   border: 2px solid black;
