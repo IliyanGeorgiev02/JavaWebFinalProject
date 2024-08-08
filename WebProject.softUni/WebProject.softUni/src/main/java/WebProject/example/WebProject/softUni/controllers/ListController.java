@@ -76,14 +76,15 @@ public class ListController {
     public String createList(@Valid CreateListDto listDto, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
         if (!bindingResult.hasErrors()) {
             this.listService.addList(listDto);
-            ListDataDto mappedList = modelMapper.map(listDto, ListDataDto.class);
-            mappedList.setUser(userHelperService.getUser().getUsername());
+            CustomList mappedList = modelMapper.map(listDto, CustomList.class);
+            mappedList.setUser(userHelperService.getUser());
             Optional<List<Movie>> allInMovieList = this.listService.findAllInMovieList(mappedList.getTitle(), mappedList.getDescription());
             if (allInMovieList.isPresent()) {
                 mappedList.setMovies(allInMovieList.get());
             } else {
                 mappedList.setMovies(new ArrayList<>());
             }
+            model.addAttribute("addCommentDto", new AddCommentDto());
             model.addAttribute("listData", mappedList);
             return "/CustomList";
         }
@@ -136,9 +137,9 @@ public class ListController {
                 this.movieService.saveMovie(mappedMovie);
             }
             CustomList customList = listById.get();
-            if (!customList.getMovies().contains(mappedMovie)) {
-                customList.getMovies().add(mappedMovie);
-                this.listService.saveMovie(customList);
+            if (!customList.getMovies().contains(movie.get())) {
+                customList.getMovies().add(movie.get());
+                this.listService.saveList(customList);
             }
             return "redirect:/ListOfMovies";
         } catch (NumberFormatException e) {

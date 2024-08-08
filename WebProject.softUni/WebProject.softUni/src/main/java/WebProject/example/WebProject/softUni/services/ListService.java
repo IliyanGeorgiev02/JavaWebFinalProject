@@ -59,7 +59,7 @@ public class ListService {
         return this.customListRepository.findByUsername(username);
     }
 
-    public void saveMovie(CustomList customList) {
+    public void saveList(CustomList customList) {
         this.customListRepository.save(customList);
     }
 
