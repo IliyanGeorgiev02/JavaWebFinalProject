@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -56,45 +56,49 @@
     <hr/>
     <div id="popularReviews">
         <div class="reviewList">
-            <div class="review" th:each="review : ${reviewsData.reviews}">
-                <div id="reviewTopContent">
-                    <div id="poster">
-                        <img
-                                id="reviewMoviePoster"
-                                th:src="@{${review.posterUrl}}"
-                                alt="movie poster"
-                        />
-                        <div id="rating" th:text="${review.rating} + '/100'">Rating</div>
-                        <div id="reviewButtons">
-                            <form th:action="@{/Home/Review/{reviewId}/like(reviewId=${review.id})}" method="post">
-                                <button type="submit" class="image-button">
-                                    <img src="/images/like.png" alt="Like" class="button-image"/>
-                                    <span th:text="${review.likes}"></span>
-                                </button>
-                            </form>
-                            <form th:action="@{/Home/Review/{reviewId}/dislike(reviewId=${review.id})}" method="post">
-                                <button type="submit" class="image-button">
-                                    <img src="/images/dislike.png" alt="Dislike" class="button-image"/>
-                                </button>
-                            </form>
+            <div th:if="${reviewsData == null or reviewsData.reviews == null or #lists.size(reviewsData.reviews) == 0}">
+                <p>No reviews available at the moment.</p>
+            </div>
+            <div th:unless="${reviewsData == null or reviewsData.reviews == null or #lists.size(reviewsData.reviews) == 0}">
+                <div class="review" th:each="review : ${reviewsData.reviews}">
+                    <div id="reviewTopContent">
+                        <div id="poster">
+                            <img
+                                    id="reviewMoviePoster"
+                                    th:src="@{${review.posterUrl}}"
+                                    alt="movie poster"
+                            />
+                            <div id="rating" th:text="${review.rating} + '/100'">Rating</div>
+                            <div id="reviewButtons">
+                                <form th:action="@{/Home/Review/{reviewId}/like(reviewId=${review.id})}" method="post">
+                                    <button type="submit" class="image-button">
+                                        <img src="/images/like.png" alt="Like" class="button-image"/>
+                                        <span th:text="${review.likes}"></span>
+                                    </button>
+                                </form>
+                                <form th:action="@{/Home/Review/{reviewId}/dislike(reviewId=${review.id})}" method="post">
+                                    <button type="submit" class="image-button">
+                                        <img src="/images/dislike.png" alt="Dislike" class="button-image"/>
+                                    </button>
+                                </form>
+                            </div>
                         </div>
-                    </div>
-                    <div id="reviewTextContent">
-                        <h1>
-                            <span th:text="${review.reviewTitle}">Review Title</span>
-                            <span> by: </span>
-                            <a th:href="@{/User/{id}(id=${review.userId})}" th:text="${review.username}"></a>
-                        </h1>
-                        <div id="reviewText" th:text="${review.reviewText}">Review text</div>
+                        <div id="reviewTextContent">
+                            <h1>
+                                <span th:text="${review.reviewTitle}">Review Title</span>
+                                <span> by: </span>
+                                <a th:href="@{/User/{id}(id=${review.userId})}" th:text="${review.username}"></a>
+                            </h1>
+                            <div id="reviewText" th:text="${review.reviewText}">Review text</div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div id="viewBtn">
+    <div id="viewBtn" th:if="${reviewsData != null and reviewsData.reviews != null and #lists.size(reviewsData.reviews) > 0}">
         <a th:href="@{/Reviews}">
-            <button id="viewMore" th:text="#{home_view_more_reviews}">View more reviews
-            </button>
+            <button id="viewMore" th:text="#{home_view_more_reviews}">View more reviews</button>
         </a>
     </div>
 </div>

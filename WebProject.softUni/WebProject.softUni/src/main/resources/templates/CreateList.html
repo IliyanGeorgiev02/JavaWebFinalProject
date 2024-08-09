@@ -15,15 +15,20 @@
 <form id="form" th:object="${listDto}" th:action="@{/CreateList}" th:method="post">
     <div id="mainBody">
         <label for="listTitle">List title:</label>
-        <input type="text" name="listTitle" id="listTitle" th:field="*{title}"/>
+        <input type="text" name="listTitle" id="listTitle" th:field="*{title}"
+               required minlength="3" maxlength="100" placeholder="Enter list title"/>
+        <small th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="error-message">
+            Title must be between 3 and 20 characters.
+        </small>
+
         <label for="listDescription">Add list description:</label>
-        <textarea
-                id="listDescription"
-                name="listDescription"
-                rows="10"
-                cols="50"
-                th:field="*{description}"
-        ></textarea>
+        <textarea id="listDescription" name="listDescription" rows="10" cols="25"
+                  th:field="*{description}" required minlength="3" maxlength="100"
+                  placeholder="Enter list description"></textarea>
+        <small th:if="${#fields.hasErrors('description')}" th:errors="*{description}" class="error-message">
+            Description must be between 3 and 100 characters.
+        </small>
+
         <button type="submit">Create list</button>
     </div>
 </form>

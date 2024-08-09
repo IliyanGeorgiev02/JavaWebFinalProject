@@ -83,10 +83,10 @@ public class ReviewController {
             model.addAttribute("commentsData", commentsData);
             return "Review";
         } else {
-            return "redirect:/home";
+            model.addAttribute("errorMessage", "The review does not exist.");
+            return "Review";
         }
     }
-
 
 
     @DeleteMapping("/Review/{id}")

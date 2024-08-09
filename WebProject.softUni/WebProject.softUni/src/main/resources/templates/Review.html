@@ -78,5 +78,8 @@
         </div>
     </div>
 </div>
+<div th:if="${reviewData == null}" class="alert alert-warning">
+    <p>No list data available. The requested list could not be found.</p>
+</div>
 </body>
 </html>

@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Size;
 import org.springframework.web.multipart.MultipartFile;
 
 public class UserProfileDto {
-
+    private long id;
     private String profilePicUrl;
     private MultipartFile profilePicture;
 
@@ -20,6 +20,14 @@ public class UserProfileDto {
     private String lastName;
 
     private String bio;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public String getProfilePicUrl() {
         return profilePicUrl;

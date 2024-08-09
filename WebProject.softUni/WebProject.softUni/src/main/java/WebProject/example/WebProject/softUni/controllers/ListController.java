@@ -118,37 +118,37 @@ public class ListController {
     @PostMapping("/AddToList")
     public String addMovieToList(@RequestParam("title") String title,
                                  @RequestParam("year") String year,
-                                 @RequestParam("listId") String listId) {
+                                 @RequestParam("listId") String listId,
+                                 Model model) {
 
-        try {
-            long id = Long.parseLong(listId);
-            Optional<CustomList> listById = this.listService.findListById(id);
-            if (listById.isEmpty()) {
-                return "redirect:/ListOfMovies";
-            }
-            MovieFullInfoDto movieFullInfoDto = this.omdbService.searchByTitleAndYear(title, year);
-            if (movieFullInfoDto == null) {
-                return "redirect:/ListOfMovies";
-            }
-            Movie mappedMovie = this.movieService.mapMovie(movieFullInfoDto);
-            Optional<Movie> movie = this.movieService.findMovie(mappedMovie);
-
-            Movie movieToAdd;
-            if (movie.isEmpty()) {
-                this.movieService.saveMovie(mappedMovie);
-            }
-            movieToAdd = movie.get();
-            CustomList customList = listById.get();
-            if (!customList.getMovies().contains(movieToAdd)) {
-                customList.getMovies().add(movieToAdd);
-                this.listService.saveList(customList);
-            }
+        long id = Long.parseLong(listId);
+        Optional<CustomList> listById = this.listService.findListById(id);
+        if (listById.isEmpty()) {
             return "redirect:/ListOfMovies";
-        } catch (NumberFormatException e) {
+        }
+        MovieFullInfoDto movieFullInfoDto = this.omdbService.searchByTitleAndYear(title, year);
+        if (movieFullInfoDto == null) {
+            return "redirect:/ListOfMovies";
+        }
+        Movie mappedMovie = this.movieService.mapMovie(movieFullInfoDto);
+        Optional<Movie> movie = this.movieService.findMovie(mappedMovie);
+
+        Movie movieToAdd;
+        if (movie.isEmpty()) {
+            this.movieService.saveMovie(mappedMovie);
+            movieToAdd = mappedMovie;
+        } else {
+            movieToAdd = movie.get();
+        }
+        CustomList customList = listById.get();
+        if (customList.getMovies().contains(movieToAdd)) {
+            return "redirect:/ListOfMovies?error=movieAlreadyInList";
+        } else {
+            customList.getMovies().add(movieToAdd);
+            this.listService.saveList(customList);
             return "redirect:/ListOfMovies";
         }
     }
-
 
     @PostMapping("/CustomList/{listId}/like")
     public String likeList(@PathVariable("listId") Long listId, Model model) {

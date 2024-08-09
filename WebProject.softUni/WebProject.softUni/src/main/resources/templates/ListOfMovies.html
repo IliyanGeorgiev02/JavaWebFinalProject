@@ -13,6 +13,10 @@
 <body>
 <div th:replace="Fragments/Navbar"></div>
 <div id="mainBody">
+    <div th:if="${param.error == 'movieAlreadyInList'}" class="error-message">
+        <p>The movie is already in the list.</p>
+    </div>
+
     <div class="movieList">
         <div th:if="${result.search != null and #lists.size(result.search) > 0}" th:each="movie : ${result.search}">
             <div id="movie">
@@ -27,10 +31,12 @@
                 <form th:action="@{/AddToList}" th:method="post">
                     <input type="hidden" name="title" th:value="${movie.title}"/>
                     <input type="hidden" name="year" th:value="${movie.year}"/>
-                    <select name="listId" id="listSelect">
-                        <option th:each="list : ${lists}" th:value="${list.id}" th:text="${list.title}"></option>
-                    </select>
-                    <button id="addToListBtn" type="submit">Add to list</button>
+                    <div th:if="${lists != null and #lists.size(lists) > 0}">
+                        <select name="listId" id="listSelect">
+                            <option th:each="list : ${lists}" th:value="${list.id}" th:text="${list.title}"></option>
+                        </select>
+                        <button id="addToListBtn" type="submit">Add to list</button>
+                    </div>
                 </form>
             </div>
         </div>

@@ -12,6 +12,8 @@
 </head>
 <body>
 <div th:replace="Fragments/Navbar"></div>
+<h1>Reviews :</h1>
+<hr/>
 <div id="reviews">
     <div class="review" th:each="review : ${ReviewsData.reviews}">
         <div id="textContent">

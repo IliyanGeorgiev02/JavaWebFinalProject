@@ -13,17 +13,25 @@
 </head>
 <body>
 <div th:replace="Fragments/Navbar"></div>
-<form id="form" th:action="@{/editProfile}" th:object="${profileData}" th:method="post">
+<form id="form" th:action="@{/editProfile}" th:object="${profileData}" th:method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
     <label for="profile">Profile picture:</label>
-    <input type="file" name="profile" id="profile" th:field="*{profilePicUrl}" enctype="multipart/form-data"/>
+    <input type="file" name="profile" id="profile" th:field="*{profilePicture}" accept="image/*"  />
+    
     <label for="username">Username:</label>
-    <input type="text" name="username" id="username" th:field="*{username}"/>
+    <input type="text" name="username" id="username" th:field="*{username}" minlength="3" maxlength="30"  />
+    <small id="usernameError" class="error-message"></small>
+
     <label for="FirstName">First name:</label>
-    <input type="text" name="FirstName" id="FirstName" th:field="*{firstName}"/>
+    <input type="text" name="FirstName" id="FirstName" th:field="*{firstName}" minlength="3" maxlength="30"  />
+    <small id="firstNameError" class="error-message"></small>
+
     <label for="LastName">Last name:</label>
-    <input type="text" name="LastName" id="LastName" th:field="*{lastName}"/>
+    <input type="text" name="LastName" id="LastName" th:field="*{lastName}" minlength="3" maxlength="30"  />
+    <small id="lastNameError" class="error-message"></small>
+
     <label for="Bio">Bio:</label>
-    <textarea name="Bio" rows="6" cols="35" id="Bio" th:field="*{bio}"></textarea>
+    <textarea name="Bio" rows="6" cols="35" id="Bio" th:field="*{bio}" maxlength="500"></textarea>
+
     <button type="submit">Update profile</button>
 </form>
 </body>

@@ -44,12 +44,12 @@ public class UserHelperService {
 
     public void updateUser(UserProfileDto userProfileDto) {
         User user = getUser();
-
         if (user == null) {
             logger.warn("User not found");
             return;
         }
         logger.info("Updating profile for user: {}", user.getUsername());
+        userProfileDto.setId(user.getId());
         updateFieldIfNotBlank(userProfileDto::getUsername, user::setUsername, "Username");
         updateFieldIfNotBlank(userProfileDto::getFirstName, user::setFirstName, "First Name");
         updateFieldIfNotBlank(userProfileDto::getLastName, user::setLastName, "Last Name");

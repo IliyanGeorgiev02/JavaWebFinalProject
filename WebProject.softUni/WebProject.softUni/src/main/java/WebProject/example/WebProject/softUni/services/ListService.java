@@ -116,6 +116,7 @@ public class ListService {
 
     private DisplayMovieInListDto convertToDisplayMovieInListDto(Movie movie) {
         DisplayMovieInListDto displayMovieInListDto = new DisplayMovieInListDto();
+        displayMovieInListDto.setId(movie.getId());
         displayMovieInListDto.setPosterUrl(movie.getPosterUrl());
         displayMovieInListDto.setTitle(movie.getTitle());
         displayMovieInListDto.setYear(movie.getYear().toString());

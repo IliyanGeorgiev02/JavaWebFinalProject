@@ -93,7 +93,7 @@ public class UserController {
             return "redirect:/editProfile";
         }
         userHelperService.updateUser(userProfileDto);
-        return "redirect:/User";
+        return "redirect:/User/"+userProfileDto.getId();
     }
 
     @GetMapping("/User/{id}")

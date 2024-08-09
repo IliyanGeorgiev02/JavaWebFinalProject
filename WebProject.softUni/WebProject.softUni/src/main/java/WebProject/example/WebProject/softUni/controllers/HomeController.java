@@ -37,7 +37,7 @@ public class HomeController {
                 .limit(4)
                 .toList();
         ListDto listDto = this.listService.mapCustomListsToListDto(sortedLists);
-        model.addAttribute("listsData", listDto);
+        model.addAttribute("listData", listDto);
 
         List<Review> allReviews = reviewService.findALLReviews();
         List<Review> sortedReviews = allReviews.stream()

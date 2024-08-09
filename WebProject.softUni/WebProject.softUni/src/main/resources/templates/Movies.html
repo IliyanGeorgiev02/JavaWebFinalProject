@@ -12,6 +12,8 @@
 </head>
 <body>
 <div th:replace="Fragments/Navbar"></div>
+<h1>Movies :</h1>
+<hr/>
 <div class="movieList">
     <div class="movieRow" th:each="movie, iterStat : ${moviesData.movies}">
         <div id="movie">

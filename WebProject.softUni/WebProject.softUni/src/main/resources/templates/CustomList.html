@@ -23,7 +23,7 @@
         <div id="listDescription">
             <p name="listDescription" th:text="${listData.description}"></p>
             <a th:href="@{/User/{id}(id=${listData.userId})}">
-                <p name="byUser" th:text="${'by '+listData.username}"></p>
+                <p id="username" name="byUser" th:text="${'by '+listData.username}"></p>
             </a>
         </div>
 
