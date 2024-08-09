@@ -1,7 +1,6 @@
 package WebProject.example.WebProject.softUni.services;
 
-import WebProject.example.WebProject.softUni.dtos.CreateListDto;
-import WebProject.example.WebProject.softUni.dtos.FindListDto;
+import WebProject.example.WebProject.softUni.dtos.*;
 import WebProject.example.WebProject.softUni.model.Comment;
 import WebProject.example.WebProject.softUni.model.CustomList;
 import WebProject.example.WebProject.softUni.model.Movie;
@@ -12,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -83,6 +83,43 @@ public class ListService {
                 customListRepository.save(customList);
             }
         }
+    }
+
+    public List<CustomList> findListsByUser(long id) {
+        return this.customListRepository.findByUserId(id);
+    }
+
+    public ListDto mapCustomListsToListDto(List<CustomList> customLists) {
+        List<DisplayListDto> displayListDtos = customLists.stream()
+                .map(this::convertToDisplayListDto)
+                .collect(Collectors.toList());
+        ListDto listDto = new ListDto();
+        listDto.setLists(displayListDtos);
+
+        return listDto;
+    }
+
+    public DisplayListDto convertToDisplayListDto(CustomList customList) {
+        DisplayListDto displayListDto = new DisplayListDto();
+        displayListDto.setTitle(customList.getTitle());
+        displayListDto.setDescription(customList.getDescription());
+        displayListDto.setLikes(customList.getLikes());
+        displayListDto.setId(customList.getId());
+        List<DisplayMovieInListDto> movieDtos = customList.getMovies().stream()
+                .map(this::convertToDisplayMovieInListDto)
+                .collect(Collectors.toList());
+
+        displayListDto.setMovies(movieDtos);
+
+        return displayListDto;
+    }
+
+    private DisplayMovieInListDto convertToDisplayMovieInListDto(Movie movie) {
+        DisplayMovieInListDto displayMovieInListDto = new DisplayMovieInListDto();
+        displayMovieInListDto.setPosterUrl(movie.getPosterUrl());
+        displayMovieInListDto.setTitle(movie.getTitle());
+        displayMovieInListDto.setYear(movie.getYear().toString());
+        return displayMovieInListDto;
     }
 }
 

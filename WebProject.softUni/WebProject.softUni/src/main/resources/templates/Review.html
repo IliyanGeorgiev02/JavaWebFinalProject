@@ -14,16 +14,12 @@
 <div th:replace="Fragments/Navbar"></div>
 <div id="review">
     <div class="review">
-        <h1 th:text="|${reviewData.reviewTitle}|">
-            <span th:text="' by: ' + ${reviewData.user.username}"> </span>
-        </h1>
+        <h1 th:text="${reviewData.reviewTitle} + ' by: ' + ${reviewData.username}"></h1>
         <div>
-            <h2 th:text="${reviewData.movie.title} + ' (' + ${reviewData.movie.released} + ')'"></h2>
+            <h2 th:text="${reviewData.movieTitle} +' '+${reviewData.movieRelease}"></h2>
         </div>
-        <div id="reviewText" th:text="${reviewData.reviewText}">
-        </div>
-        <div id="rating" th:text="${reviewData.rating + '/100'}">
-        </div>
+        <div id="reviewText" th:text="${reviewData.reviewText}"></div>
+        <div id="rating" th:text="${reviewData.rating + '/100'}"></div>
         <div id="reviewButtons">
             <form th:action="@{/Review/{reviewId}/like(reviewId=${reviewData.id})}" method="post">
                 <button type="submit" class="image-button">
@@ -37,14 +33,13 @@
                 </button>
             </form>
         </div>
-
     </div>
 </div>
 <div id="changeReviewBtns">
     <a th:href="@{/EditReview/{id}(id=${reviewData.id})}">
         <button id="editBtn" type="submit">Edit review</button>
     </a>
-    <form th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') || reviewData.user.username == #authentication.name}"
+    <form th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') || reviewData.username == #authentication.name}"
           th:action="@{/Review/{id}(id=${reviewData.id})}" method="post">
         <input type="hidden" name="_method" value="delete"/>
         <button id="deleteBtn" type="submit">Delete review</button>
@@ -55,18 +50,15 @@
     <h3>Add a comment</h3>
     <hr>
 </div>
-<form th:object="${addCommentDto}" th:method="post" th:action="@{/Review/{id}(id=${reviewData.id})}"
-      id="form">
+<form th:object="${addCommentDto}" th:method="post" th:action="@{/Review/{id}(id=${reviewData.id})}" id="form">
     <div id="addComment">
         <input type="text" placeholder="Add a comment" th:field="*{text}"/>
         <button type="submit">Add comment</button>
     </div>
 </form>
 <div id="comments">
-    <div id="comment" th:each="comment : ${reviewData.comments}">
-        <div id="user" th:text="${comment.user.username}">
-            username
-        </div>
+    <div id="comment" th:each="comment : ${commentsData.comments}">
+        <div id="user" th:text="${comment.username}">username</div>
         <br/>
         <p th:text="${comment.text}">This is my comment</p>
         <div id="reviewButtons">
@@ -83,7 +75,6 @@
                     <img src="/images/dislike.png" alt="Dislike" class="button-image"/>
                 </button>
             </form>
-
         </div>
     </div>
 </div>

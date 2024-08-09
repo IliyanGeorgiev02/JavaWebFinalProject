@@ -22,4 +22,6 @@ public interface CustomListRepository extends JpaRepository<CustomList, Long> {
     @Query("SELECT c FROM CustomList c WHERE c.user.username = :username")
     List<CustomList> findByUsername(@Param("username") String username);
 
+    @Query("SELECT c FROM CustomList c WHERE c.user.id = :userId")
+    List<CustomList> findByUserId(@Param("userId") long id);
 }

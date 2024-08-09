@@ -20,12 +20,12 @@
         <h1 id="title" th:text="${movieData.title}">Movie Title</h1>
         <h2 th:text="'Director: ' + ${movieData.director}">Director: Director Name</h2>
         <h3 th:text="'Genre: ' + ${movieData.genre}">Genre: Genre</h3>
-        <h3 id="releaseDate" th:text="'Release date: ' + ${movieData.released}">Release date: Year</h3>
+        <h3 id="releaseDate" th:text="'Release date: ' + ${movieData.releaseDate}">Release date: Year</h3>
         <h3 id="runtime" th:text="'Runtime: ' + ${movieData.runtime}">Runtime: Runtime</h3>
         <h3 id="description">
             Description:
             <br/>
-            <span th:text="${movieData.description}">Movie description here.</span>
+            <span th:text="${movieData.plot}">Movie description here.</span>
         </h3>
         <ul>
             <h2>Cast:</h2>
@@ -35,11 +35,11 @@
 </div>
 <h1>User reviews:</h1>
 <div id="reviews">
-    <div id="review" th:each="review : ${movieData.reviews}">
+    <div id="review" th:each="review : ${reviewsData.reviews}">
         <div class="review">
             <h1>
-                <span th:text="|${review.reviewTitle}|"></span>
-                <span th:text="' by: ' + ${review.user.username}"> by: username</span>
+                <span th:text="${review.reviewTitle}"></span>
+                <span th:text="' by: ' + ${review.username}"> by: username</span>
             </h1>
             <div id="reviewText" th:text="${review.reviewText}">Review text here</div>
             <div id="rating" th:text="${review.rating} + '/100'">Rating</div>

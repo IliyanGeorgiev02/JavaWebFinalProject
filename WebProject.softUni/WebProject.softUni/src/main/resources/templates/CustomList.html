@@ -15,14 +15,15 @@
 <div th:if="${errorMessage}" class="alert alert-danger">
     <p th:text="${errorMessage}"></p>
 </div>
+
 <div th:if="${listData != null}">
     <h1 id="listTitle" th:text="${listData.title}">List title</h1>
     <div id="totalContent">
 
         <div id="listDescription">
             <p name="listDescription" th:text="${listData.description}"></p>
-            <a th:href="/User/listData.user.id">
-                <p name="byUser" th:text="${listData.user.username}"></p>
+            <a th:href="@{/User/{id}(id=${listData.userId})}">
+                <p name="byUser" th:text="${'by '+listData.username}"></p>
             </a>
         </div>
 
@@ -33,7 +34,7 @@
                         <div id="movie">
                             <img th:src="${movie.posterUrl}" alt="movie poster"/>
                             <h3 th:text="${movie.title}">Title</h3>
-                            <h3 th:text="${movie.description}">Description</h3>
+                            <p th:text="${movie.year}">Year</p>
                         </div>
                     </a>
                 </div>
@@ -52,13 +53,7 @@
                 </form>
             </div>
         </div>
-
-
-        <button th:if="${#authentication.name == listData.user.username}">
-            <a th:href="@{/listOfMovies}">Add movie</a>
-        </button>
-
-        <form th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') || listData.user.username == #authentication.name}"
+        <form th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') || listData.username == #authentication.name}"
               th:action="@{/CustomList/{id}(id=${listData.id})}" method="post">
             <input type="hidden" name="_method" value="delete"/>
             <button id="deleteBtn" type="submit">Delete list</button>
@@ -77,15 +72,15 @@
             </div>
         </form>
 
-        <div id="comments" th:if="${#lists.size(listData.comments) > 0}">
+        <div id="comments" th:if="${#lists.size(commentsData.comments) > 0}">
             <div class="sectionDivider">
                 <hr>
                 <h3>Comments</h3>
                 <hr>
             </div>
-            <div th:each="comment : ${listData.comments}">
+            <div th:each="comment : ${commentsData.comments}">
                 <div id="comment">
-                    <strong th:text="${comment.user.username}">Username</strong><br/>
+                    <strong th:text="${comment.username}">Username</strong><br/>
                     <p th:text="${comment.text}">This is my comment</p>
                     <div id="reviewButtons">
                         <form th:action="@{/List/Comments/{commentId}/{listId}/like(commentId=${comment.id}, listId=${listData.id})}"
@@ -107,6 +102,7 @@
         </div>
     </div>
 </div>
+
 <div th:if="${listData == null}" class="alert alert-warning">
     <p>No list data available. The requested list could not be found.</p>
 </div>

@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"
-      xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -14,17 +13,20 @@
 <body>
 <div th:replace="Fragments/Navbar"></div>
 <div id="reviews">
-    <div class="review" th:each="review : ${ListData}">
+    <div class="review" th:each="review : ${ReviewsData.reviews}">
         <div id="textContent">
-            <a th:href="@{Review.html(reviewId=${review.id})}" th:text="${review.reviewTitle}"> "Gud muvi" </a>
-            <span> by: <a th:href="@{User.html(userId=${review.user.id})}"
-                          th:text="${review.user.username}"> username </a></span>
+            <a th:href="@{/Review/{reviewId}(reviewId=${review.id})}" th:text="${review.reviewTitle}">  </a>
+            <span> by:
+                <a th:href="@{/User/{userId}(userId=${review.username})}" th:text="${review.username}">  </a>
+            </span>
         </div>
         <div id="reviewText" th:text="${review.reviewText}">
         </div>
         <div id="rating" th:text="${review.rating} + '/100'">
         </div>
-        <a th:href="@{/Review/{reviewId}(reviewId=${review.id})}"><button>View review</button></a>
+        <a th:href="@{/Review/{reviewId}(reviewId=${review.id})}">
+            <button>View review</button>
+        </a>
     </div>
 </div>
 </body>

@@ -62,7 +62,14 @@ public class ListController {
     public String viewListById(@PathVariable("id") Long id, Model model) {
         Optional<CustomList> customList = listService.findListById(id);
         if (customList.isPresent()) {
-            model.addAttribute("listData", customList.get());
+            CustomList customList1 = customList.get();
+            List<Comment> commentByListId = this.commentsService.findCommentByListId(customList1.getId());
+            ListOfCommentsDto listOfCommentsDto = this.commentsService.mapCommentsToListOfCommentsDto(commentByListId);
+            DisplayListDto displayListDto = this.listService.convertToDisplayListDto(customList1);
+            displayListDto.setUsername(customList1.getUser().getUsername());
+            displayListDto.setUserId(customList1.getUser().getId());
+            model.addAttribute("listData", displayListDto);
+            model.addAttribute("commentsData", listOfCommentsDto);
             model.addAttribute("addCommentDto", new AddCommentDto());
             return "CustomList";
         } else {
@@ -76,7 +83,7 @@ public class ListController {
     public String createList(@Valid CreateListDto listDto, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
         if (!bindingResult.hasErrors()) {
             CustomList mappedList = this.listService.addList(listDto);
-            return "redirect:/CustomList/"+mappedList.getId();
+            return "redirect:/CustomList/" + mappedList.getId();
         }
         redirectAttributes.addFlashAttribute("listData", listDto);
         redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.listDto", bindingResult);
@@ -88,7 +95,9 @@ public class ListController {
         if (!model.containsAttribute("findListDto")) {
             model.addAttribute("findListDto", new FindListDto());
         }
-        model.addAttribute("allLists", this.listService.findAllLists());
+        List<CustomList> allLists = this.listService.findAllLists();
+        ListDto listDto = this.listService.mapCustomListsToListDto(allLists);
+        model.addAttribute("listData", listDto);
         return "Lists";
     }
 
@@ -126,9 +135,9 @@ public class ListController {
 
             Movie movieToAdd;
             if (movie.isEmpty()) {
-               this.movieService.saveMovie(mappedMovie);
+                this.movieService.saveMovie(mappedMovie);
             }
-                movieToAdd = movie.get();
+            movieToAdd = movie.get();
             CustomList customList = listById.get();
             if (!customList.getMovies().contains(movieToAdd)) {
                 customList.getMovies().add(movieToAdd);

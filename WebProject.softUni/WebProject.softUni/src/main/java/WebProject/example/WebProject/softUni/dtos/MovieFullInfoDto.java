@@ -6,6 +6,8 @@ import java.io.Serializable;
 import java.util.List;
 
 public class MovieFullInfoDto implements Serializable {
+    private long id;
+
     @JsonProperty("Title")
     private String title;
 
@@ -80,6 +82,14 @@ public class MovieFullInfoDto implements Serializable {
 
     @JsonProperty("Response")
     private String response;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public String getTitle() {
         return title;

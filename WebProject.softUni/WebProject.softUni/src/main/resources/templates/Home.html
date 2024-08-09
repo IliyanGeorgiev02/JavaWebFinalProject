@@ -18,54 +18,61 @@
     </div>
     <hr/>
     <div class="movieList">
-        <div id="movie" th:each="movie, iterStat : ${moviesData}" th:if="${iterStat.index < 4}">
+        <div class="movie" th:each="movie, iterStat : ${moviesData.movies}" th:if="${iterStat.index < 4}">
             <a th:href="@{/Movie/{id}(id=${movie.id})}">
                 <img th:src="${movie.posterUrl}" alt="movie poster"/>
-                <h3 th:text="${movie.title}"></h3>
-                <h3 th:text="${movie.scores}"></h3>
+                <h3 th:text="${movie.title}">Movie Title</h3>
+                <h3 th:text="${movie.imdbRating}">Movie Rating</h3>
             </a>
         </div>
     </div>
     <h1 th:text="#{home_trending_lists}"></h1>
     <hr/>
     <div id="trendingLists">
-        <div class="listBox" th:each="list : ${listsData}">
-            <div class="movie-grid">
-                <div id="frame" th:each="movie, iter : ${list.movies}" th:if="${iter.index < 4}">
-                    <img th:src="${movie.posterUrl}" alt="movie poster"/>
+        <div th:if="${listData == null or listData.lists == null or #lists.size(listData.lists) == 0}">
+            <p>No trending lists available at the moment.</p>
+        </div>
+        <div th:unless="${listData == null or listData.lists == null or #lists.size(listData.lists) == 0}">
+            <div class="listBox" th:each="list : ${listData.lists}">
+                <div class="movie-grid">
+                    <div class="movie-frame" th:each="movie, iter : ${list.movies}"
+                         th:if="${iter.index < 4 and list.movies != null}">
+                        <img th:src="${movie.posterUrl}" alt="movie poster"
+                             th:alt="${movie.posterUrl != null ? 'Movie poster' : 'No poster available'}"/>
+                    </div>
                 </div>
-            </div>
-            <br/>
-            <div id="listContent">
-                <h4 th:text="${list.title}">List title</h4>
-                <span th:text="${list.description}">List description</span>
-                <a th:href="@{/CustomList/{id}(id=${list.id})}">
-                    <button th:text="#{home_view_list}">View list</button>
-                </a>
+                <br/>
+                <div id="listContent">
+                    <h4 th:text="${list.title != null ? list.title : 'List title'}">List title</h4>
+                    <span th:text="${list.description != null ? list.description : 'List description'}">List description</span>
+                    <a th:href="@{/CustomList/{id}(id=${list.id})}">
+                        <button th:text="#{home_view_list}">View list</button>
+                    </a>
+                </div>
             </div>
         </div>
     </div>
     <h1 th:text="#{home_popular_reviews}"></h1>
+    <hr/>
     <div id="popularReviews">
-        <div id="reviews">
-            <hr/>
-            <div class="review" th:each="review : ${reviewsData}">
+        <div class="reviewList">
+            <div class="review" th:each="review : ${reviewsData.reviews}">
                 <div id="reviewTopContent">
                     <div id="poster">
                         <img
                                 id="reviewMoviePoster"
-                                th:src="${review.movie.posterUrl}"
+                                th:src="@{${review.posterUrl}}"
                                 alt="movie poster"
                         />
-                        <div id="rating" th:text="${review.rating}+'/100'">Rating</div>
+                        <div id="rating" th:text="${review.rating} + '/100'">Rating</div>
                         <div id="reviewButtons">
-                            <form th:action="@{Home/Review/{reviewId}/like(reviewId=${review.id})}" method="post">
+                            <form th:action="@{/Home/Review/{reviewId}/like(reviewId=${review.id})}" method="post">
                                 <button type="submit" class="image-button">
                                     <img src="/images/like.png" alt="Like" class="button-image"/>
                                     <span th:text="${review.likes}"></span>
                                 </button>
                             </form>
-                            <form th:action="@{Home/Review/{reviewId}/dislike(reviewId=${review.id})}" method="post">
+                            <form th:action="@{/Home/Review/{reviewId}/dislike(reviewId=${review.id})}" method="post">
                                 <button type="submit" class="image-button">
                                     <img src="/images/dislike.png" alt="Dislike" class="button-image"/>
                                 </button>
@@ -74,37 +81,11 @@
                     </div>
                     <div id="reviewTextContent">
                         <h1>
-                            <span th:text="${review.reviewTitle}"></span>
+                            <span th:text="${review.reviewTitle}">Review Title</span>
                             <span> by: </span>
-                            <a th:href="@{/User/{id}(id=${review.user.id})}" th:text="${review.user.username}"></a>
+                            <a th:href="@{/User/{id}(id=${review.userId})}" th:text="${review.username}"></a>
                         </h1>
                         <div id="reviewText" th:text="${review.reviewText}">Review text</div>
-                        <div id="comments">
-                            <div th:each="comment : ${review.comments}">
-                                <div id="comment">
-                                    <a th:href="@{/User/comment.user.id}">
-                                        <strong th:text="${comment.user.username}">Username</strong>
-                                    </a>
-                                    <br/>
-                                    <p th:text="${comment.text}">This is my comment</p>
-                                    <div id="reviewButtons">
-                                        <form th:action="@{Home/Comments/{commentId}/like(commentId=${comment.id})}"
-                                              method="post">
-                                            <button type="submit" class="image-button">
-                                                <img src="/images/like.png" alt="Like" class="button-image"/>
-                                                <span th:text="${comment.likes}"></span>
-                                            </button>
-                                        </form>
-                                        <form th:action="@{Home/Comments/{commentId}/dislike(commentId=${comment.id})}"
-                                              method="post">
-                                            <button type="submit" class="image-button">
-                                                <img src="/images/dislike.png" alt="Dislike" class="button-image"/>
-                                            </button>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>

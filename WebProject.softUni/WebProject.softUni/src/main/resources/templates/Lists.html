@@ -16,9 +16,9 @@
 <hr/>
 <div id="mainBody">
     <div id="lists">
-        <div class="listBox" th:each="list : ${allLists}">
+        <div class="listBox" th:each="list : ${listData.lists}">
             <div class="movie-grid">
-                <div id="frame" th:each="movie : ${list.movies}">
+                <div class="movie-frame" th:each="movie : ${list.movies}">
                     <img th:src="${movie.posterUrl}" alt="movie poster"/>
                 </div>
             </div>

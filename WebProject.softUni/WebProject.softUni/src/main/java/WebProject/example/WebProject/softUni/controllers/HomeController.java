@@ -1,5 +1,8 @@
 package WebProject.example.WebProject.softUni.controllers;
 
+import WebProject.example.WebProject.softUni.dtos.ListDto;
+import WebProject.example.WebProject.softUni.dtos.ListOfMoviesDto;
+import WebProject.example.WebProject.softUni.dtos.ReviewListDto;
 import WebProject.example.WebProject.softUni.model.CustomList;
 import WebProject.example.WebProject.softUni.model.Movie;
 import WebProject.example.WebProject.softUni.model.Review;
@@ -33,19 +36,22 @@ public class HomeController {
                 .sorted(Comparator.comparing(CustomList::getLikes).reversed())
                 .limit(4)
                 .toList();
-        model.addAttribute("listsData", sortedLists);
+        ListDto listDto = this.listService.mapCustomListsToListDto(sortedLists);
+        model.addAttribute("listsData", listDto);
 
         List<Review> allReviews = reviewService.findALLReviews();
         List<Review> sortedReviews = allReviews.stream()
                 .sorted(Comparator.comparing(Review::getLikes).reversed())
                 .limit(4)
                 .toList();
-        model.addAttribute("reviewsData", sortedReviews);
+        ReviewListDto reviewListDto = this.reviewService.mapReviewsToDto(sortedReviews);
+        model.addAttribute("reviewsData", reviewListDto);
         List<Movie> allMovies = this.movieService.findAllMovies();
         allMovies.sort(Comparator.comparingInt((Movie m) -> m.getReviews().size())
                 .thenComparingInt(m -> m.getCustomLists().size())
                 .reversed());
-        model.addAttribute("moviesData", allMovies);
+        ListOfMoviesDto listOfMoviesDto = this.movieService.mapMoviesToDto(allMovies);
+        model.addAttribute("moviesData", listOfMoviesDto);
         return "home";
     }
 }

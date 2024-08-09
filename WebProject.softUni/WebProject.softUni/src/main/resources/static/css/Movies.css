@@ -29,7 +29,7 @@ body {
   padding: 20px;
   background-color: dimgray;
   transition: top ease 0.5s;
-  height: 600px;
+  height: 700px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;

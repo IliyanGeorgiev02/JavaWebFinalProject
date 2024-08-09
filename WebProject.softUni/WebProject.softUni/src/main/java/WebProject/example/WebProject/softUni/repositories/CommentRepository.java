@@ -13,6 +13,6 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     @Query("SELECT c FROM Comment c WHERE c.review.id = :reviewId")
     List<Comment> findAllByReviewId(@Param("reviewId") Long reviewId);
 
-
-
+    @Query("SELECT c FROM Comment c WHERE c.customList.id = :customListId")
+    List<Comment> findAllByListId(@Param("customListId") long id);
 }

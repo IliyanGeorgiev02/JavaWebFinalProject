@@ -6,10 +6,19 @@ public class MovieReviewInfoDto {
     private String director;
     private String plot;
     private String imdbRating;
+    private String posterUrl;
 
     private String reviewTitle;
     private String reviewRating;
     private String reviewText;
+
+    public String getPosterUrl() {
+        return posterUrl;
+    }
+
+    public void setPosterUrl(String posterUrl) {
+        this.posterUrl = posterUrl;
+    }
 
     public String getMovieTitle() {
         return movieTitle;

@@ -1,9 +1,6 @@
 package WebProject.example.WebProject.softUni.controllers;
 
-import WebProject.example.WebProject.softUni.dtos.AddCommentDto;
-import WebProject.example.WebProject.softUni.dtos.AddReviewDto;
-import WebProject.example.WebProject.softUni.dtos.EditReviewDto;
-import WebProject.example.WebProject.softUni.dtos.MovieFullInfoDto;
+import WebProject.example.WebProject.softUni.dtos.*;
 import WebProject.example.WebProject.softUni.model.Comment;
 import WebProject.example.WebProject.softUni.model.Movie;
 import WebProject.example.WebProject.softUni.model.Review;
@@ -17,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -76,13 +74,20 @@ public class ReviewController {
     public String getReview(@PathVariable("id") Long reviewId, Model model) {
         Optional<Review> review = this.reviewService.findReviewById(reviewId);
         if (review.isPresent()) {
-            model.addAttribute("reviewData", review.get());
+            Review reviewData = review.get();
+            ReviewFullInfoDto mappedReview = this.reviewService.mapReviewData(reviewData);
+            List<Comment> reviewComments = this.commentsService.findByReviewId(reviewData.getId());
+            ListOfCommentsDto commentsData = this.commentsService.mapCommentsToListOfCommentsDto(reviewComments);
+            model.addAttribute("reviewData", mappedReview);
             model.addAttribute("addCommentDto", new AddCommentDto());
+            model.addAttribute("commentsData", commentsData);
             return "Review";
         } else {
-            return "redirect:/error";
+            return "redirect:/home";
         }
     }
+
+
 
     @DeleteMapping("/Review/{id}")
     public String deleteReview(@PathVariable("id") Long reviewId, Model model) {
@@ -125,14 +130,16 @@ public class ReviewController {
     @GetMapping("/Reviews")
     public String getReviews(Model model) {
         List<Review> allReviews = this.reviewService.findALLReviews();
-        model.addAttribute("ListData", allReviews);
+        ReviewListDto reviewListDto = this.reviewService.mapReviewsToDto(allReviews);
+        model.addAttribute("ReviewsData", reviewListDto);
         return "Reviews";
     }
 
     @GetMapping("/Reviews/{username}")
     public String getReviewsByUsername(@PathVariable("username") String username, Model model) {
         List<Review> allReviewsByUsername = this.userService.findAllReviewsByUser(username);
-        model.addAttribute("ListData", allReviewsByUsername);
+        ReviewListDto reviewListDto = this.reviewService.mapReviewsToDto(allReviewsByUsername);
+        model.addAttribute("ReviewsData", reviewListDto);
         return "Reviews";
     }
 
@@ -173,7 +180,7 @@ public class ReviewController {
     }
 
     @PostMapping("/Review/{reviewId}")
-    public String postComment(@ModelAttribute("addCommentDto") AddCommentDto addCommentDto,@PathVariable("reviewId")long id) {
+    public String postComment(@ModelAttribute("addCommentDto") AddCommentDto addCommentDto, @PathVariable("reviewId") long id) {
         Optional<Review> reviewById = this.reviewService.findReviewById(id);
         if (reviewById.isEmpty()) {
             return "redirect:/home";
@@ -184,6 +191,6 @@ public class ReviewController {
         mappedComment.setReview(review);
         mappedComment.setUser(userHelperService.getUser());
         this.commentsService.addComment(mappedComment);
-        return "redirect:/Review/"+id;
+        return "redirect:/Review/" + id;
     }
 }

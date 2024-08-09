@@ -1,5 +1,6 @@
 package WebProject.example.WebProject.softUni.services;
 
+import WebProject.example.WebProject.softUni.dtos.ListOfMoviesDto;
 import WebProject.example.WebProject.softUni.dtos.MovieFullInfoDto;
 import WebProject.example.WebProject.softUni.model.Movie;
 import WebProject.example.WebProject.softUni.repositories.MovieRepository;
@@ -12,6 +13,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class MovieService {
@@ -50,5 +52,38 @@ public class MovieService {
 
     public Optional<Movie> findMovieById(long id) {
         return this.movieRepository.findById(id);
+    }
+    public MovieFullInfoDto mapMovieShortInfo(Movie movie) {
+        MovieFullInfoDto mappedMovie = this.modelMapper.map(movie, MovieFullInfoDto.class);
+        mappedMovie.setPlot(movie.getDescription());
+        mappedMovie.setReleaseDate(movie.getReleased().toString());
+        mappedMovie.setId(movie.getId());
+        return mappedMovie;
+    }
+
+    public ListOfMoviesDto mapMoviesToDto(List<Movie> movies) {
+        List<MovieFullInfoDto> movieDtos = movies.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+
+        ListOfMoviesDto listOfMoviesDto = new ListOfMoviesDto();
+        listOfMoviesDto.setMovies(movieDtos);
+        return listOfMoviesDto;
+    }
+
+    private MovieFullInfoDto convertToDto(Movie movie) {
+        MovieFullInfoDto dto = new MovieFullInfoDto();
+        dto.setId(movie.getId());
+        dto.setTitle(movie.getTitle());
+        dto.setYear(movie.getYear().toString());
+        dto.setReleaseDate(movie.getReleased().toString());
+        dto.setRuntime(movie.getRuntime());
+        dto.setGenre(movie.getGenre());
+        dto.setDirector(movie.getDirector());
+        dto.setActors(movie.getActors());
+        dto.setPlot(movie.getDescription());
+        dto.setPosterUrl(movie.getPosterUrl());
+        dto.setImdbId(movie.getImdbId());
+        return dto;
     }
 }

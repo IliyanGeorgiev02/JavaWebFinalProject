@@ -7,8 +7,6 @@
     <link rel="stylesheet" href="/css/user.css"/>
     <link rel="preconnect" href="https://fonts.googleapis.com"/>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-    <link rel="preconnect" href="https://fonts.googleapis.com"/>
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
     <link
             href="https://fonts.googleapis.com/css2?family=REM:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
             rel="stylesheet"
@@ -24,18 +22,19 @@
     <img
             id="Profile"
             th:src="${userData.profilePicture}"
-    alt="Profile picture"
+            alt="Profile picture"
     />
     <div id="data">
         <h1 id="username" th:text="${userData.username}">Username</h1>
         <h1 id="names" th:text="${userData.firstName} + ' ' + ${userData.lastName}">Full Name</h1>
         <h3 id="bio" th:text="${userData.bio}">Bio</h3>
-        <div class="movieLists">
+
+        <div class="movieLists" th:if="${listsData.lists != null and listsData.lists.size() > 0}">
             <h3>Lists</h3>
             <div id="trendingLists">
-                <div class="listBox" th:each="list : ${userData.lists}">
-                    <div class="movie-grid" th:if="${iter.index < 4}">
-                        <div th:each="movie, iter : ${list.movies}">
+                <div class="listBox" th:each="list : ${listsData.lists}">
+                    <div class="movie-grid" th:if="${list.movies != null and list.movies.size() > 0}">
+                        <div th:each="movie : ${list.movies}">
                             <img th:src="${movie.posterUrl}" alt="movie poster"/>
                         </div>
                     </div>
@@ -50,20 +49,22 @@
                 </div>
             </div>
         </div>
-        <div class="movieList"></div>
-        <h3>Recently reviewed</h3>
-        <span>
-              <div class="listContents" th:each="review, iter : ${userData.reviews}" th:if="${iter.index < 4}">
-                <img th:src="${review.movie.posterUrl}" alt="Movie poster"/>
-                <h5 th:text="${review.movie.title}">Movie Title</h5>
-              </div>
-        </span>
-        <a th:href="@{/Reviews/{username}(username=${userData.username})}">
-            <button class="viewAll">View all</button>
-        </a>
+
+        <div class="movieList" th:if="${reviewsData.reviews != null and reviewsData.reviews.size() > 0}">
+            <h3>Recently reviewed</h3>
+            <div class="listContents" th:each="review, iter : ${reviewsData.reviews}" th:if="${iter.index < 4}">
+                <img th:src="${review.posterUrl}" alt="Movie poster"/>
+                <h5 th:text="${review.movieTitle}">Movie Title</h5>
+                <p th:text="${review.reviewTitle}">Review Title</p>
+                <p th:text="${review.reviewRating}">Rating</p>
+            </div>
+            <a th:href="@{/Reviews/{username}(username=${userData.username})}">
+                <button class="viewAll">View all</button>
+            </a>
+        </div>
+
         <hr/>
     </div>
 </div>
 </body>
-
 </html>
