@@ -130,24 +130,29 @@ public class ListController {
         if (movieFullInfoDto == null) {
             return "redirect:/ListOfMovies";
         }
-        Movie mappedMovie = this.movieService.mapMovie(movieFullInfoDto);
-        Optional<Movie> movie = this.movieService.findMovie(mappedMovie);
-
         Movie movieToAdd;
-        if (movie.isEmpty()) {
-            this.movieService.saveMovie(mappedMovie);
-            movieToAdd = mappedMovie;
-        } else {
-            movieToAdd = movie.get();
+        try {
+            movieToAdd = this.movieService.findMovieByTitleAndYear(title, Year.parse(year))
+                    .orElseGet(() -> this.movieService.saveMovie(this.movieService.mapMovie(movieFullInfoDto)));
+        } catch (Exception e) {
+            model.addAttribute("error", "An error occurred while processing the movie.");
+            e.printStackTrace();
+            return "redirect:/ListOfMovies?error=processingFailed";
         }
         CustomList customList = listById.get();
-        if (customList.getMovies().contains(movieToAdd)) {
-            return "redirect:/ListOfMovies?error=movieAlreadyInList";
-        } else {
-            customList.getMovies().add(movieToAdd);
-            this.listService.saveList(customList);
-            return "redirect:/ListOfMovies";
+        try {
+            if (customList.getMovies().contains(movieToAdd)) {
+                return "redirect:/ListOfMovies?error=movieAlreadyInList";
+            } else {
+                customList.getMovies().add(movieToAdd);
+                this.listService.saveList(customList);
+            }
+        } catch (IllegalStateException e) {
+            model.addAttribute("error", "An error occurred while updating the list.");
+            e.printStackTrace();
+            return "redirect:/ListOfMovies?error=updateFailed";
         }
+        return "redirect:/ListOfMovies";
     }
 
     @PostMapping("/CustomList/{listId}/like")

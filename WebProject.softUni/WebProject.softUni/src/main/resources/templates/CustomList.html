@@ -33,8 +33,7 @@
                     <a th:href="@{/Movie/{id}(id=${movie.id})}">
                         <div id="movie">
                             <img th:src="${movie.posterUrl}" alt="movie poster"/>
-                            <h3 th:text="${movie.title}">Title</h3>
-                            <p th:text="${movie.year}">Year</p>
+                            <h5 th:text="${movie.title}">Title</h5>
                         </div>
                     </a>
                 </div>

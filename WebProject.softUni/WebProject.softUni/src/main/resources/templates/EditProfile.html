@@ -15,7 +15,7 @@
 <div th:replace="Fragments/Navbar"></div>
 <form id="form" th:action="@{/editProfile}" th:object="${profileData}" th:method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
     <label for="profile">Profile picture:</label>
-    <input type="file" name="profile" id="profile" th:field="*{profilePicture}" accept="image/*"  />
+    <input type="file" name="profile" id="profile" th:field="*{profilePicture}" />
     
     <label for="username">Username:</label>
     <input type="text" name="username" id="username" th:field="*{username}" minlength="3" maxlength="30"  />

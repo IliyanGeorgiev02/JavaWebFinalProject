@@ -86,4 +86,8 @@ public class MovieService {
         dto.setImdbId(movie.getImdbId());
         return dto;
     }
+
+    public Optional<Movie> findMovieByTitleAndYear(String title, Year year) {
+        return this.movieRepository.findByTitleAndYear(title,year);
+    }
 }

@@ -12,74 +12,78 @@
 </head>
 <body>
 <div th:replace="Fragments/Navbar"></div>
-<div id="review">
-    <div class="review">
-        <h1 th:text="${reviewData.reviewTitle} + ' by: ' + ${reviewData.username}"></h1>
-        <div>
-            <h2 th:text="${reviewData.movieTitle} +' '+${reviewData.movieRelease}"></h2>
-        </div>
-        <div id="reviewText" th:text="${reviewData.reviewText}"></div>
-        <div id="rating" th:text="${reviewData.rating + '/100'}"></div>
-        <div id="reviewButtons">
-            <form th:action="@{/Review/{reviewId}/like(reviewId=${reviewData.id})}" method="post">
-                <button type="submit" class="image-button">
-                    <img src="/images/like.png" alt="Like" class="button-image"/>
-                    <span th:text="${reviewData.likes}"></span>
-                </button>
-            </form>
-            <form th:action="@{/Review/{reviewId}/dislike(reviewId=${reviewData.id})}" method="post">
-                <button type="submit" class="image-button">
-                    <img src="/images/dislike.png" alt="Dislike" class="button-image"/>
-                </button>
-            </form>
-        </div>
-    </div>
-</div>
-<div id="changeReviewBtns">
-    <a th:href="@{/EditReview/{id}(id=${reviewData.id})}">
-        <button id="editBtn" type="submit">Edit review</button>
-    </a>
-    <form th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') || reviewData.username == #authentication.name}"
-          th:action="@{/Review/{id}(id=${reviewData.id})}" method="post">
-        <input type="hidden" name="_method" value="delete"/>
-        <button id="deleteBtn" type="submit">Delete review</button>
-    </form>
-</div>
-<div class="sectionDivider">
-    <hr>
-    <h3>Add a comment</h3>
-    <hr>
-</div>
-<form th:object="${addCommentDto}" th:method="post" th:action="@{/Review/{id}(id=${reviewData.id})}" id="form">
-    <div id="addComment">
-        <input type="text" placeholder="Add a comment" th:field="*{text}"/>
-        <button type="submit">Add comment</button>
-    </div>
-</form>
-<div id="comments">
-    <div id="comment" th:each="comment : ${commentsData.comments}">
-        <div id="user" th:text="${comment.username}">username</div>
-        <br/>
-        <p th:text="${comment.text}">This is my comment</p>
-        <div id="reviewButtons">
-            <form th:action="@{/Review/Comments/{commentId}/{reviewId}/like(commentId=${comment.id}, reviewId=${reviewData.id})}"
-                  method="post">
-                <button type="submit" class="image-button">
-                    <img src="/images/like.png" alt="Like" class="button-image"/>
-                    <span th:text="${comment.likes}"></span>
-                </button>
-            </form>
-            <form th:action="@{/Review/Comments/{commentId}/{reviewId}/dislike(commentId=${comment.id}, reviewId=${reviewData.id})}"
-                  method="post">
-                <button type="submit" class="image-button">
-                    <img src="/images/dislike.png" alt="Dislike" class="button-image"/>
-                </button>
-            </form>
-        </div>
-    </div>
-</div>
 <div th:if="${reviewData == null}" class="alert alert-warning">
-    <p>No list data available. The requested list could not be found.</p>
+    <p>No review data available. The requested review could not be found.</p>
+</div>
+<div th:if="${reviewData != null}">
+    <div id="review">
+        <div class="review">
+            <h1 th:text="${reviewData.reviewTitle} + ' by: '"><a th:href="@{/User/{userId}(userId=${review.userId})}"
+                                                                 th:text="${review.username}"> </a>
+            </h1>
+            <div>
+                <h2 th:text="${reviewData.movieTitle} +' '+${reviewData.movieRelease}"></h2>
+            </div>
+            <div id="reviewText" th:text="${reviewData.reviewText}"></div>
+            <div id="rating" th:text="${reviewData.rating + '/100'}"></div>
+            <div id="reviewButtons">
+                <form th:action="@{/Review/{reviewId}/like(reviewId=${reviewData.id})}" method="post">
+                    <button type="submit" class="image-button">
+                        <img src="/images/like.png" alt="Like" class="button-image"/>
+                        <span th:text="${reviewData.likes}"></span>
+                    </button>
+                </form>
+                <form th:action="@{/Review/{reviewId}/dislike(reviewId=${reviewData.id})}" method="post">
+                    <button type="submit" class="image-button">
+                        <img src="/images/dislike.png" alt="Dislike" class="button-image"/>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div id="changeReviewBtns">
+        <a th:href="@{/EditReview/{id}(id=${reviewData.id})}">
+            <button id="editBtn" type="submit">Edit review</button>
+        </a>
+        <form th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') || reviewData.username == #authentication.name}"
+              th:action="@{/Review/{id}(id=${reviewData.id})}" method="post">
+            <input type="hidden" name="_method" value="delete"/>
+            <button id="deleteBtn" type="submit">Delete review</button>
+        </form>
+    </div>
+    <div class="sectionDivider">
+        <hr>
+        <h3>Add a comment</h3>
+        <hr>
+    </div>
+    <form th:object="${addCommentDto}" th:method="post" th:action="@{/Review/{id}(id=${reviewData.id})}" id="form">
+        <div id="addComment">
+            <input type="text" placeholder="Add a comment" th:field="*{text}"/>
+            <button type="submit">Add comment</button>
+        </div>
+    </form>
+    <div id="comments">
+        <div id="comment" th:each="comment : ${commentsData.comments}">
+            <div id="user" th:text="${comment.username}">username</div>
+            <br/>
+            <p th:text="${comment.text}">This is my comment</p>
+            <div id="reviewButtons">
+                <form th:action="@{/Review/Comments/{commentId}/{reviewId}/like(commentId=${comment.id}, reviewId=${reviewData.id})}"
+                      method="post">
+                    <button type="submit" class="image-button">
+                        <img src="/images/like.png" alt="Like" class="button-image"/>
+                        <span th:text="${comment.likes}"></span>
+                    </button>
+                </form>
+                <form th:action="@{/Review/Comments/{commentId}/{reviewId}/dislike(commentId=${comment.id}, reviewId=${reviewData.id})}"
+                      method="post">
+                    <button type="submit" class="image-button">
+                        <img src="/images/dislike.png" alt="Dislike" class="button-image"/>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 </body>
 </html>

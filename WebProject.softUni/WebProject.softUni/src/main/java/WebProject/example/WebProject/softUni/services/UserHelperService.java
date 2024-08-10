@@ -10,7 +10,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -19,9 +18,11 @@ public class UserHelperService {
     private static final String ROLE_PREFIX = "ROLE_";
     private final UserRepository userRepository;
     private static final Logger logger = LoggerFactory.getLogger(UserHelperService.class);
+    private final CloudinaryService cloudinaryService;
 
-    public UserHelperService(UserRepository userRepository) {
+    public UserHelperService(UserRepository userRepository, CloudinaryService cloudinaryService) {
         this.userRepository = userRepository;
+        this.cloudinaryService = cloudinaryService;
     }
 
     public User getUser() {
@@ -48,8 +49,12 @@ public class UserHelperService {
             logger.warn("User not found");
             return;
         }
-        logger.info("Updating profile for user: {}", user.getUsername());
+        String path="";
         userProfileDto.setId(user.getId());
+        if (!userProfileDto.getProfilePicture().isEmpty()){
+           path=this.cloudinaryService.upload(userProfileDto.getProfilePicture(),"");
+           user.setProfilePicture(path);
+        }
         updateFieldIfNotBlank(userProfileDto::getUsername, user::setUsername, "Username");
         updateFieldIfNotBlank(userProfileDto::getFirstName, user::setFirstName, "First Name");
         updateFieldIfNotBlank(userProfileDto::getLastName, user::setLastName, "Last Name");

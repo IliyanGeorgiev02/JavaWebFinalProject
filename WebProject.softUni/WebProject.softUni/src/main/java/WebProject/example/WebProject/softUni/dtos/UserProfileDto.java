@@ -6,7 +6,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 public class UserProfileDto {
     private long id;
+
     private String profilePicUrl;
+
     private MultipartFile profilePicture;
 
     @UniqueUsername

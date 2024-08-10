@@ -2,8 +2,7 @@ package WebProject.example.WebProject.softUni.model;
 
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table(name = "lists")
@@ -17,12 +16,12 @@ public class CustomList extends BaseEntity {
     @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     @JoinTable(name = "lists_movies", joinColumns = @JoinColumn(name = "list_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "movie_id", referencedColumnName = "id"))
-    private List<Movie> movies;
+    private Set<Movie> movies;
     @OneToMany(mappedBy = "customList", cascade = CascadeType.REMOVE, orphanRemoval = true,fetch = FetchType.EAGER)
     private List<Comment> comments;
 
     public CustomList() {
-        this.movies = new ArrayList<>();
+        this.movies = new HashSet<>();
         this.comments = new ArrayList<>();
     }
 
@@ -58,11 +57,11 @@ public class CustomList extends BaseEntity {
         this.description = description;
     }
 
-    public List<Movie> getMovies() {
+    public Set<Movie> getMovies() {
         return movies;
     }
 
-    public void setMovies(List<Movie> movies) {
+    public void setMovies(Set<Movie> movies) {
         this.movies = movies;
     }
 
@@ -86,4 +85,17 @@ public class CustomList extends BaseEntity {
                 '}';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        CustomList that = (CustomList) o;
+        return likes == that.likes && Objects.equals(title, that.title) && Objects.equals(description, that.description) && Objects.equals(user, that.user) && Objects.equals(movies, that.movies) && Objects.equals(comments, that.comments);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), title, description, likes, user, movies, comments);
+    }
 }

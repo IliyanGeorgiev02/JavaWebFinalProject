@@ -31,6 +31,7 @@
 
         <div class="movieLists" th:if="${listsData.lists != null and listsData.lists.size() > 0}">
             <h3>Lists</h3>
+            <hr/>
             <div id="trendingLists">
                 <div class="listBox" th:each="list : ${listsData.lists}">
                     <div class="movie-grid" th:if="${list.movies != null and list.movies.size() > 0}">
@@ -52,6 +53,7 @@
 
         <div class="movieList" th:if="${reviewsData.reviews != null and reviewsData.reviews.size() > 0}">
             <h3>Recently reviewed</h3>
+            <hr/>
             <div class="listContents" th:each="review, iter : ${reviewsData.reviews}" th:if="${iter.index < 4}">
                 <img th:src="${review.posterUrl}" alt="Movie poster"/>
                 <h5 th:text="${review.movieTitle}">Movie Title</h5>
@@ -62,8 +64,6 @@
                 <button class="viewAll">View all</button>
             </a>
         </div>
-
-        <hr/>
     </div>
 </div>
 </body>

@@ -22,7 +22,7 @@
         </small>
 
         <label for="listDescription">Add list description:</label>
-        <textarea id="listDescription" name="listDescription" rows="10" cols="25"
+        <textarea id="listDescription" name="listDescription" rows="10" cols="40"
                   th:field="*{description}" required minlength="3" maxlength="100"
                   placeholder="Enter list description"></textarea>
         <small th:if="${#fields.hasErrors('description')}" th:errors="*{description}" class="error-message">

@@ -83,7 +83,7 @@ public class ReviewController {
             model.addAttribute("commentsData", commentsData);
             return "Review";
         } else {
-            model.addAttribute("errorMessage", "The review does not exist.");
+            model.addAttribute("reviewData", null);
             return "Review";
         }
     }
