@@ -89,7 +89,7 @@ a {
   border-radius: 20px;
   padding: 10px;
   margin-bottom: 0;
-  width: 500px;
+  width: 90%;
   text-align: left;
 }
 a:hover {
@@ -100,3 +100,8 @@ button:hover {
 }
 #deleteBtn{
 background-color:firebrick}
+
+#viewBtn{
+border:2px solid black;
+border-radius:10px;
+}

@@ -17,7 +17,7 @@
 <div id="reviews">
     <div class="review" th:each="review : ${ReviewsData.reviews}">
         <div id="textContent">
-            <span th:text="'For movie '${review.movieTitle}+' '"></span>
+            <span th:text="'For movie: '+${review.movieTitle}+' ('+${review.movieRelease}+'): '"></span>
             <span th:text="${review.reviewTitle}"> </span>
             <span> by:
                 <a th:href="@{/User/{userId}(userId=${review.userId})}" th:text="${review.username}"></a>
@@ -28,7 +28,7 @@
         <div id="rating" th:text="${review.rating} + '/100'">
         </div>
         <a th:href="@{/Review/{reviewId}(reviewId=${review.id})}">
-            <button>View review</button>
+            <button id="viewBtn">View review</button>
         </a>
     </div>
 </div>

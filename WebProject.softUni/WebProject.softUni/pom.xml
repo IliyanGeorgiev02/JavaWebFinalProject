@@ -88,6 +88,42 @@
 				<artifactId>cloudinary-taglib</artifactId>
 				<version>1.39.0</version>
 			</dependency>
+			<!-- JUnit Jupiter API -->
+			<dependency>
+				<groupId>org.junit.jupiter</groupId>
+				<artifactId>junit-jupiter-api</artifactId>
+				<version>5.8.2</version> <!-- Or the latest stable version -->
+				<scope>test</scope>
+			</dependency>
+
+			<!-- JUnit Jupiter Engine -->
+			<dependency>
+				<groupId>org.junit.jupiter</groupId>
+				<artifactId>junit-jupiter-engine</artifactId>
+				<version>5.8.2</version> <!-- Or the latest stable version -->
+				<scope>test</scope>
+			</dependency>
+
+			<!-- Mockito Core -->
+			<dependency>
+				<groupId>org.mockito</groupId>
+				<artifactId>mockito-core</artifactId>
+				<version>5.0.0</version> <!-- Or the latest stable version -->
+				<scope>test</scope>
+			</dependency>
+
+			<!-- Mockito JUnit Jupiter -->
+			<dependency>
+				<groupId>org.mockito</groupId>
+				<artifactId>mockito-junit-jupiter</artifactId>
+				<version>5.0.0</version> <!-- Or the latest stable version -->
+				<scope>test</scope>
+			</dependency>
+		<dependency>
+			<groupId>org.hsqldb</groupId>
+			<artifactId>hsqldb</artifactId>
+			<scope>runtime</scope>
+		</dependency>
 	</dependencies>
 
 	<build>

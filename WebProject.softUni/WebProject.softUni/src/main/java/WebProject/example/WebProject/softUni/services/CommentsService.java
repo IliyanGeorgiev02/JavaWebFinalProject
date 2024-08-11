@@ -3,7 +3,6 @@ package WebProject.example.WebProject.softUni.services;
 import WebProject.example.WebProject.softUni.dtos.CommentsDto;
 import WebProject.example.WebProject.softUni.dtos.ListOfCommentsDto;
 import WebProject.example.WebProject.softUni.model.Comment;
-import WebProject.example.WebProject.softUni.model.CustomList;
 import WebProject.example.WebProject.softUni.model.User;
 import WebProject.example.WebProject.softUni.repositories.CommentRepository;
 import org.springframework.stereotype.Service;
@@ -57,9 +56,6 @@ public class CommentsService {
         this.commentRepository.save(comment);
     }
 
-    public void dislikeReview(Long commentId) {
-
-    }
 
     public List<Comment> findByReviewId(long id) {
         return commentRepository.findAllByReviewId(id);

@@ -53,7 +53,6 @@ public class OmdbController {
         model.addAttribute("movieSearchDto", movieSearchDto);
         model.addAttribute("result", result);
         model.addAttribute("lists", lists);
-
         return "ListOfMovies";
     }
 

@@ -20,7 +20,7 @@
     <div class="movieList">
         <div class="movie" th:each="movie, iterStat : ${moviesData.movies}" th:if="${iterStat.index < 4}">
             <a th:href="@{/Movie/{id}(id=${movie.id})}">
-                <img th:src="${movie.posterUrl}" alt="movie poster"/>
+                <img id="moviePoster" th:src="${movie.posterUrl}" alt="movie poster"/>
                 <h3 th:text="${movie.title}">Movie Title</h3>
                 <h3 th:text="${movie.imdbRating}">Movie Rating</h3>
             </a>

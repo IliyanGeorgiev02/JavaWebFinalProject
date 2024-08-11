@@ -71,7 +71,7 @@ public class MovieService {
         return listOfMoviesDto;
     }
 
-    private MovieFullInfoDto convertToDto(Movie movie) {
+    public MovieFullInfoDto convertToDto(Movie movie) {
         MovieFullInfoDto dto = new MovieFullInfoDto();
         dto.setId(movie.getId());
         dto.setTitle(movie.getTitle());

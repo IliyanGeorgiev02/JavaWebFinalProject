@@ -12,6 +12,20 @@ public class MovieReviewInfoDto {
     private String reviewRating;
     private String reviewText;
 
+    //     new MovieReviewInfoDto("Movie Title", "Director", "posterUrl", "Review Title", "5")
+
+
+    public MovieReviewInfoDto() {
+    }
+
+    public MovieReviewInfoDto(String movieTitle, String director, String posterUrl, String reviewTitle, String reviewRating) {
+        this.movieTitle = movieTitle;
+        this.director = director;
+        this.posterUrl = posterUrl;
+        this.reviewTitle = reviewTitle;
+        this.reviewRating = reviewRating;
+    }
+
     public String getPosterUrl() {
         return posterUrl;
     }

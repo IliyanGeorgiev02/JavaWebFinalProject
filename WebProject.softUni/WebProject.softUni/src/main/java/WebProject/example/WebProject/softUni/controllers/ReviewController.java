@@ -5,6 +5,7 @@ import WebProject.example.WebProject.softUni.model.Comment;
 import WebProject.example.WebProject.softUni.model.Movie;
 import WebProject.example.WebProject.softUni.model.Review;
 import WebProject.example.WebProject.softUni.services.*;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -40,15 +41,29 @@ public class ReviewController {
     }
 
     @PostMapping("/AddReview")
-    public String getAddReview(@RequestParam("title") String title,
-                               @RequestParam("year") String year, Model model) {
+    public String postAddReview(@RequestParam("title") String title,
+                                @RequestParam("year") String year, Model model, HttpSession httpSession) {
         AddReviewDto addReviewDto = new AddReviewDto();
         addReviewDto.setMovieTitle(title);
         addReviewDto.setMovieYear(year);
-        model.addAttribute("reviewDetails", addReviewDto);
+        httpSession.setAttribute("reviewDetails", addReviewDto);
+        if (!model.containsAttribute("reviewDetails")) {
+            model.addAttribute("reviewDetails", addReviewDto);
+        }
         return "AddReview";
     }
 
+    @GetMapping("/AddReview")
+    public String getAddReview(Model model, HttpSession httpSession) {
+        AddReviewDto addReviewDto = (AddReviewDto) httpSession.getAttribute("reviewDetails");
+        if (addReviewDto == null) {
+            addReviewDto = new AddReviewDto();
+        }
+        if (!model.containsAttribute("reviewDetails")) {
+            model.addAttribute("reviewDetails", addReviewDto);
+        }
+        return "AddReview";
+    }
 
     @PostMapping("/Review")
     public String postReview(@Valid @ModelAttribute("reviewDetails") AddReviewDto addReviewDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
@@ -69,7 +84,6 @@ public class ReviewController {
         return "redirect:/Review/" + review.getId();
     }
 
-
     @GetMapping("/Review/{id}")
     public String getReview(@PathVariable("id") Long reviewId, Model model) {
         Optional<Review> review = this.reviewService.findReviewById(reviewId);
@@ -87,7 +101,6 @@ public class ReviewController {
             return "Review";
         }
     }
-
 
     @DeleteMapping("/Review/{id}")
     public String deleteReview(@PathVariable("id") Long reviewId, Model model) {

@@ -12,35 +12,40 @@
 </head>
 <body>
 <div th:replace="Fragments/Navbar"></div>
-<form id="form" th:method="post" th:object="${reviewDetails}" th:action="@{/Review}">
-    <div>
-        <input type="hidden" th:field="*{movieTitle}" th:value="${movieTitle}"/>
-        <input type="hidden" th:field="*{movieYear}" th:value="${movieYear}"/>
+<div th:if="${reviewDetails == null}">
+    <p>Cannot find the movie you want to review.</p>
+</div>
+<div th:if="${reviewDetails != null}">
+    <form id="form" th:method="post" th:object="${reviewDetails}" th:action="@{/Review}">
+        <div>
+            <input type="hidden" th:field="*{movieTitle}" th:value="${movieTitle}"/>
+            <input type="hidden" th:field="*{movieYear}" th:value="${movieYear}"/>
 
-        <h3 th:text="${movieTitle}"></h3>
-        <h3 th:text="${movieYear}"></h3>
+            <h3 th:text="${movieTitle}"></h3>
+            <h3 th:text="${movieYear}"></h3>
 
-        <div class="form-group">
-            <label for="reviewTitle">Enter review title:</label>
-            <input type="text" name="reviewTitle" id="reviewTitle" th:field="*{reviewTitle}"/>
-            <small th:errors="*{reviewTitle}" id="reviewTitleError" class="bg-danger text-white rounded"></small>
+            <div class="form-group">
+                <label for="reviewTitle">Enter review title:</label>
+                <input type="text" name="reviewTitle" id="reviewTitle" th:field="*{reviewTitle}"/>
+                <small th:errors="*{reviewTitle}" id="reviewTitleError" class="bg-danger text-white rounded"></small>
+            </div>
+
+            <div class="form-group">
+                <label for="rating">Enter the rating you want to give this movie:</label>
+                <input type="text" name="rating" id="rating" th:field="*{reviewRating}"/>
+                <small th:errors="*{reviewRating}" id="reviewRatingError" class="bg-danger text-white rounded"></small>
+            </div>
+
+            <div class="form-group">
+                <label for="reviewContent">Share your opinion on the movie</label>
+                <textarea name="reviewText" id="reviewContent" rows="12" cols="100" th:field="*{reviewText}"></textarea>
+                <small th:errors="*{reviewText}" id="reviewTextError" class="bg-danger text-white rounded"></small>
+            </div>
+
+            <button type="submit">Submit review</button>
         </div>
-
-        <div class="form-group">
-            <label for="rating">Enter the rating you want to give this movie:</label>
-            <input type="text" name="rating" id="rating" th:field="*{reviewRating}"/>
-            <small th:errors="*{reviewRating}" id="reviewRatingError" class="bg-danger text-white rounded"></small>
-        </div>
-
-        <div class="form-group">
-            <label for="reviewContent">Share your opinion on the movie</label>
-            <textarea name="reviewText" id="reviewContent" rows="12" cols="100" th:field="*{reviewText}"></textarea>
-            <small th:errors="*{reviewText}" id="reviewTextError" class="bg-danger text-white rounded"></small>
-        </div>
-
-        <button type="submit">Submit review</button>
-    </div>
-</form>
+    </form>
+</div>
 
 </body>
 </html>

@@ -114,7 +114,7 @@ public class ListService {
         return displayListDto;
     }
 
-    private DisplayMovieInListDto convertToDisplayMovieInListDto(Movie movie) {
+    public DisplayMovieInListDto convertToDisplayMovieInListDto(Movie movie) {
         DisplayMovieInListDto displayMovieInListDto = new DisplayMovieInListDto();
         displayMovieInListDto.setId(movie.getId());
         displayMovieInListDto.setPosterUrl(movie.getPosterUrl());
@@ -122,5 +122,7 @@ public class ListService {
         displayMovieInListDto.setYear(movie.getYear().toString());
         return displayMovieInListDto;
     }
+
+
 }
 

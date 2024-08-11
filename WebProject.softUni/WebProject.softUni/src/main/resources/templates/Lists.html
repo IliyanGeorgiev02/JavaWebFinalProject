@@ -19,7 +19,7 @@
         <div class="listBox" th:each="list : ${listData.lists}">
             <div class="movie-grid">
                 <div class="movie-frame" th:each="movie : ${list.movies}">
-                    <img th:src="${movie.posterUrl}" alt="movie poster"/>
+                    <img id="poster" th:src="${movie.posterUrl}" alt="movie poster"/>
                 </div>
             </div>
             <br/>

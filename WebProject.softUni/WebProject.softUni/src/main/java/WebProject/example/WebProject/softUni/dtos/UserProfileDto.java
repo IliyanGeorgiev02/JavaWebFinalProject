@@ -9,6 +9,7 @@ public class UserProfileDto {
 
     private String profilePicUrl;
 
+
     private MultipartFile profilePicture;
 
     @UniqueUsername

@@ -39,6 +39,7 @@ public class User extends BaseEntity {
         this.reviews = new ArrayList<>();
     }
 
+
     public List<CustomList> getLists() {
         return lists;
     }

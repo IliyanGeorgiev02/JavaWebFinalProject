@@ -16,6 +16,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.*;
@@ -36,7 +37,6 @@ public class UserController {
         this.listService = listService;
         this.reviewService = reviewService;
     }
-
 
     @GetMapping("/login")
     public String getLogin(Model model, LoginUserDto loginUserDto) {
@@ -87,13 +87,19 @@ public class UserController {
 
     @PostMapping("/editProfile")
     public String changeUserInfo(UserProfileDto userProfileDto, RedirectAttributes redirectAttributes, BindingResult bindingResult) {
+        MultipartFile file = userProfileDto.getProfilePicture();
+        if (file.getSize() > 2 * 1024 * 1024) {
+            redirectAttributes.addFlashAttribute("profileData", userProfileDto);
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.profileData", userProfileDto);
+            return "redirect:/editProfile";
+        }
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("profileData", userProfileDto);
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.profileData", userProfileDto);
             return "redirect:/editProfile";
         }
         userHelperService.updateUser(userProfileDto);
-        return "redirect:/User/"+userProfileDto.getId();
+        return "redirect:/User/" + userProfileDto.getId();
     }
 
     @GetMapping("/User/{id}")
@@ -114,5 +120,4 @@ public class UserController {
         model.addAttribute("userData", null);
         return "User";
     }
-
 }
