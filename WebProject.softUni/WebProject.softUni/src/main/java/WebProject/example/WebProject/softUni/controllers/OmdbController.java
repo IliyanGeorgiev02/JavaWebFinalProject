@@ -36,7 +36,7 @@ public class OmdbController {
     @PostMapping("/search")
     public String search(MovieSearchDto movieSearchDto, HttpSession session) {
         String title = movieSearchDto.getTitle();
-        OMDBSearchResponseDto result = omdbService.searchByTitle(title);
+        OMDBSearchResponseDto result = omdbService.searchByTitle(title.trim());
         List<CustomList> listByUsername = this.listService.findListByUsername(this.userHelperService.getUser().getUsername());
         session.setAttribute("movieSearchDto", movieSearchDto);
         session.setAttribute("result", result);

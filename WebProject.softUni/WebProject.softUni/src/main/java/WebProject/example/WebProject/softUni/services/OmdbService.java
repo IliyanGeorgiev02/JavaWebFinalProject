@@ -20,7 +20,7 @@ public class OmdbService {
 
     public OMDBSearchResponseDto searchByTitle(String title) {
         RestTemplate restTemplate = new RestTemplate();
-        String url = baseUrl + "&s=" + title;
+        String url = baseUrl + "&s=" + title+"&type=movie";
         try {
             return restTemplate.getForObject(url, OMDBSearchResponseDto.class);
         } catch (HttpClientErrorException | HttpServerErrorException e) {

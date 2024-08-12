@@ -134,13 +134,11 @@ public class ListController {
             redirectAttributes.addFlashAttribute("error", "Custom list not found");
             return "redirect:/ListOfMovies";
         }
-
         MovieFullInfoDto movieFullInfoDto = this.omdbService.searchByTitleAndYear(title, year);
         if (movieFullInfoDto == null) {
             redirectAttributes.addFlashAttribute("error", "Movie not found");
             return "redirect:/ListOfMovies";
         }
-
         Movie movie = this.movieService.mapMovie(movieFullInfoDto);
         Optional<Movie> existingMovie = this.movieService.findMovie(movie);
 
@@ -148,27 +146,16 @@ public class ListController {
             this.movieService.saveMovie(movie);
             existingMovie = Optional.of(movie);
         }
-
         Movie movieToUse = existingMovie.get();
         CustomList customList = listById.get();
-        boolean alreadyInList = false;
         if (!customList.getMovies().contains(movieToUse)) {
             customList.getMovies().add(movieToUse);
             this.listService.saveList(customList);
         } else {
-            alreadyInList = true;
-        }
-
-        if (alreadyInList) {
             redirectAttributes.addFlashAttribute("message", "The list already contains this movie");
-        } else {
-            redirectAttributes.addFlashAttribute("message", "Movie added to the list successfully");
         }
-
         return "redirect:/ListOfMovies";
     }
-
-
 
     @PostMapping("/CustomList/{listId}/like")
     public String likeList(@PathVariable("listId") Long listId, Model model) {

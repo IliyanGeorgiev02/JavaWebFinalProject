@@ -17,7 +17,7 @@ h1 {
   color: white;
 }
 #listDescription {
-  background-color: #d3d3d3;
+  background-color: gray;
   border: 2px solid black;
   border-radius: 20px;
   padding: 20px;
@@ -43,7 +43,7 @@ h1 {
   cursor: pointer;
 }
 #mainBody {
-  background-color: #d3d3d3;
+  background-color: Gray;
   border: 2px solid black;
   padding: 20px;
   border-radius: 20px;

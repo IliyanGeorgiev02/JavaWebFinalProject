@@ -16,6 +16,9 @@
     <div th:if="${errorMessage != null}" class="alert alert-danger">
         <p th:text="${errorMessage}"></p>
     </div>
+    <div th:if="${message}" class="alert alert-danger">
+        <p th:text="${message}"></p>
+    </div>
     <div class="movieList">
         <div th:if="${result.search != null and #lists.size(result.search) > 0}" th:each="movie : ${result.search}">
             <div id="movie">

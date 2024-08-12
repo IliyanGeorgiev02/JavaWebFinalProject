@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -18,10 +18,10 @@
 <div th:if="${reviewData != null}">
     <div id="review">
         <div class="review">
-            <h1>
+            <h3>
                 <span th:text="${reviewData.reviewTitle} + ' by: '"></span>
                 <a th:href="@{/User/{userId}(userId=${reviewData.userId})}" th:text="${reviewData.username}"></a>
-            </h1>
+            </h3>
             <div>
                 <h2 th:text="${reviewData.movieTitle} +' '+${reviewData.movieRelease}"></h2>
             </div>
@@ -65,10 +65,14 @@
             <button type="submit">Add comment</button>
         </div>
     </form>
+    <div class="sectionDivider">
+        <hr>
+        <h3>Comments</h3>
+        <hr>
+    </div>
     <div id="comments">
         <div id="comment" th:each="comment : ${commentsData.comments}">
-            <div id="user" th:text="${comment.username}">username</div>
-            <br/>
+            <strong th:text="${comment.username}"></strong><br/>
             <p th:text="${comment.text}">This is my comment</p>
             <div id="reviewButtons">
                 <form th:action="@{/Review/Comments/{commentId}/{reviewId}/like(commentId=${comment.id}, reviewId=${reviewData.id})}"

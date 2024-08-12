@@ -75,7 +75,7 @@ button {
 #mainBody > #data {
   margin-left: auto;
   margin-right: auto;
-  width: 900px;
+  width: 70%;
 }
 span {
   display: flex;
@@ -156,4 +156,10 @@ border-radius:10px;
 #listContents>img{
  border: 2px solid black;
   border-radius: 10px;
+}
+.movieList{
+display:flex;
+align-items:center;
+justify-content: space-around;
+flex-direction:row;
 }

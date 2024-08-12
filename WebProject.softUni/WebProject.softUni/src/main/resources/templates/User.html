@@ -33,9 +33,9 @@
             <h3>Lists</h3>
             <hr/>
             <div id="trendingLists">
-                <div class="listBox" th:each="list : ${listsData.lists}">
+                <div class="listBox" th:each="list, iter : ${listsData.lists}" th:if="${iter.index < 4}">
                     <div class="movie-grid" th:if="${list.movies != null and list.movies.size() > 0}">
-                        <div th:each="movie : ${list.movies}">
+                        <div th:each="movie, movieIter : ${list.movies}" th:if="${movieIter.index < 4}">
                             <img th:src="${movie.posterUrl}" alt="movie poster"/>
                         </div>
                     </div>
@@ -50,20 +50,21 @@
                 </div>
             </div>
         </div>
-
+        <h3>Recently reviewed</h3>
+        <hr/>
         <div class="movieList" th:if="${reviewsData.reviews != null and reviewsData.reviews.size() > 0}">
-            <h3>Recently reviewed</h3>
-            <hr/>
-            <div class="listContents" th:each="review, iter : ${reviewsData.reviews}" th:if="${iter.index < 4}">
-                <img th:src="${review.posterUrl}" alt="Movie poster"/>
-                <h5 th:text="${review.movieTitle}">Movie Title</h5>
-                <p th:text="${review.reviewTitle}">Review Title</p>
-                <p th:text="${review.reviewRating}">Rating</p>
+            <div id="review" th:each="review, iter : ${reviewsData.reviews}" th:if="${iter.index < 4}">
+                <div class="listContents">
+                    <img th:src="${review.posterUrl}" alt="Movie poster"/>
+                    <h5 th:text="${review.movieTitle}">Movie Title</h5>
+                    <p th:text="${review.reviewTitle}">Review Title</p>
+                    <p th:text="${review.reviewRating}">Rating</p>
+                </div>
             </div>
-            <a th:href="@{/Reviews/{username}(username=${userData.username})}">
-                <button class="viewAll">View all</button>
-            </a>
         </div>
+        <a th:href="@{/Reviews/{username}(username=${userData.username})}">
+            <button class="viewAll">View all</button>
+        </a>
     </div>
 </div>
 </body>

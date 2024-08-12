@@ -21,7 +21,7 @@ body {
   margin-left: auto;
   margin-right: auto;
 }
-.review > h1 {
+.review > h3 {
   border: 2px solid black;
   border-radius: 20px;
   padding: 5px;
@@ -48,8 +48,10 @@ body {
   padding: 0;
 }
 #reviewButtons {
-  display: flex;
-  flex-direction: row;
+ margin-top:10px;
+   display: flex;
+   flex-direction: row;
+ gap:5px;
 }
 .image-button {
   display: flex;
@@ -57,26 +59,16 @@ body {
   justify-content: center;
   padding: 10px;
   border: 2px solid black;
-  border-radius: 10px;
+  border-radius: 20px;
   background-color: dimgray;
   margin: 10px;
   color: white;
   gap: 8px;
 }
-
 .button-image {
   width: 20px;
   height: 20px;
   margin-right: 8px;
-}
-#viewMore {
-  padding: 20px;
-  border: 2px solid black;
-  border-radius: 20px;
-  background-color: dimgray;
-  margin: 10px;
-  font-size: large;
-  color: white;
 }
 button:hover {
   cursor: pointer;
@@ -101,36 +93,6 @@ button:hover {
 #movieContents {
   text-align: left;
 }
-#comment {
-  margin-top: 20px;
-  border: 2px solid black;
-  background-color: Gray;
-  border-radius: 20px;
-  width: 50%;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  text-align: left;
-}
-#comment > p {
-  border: 2px solid black;
-  border-radius: 20px;
-  padding: 10px;
-}
-#viewMoreComments {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  background-color: dimgrey;
-  color: white;
-  border-radius: 20px;
-  font-family: REM;
-  border: 2px solid black;
-  padding: 10px 20px 10px 20px;
-  cursor: pointer;
-  font-size: medium;
-  margin-top: 20px;
-}
 #user {
   padding-left: 10px;
   display: flex;
@@ -139,23 +101,10 @@ button:hover {
   padding-bottom: 0;
   margin-bottom: 0;
 }
-
- hr{
- width:35%;
- }
- .sectionDivider{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  flex-direction:row;
-  }
-
  #comment {
    border: 2px solid black;
    background-color: Gray;
    border-radius: 20px;
-   padding: 5px;
-   padding: 20px;
    margin: 10px;
    text-align:left;
    width:500px;
@@ -168,13 +117,13 @@ button:hover {
    border-radius: 20px;
    padding: 10px;
    margin-left:10px;
+   margin-right:10px;
  }
  #addComment {
    border: 2px solid black;
    background-color: Gray;
    border-radius: 20px;
    padding: 5px;
-   padding: 10px;
    margin: 10px;
    display: flex;
    flex-direction: column;
@@ -206,6 +155,7 @@ button:hover {
  #addComment > p {
    font-size: larger;
    margin-left: 4.5%;
+    margin-right: 4.5%;
  }
  #commentInputField {
    align-items: center;
@@ -215,11 +165,31 @@ button:hover {
  background-color:firebrick
  }
  #form{
- width:600px;
+ width:500px;
  display:block;
  margin-left:auto;
  margin-right:auto;
  }
- #changeReviewBtns{
- gap:5px;
+ #changeReviewBtns>*{
+margin:5px;
  }
+ .sectionDivider {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   flex-direction: row;
+   width: 100%;
+   margin: 20px 0;
+ }
+
+ .sectionDivider h3 {
+   margin: 0 10px;
+ }
+
+ hr {
+   width: 35%;
+ }
+  #comment >strong{
+  margin-left:10px;
+  margin-top:5px;
+  }
