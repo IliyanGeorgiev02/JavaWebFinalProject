@@ -52,7 +52,7 @@
                 </form>
             </div>
         </div>
-        <form th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') || listData.username == #authentication.name}"
+        <form th:if="${userHasRoleAdmin or listData.username == currentUsername}"
               th:action="@{/CustomList/{id}(id=${listData.id})}" method="post">
             <input type="hidden" name="_method" value="delete"/>
             <button id="deleteBtn" type="submit">Delete list</button>

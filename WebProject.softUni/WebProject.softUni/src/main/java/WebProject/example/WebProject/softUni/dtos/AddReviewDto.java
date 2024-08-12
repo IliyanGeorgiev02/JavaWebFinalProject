@@ -3,15 +3,17 @@ package WebProject.example.WebProject.softUni.dtos;
 import jakarta.validation.constraints.*;
 
 public class AddReviewDto {
-    @NotEmpty(message = "Your review must contain a title")
+    @NotBlank(message = "Your review must contain a title")
     private String reviewTitle;
     @NotNull(message = "Your review must contain a rating")
     @Min(1)
     @Max(100)
     private int reviewRating;
-    @NotEmpty(message = "Your review must contain text")
+    @NotBlank(message = "Your review must contain text")
     private String reviewText;
+    @NotBlank
     private String movieTitle;
+    @NotBlank
     private String movieYear;
 
     public String getMovieTitle() {

@@ -4,6 +4,8 @@ import WebProject.example.WebProject.softUni.dtos.*;
 import WebProject.example.WebProject.softUni.model.Comment;
 import WebProject.example.WebProject.softUni.model.CustomList;
 import WebProject.example.WebProject.softUni.model.Movie;
+import WebProject.example.WebProject.softUni.model.User;
+import WebProject.example.WebProject.softUni.model.enums.UserRoleEnum;
 import WebProject.example.WebProject.softUni.services.*;
 import jakarta.validation.Valid;
 import org.slf4j.LoggerFactory;
@@ -61,6 +63,8 @@ public class ListController {
     @GetMapping("/CustomList/{id}")
     public String viewListById(@PathVariable("id") Long id, Model model) {
         Optional<CustomList> customList = listService.findListById(id);
+        User user = this.userHelperService.getUser();
+        boolean isAdmin = user.getRole().equals(UserRoleEnum.ADMIN);
         if (customList.isPresent()) {
             CustomList customList1 = customList.get();
             List<Comment> commentByListId = this.commentsService.findCommentByListId(customList1.getId());
@@ -71,6 +75,8 @@ public class ListController {
             model.addAttribute("listData", displayListDto);
             model.addAttribute("commentsData", listOfCommentsDto);
             model.addAttribute("addCommentDto", new AddCommentDto());
+            model.addAttribute("userHasRoleAdmin", isAdmin);
+            model.addAttribute("currentUsername", userHelperService.getUserDetails().getUsername());
             return "CustomList";
         } else {
             model.addAttribute("errorMessage", "The requested list does not exist.");
@@ -119,41 +125,50 @@ public class ListController {
     public String addMovieToList(@RequestParam("title") String title,
                                  @RequestParam("year") String year,
                                  @RequestParam("listId") String listId,
-                                 Model model) {
+                                 RedirectAttributes redirectAttributes) {
 
         long id = Long.parseLong(listId);
         Optional<CustomList> listById = this.listService.findListById(id);
+
         if (listById.isEmpty()) {
+            redirectAttributes.addFlashAttribute("error", "Custom list not found");
             return "redirect:/ListOfMovies";
         }
+
         MovieFullInfoDto movieFullInfoDto = this.omdbService.searchByTitleAndYear(title, year);
         if (movieFullInfoDto == null) {
+            redirectAttributes.addFlashAttribute("error", "Movie not found");
             return "redirect:/ListOfMovies";
         }
-        Movie movieToAdd;
-        try {
-            movieToAdd = this.movieService.findMovieByTitleAndYear(title, Year.parse(year))
-                    .orElseGet(() -> this.movieService.saveMovie(this.movieService.mapMovie(movieFullInfoDto)));
-        } catch (Exception e) {
-            model.addAttribute("error", "An error occurred while processing the movie.");
-            e.printStackTrace();
-            return "redirect:/ListOfMovies?error=processingFailed";
+
+        Movie movie = this.movieService.mapMovie(movieFullInfoDto);
+        Optional<Movie> existingMovie = this.movieService.findMovie(movie);
+
+        if (existingMovie.isEmpty()) {
+            this.movieService.saveMovie(movie);
+            existingMovie = Optional.of(movie);
         }
+
+        Movie movieToUse = existingMovie.get();
         CustomList customList = listById.get();
-        try {
-            if (customList.getMovies().contains(movieToAdd)) {
-                return "redirect:/ListOfMovies?error=movieAlreadyInList";
-            } else {
-                customList.getMovies().add(movieToAdd);
-                this.listService.saveList(customList);
-            }
-        } catch (IllegalStateException e) {
-            model.addAttribute("error", "An error occurred while updating the list.");
-            e.printStackTrace();
-            return "redirect:/ListOfMovies?error=updateFailed";
+        boolean alreadyInList = false;
+        if (!customList.getMovies().contains(movieToUse)) {
+            customList.getMovies().add(movieToUse);
+            this.listService.saveList(customList);
+        } else {
+            alreadyInList = true;
         }
+
+        if (alreadyInList) {
+            redirectAttributes.addFlashAttribute("message", "The list already contains this movie");
+        } else {
+            redirectAttributes.addFlashAttribute("message", "Movie added to the list successfully");
+        }
+
         return "redirect:/ListOfMovies";
     }
+
+
 
     @PostMapping("/CustomList/{listId}/like")
     public String likeList(@PathVariable("listId") Long listId, Model model) {

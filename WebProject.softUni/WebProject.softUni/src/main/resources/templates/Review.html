@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -18,8 +18,9 @@
 <div th:if="${reviewData != null}">
     <div id="review">
         <div class="review">
-            <h1 th:text="${reviewData.reviewTitle} + ' by: '"><a th:href="@{/User/{userId}(userId=${review.userId})}"
-                                                                 th:text="${review.username}"> </a>
+            <h1>
+                <span th:text="${reviewData.reviewTitle} + ' by: '"></span>
+                <a th:href="@{/User/{userId}(userId=${reviewData.userId})}" th:text="${reviewData.username}"></a>
             </h1>
             <div>
                 <h2 th:text="${reviewData.movieTitle} +' '+${reviewData.movieRelease}"></h2>
@@ -42,10 +43,12 @@
         </div>
     </div>
     <div id="changeReviewBtns">
-        <a th:href="@{/EditReview/{id}(id=${reviewData.id})}">
-            <button id="editBtn" type="submit">Edit review</button>
-        </a>
-        <form th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') || reviewData.username == #authentication.name}"
+        <div th:if="${reviewData.username == currentUsername}">
+            <a th:href="@{/EditReview/{id}(id=${reviewData.id})}">
+                <button id="editBtn" type="button">Edit review</button>
+            </a>
+        </div>
+        <form th:if="${userHasRoleAdmin or reviewData.username == currentUsername}"
               th:action="@{/Review/{id}(id=${reviewData.id})}" method="post">
             <input type="hidden" name="_method" value="delete"/>
             <button id="deleteBtn" type="submit">Delete review</button>

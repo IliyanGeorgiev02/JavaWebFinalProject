@@ -3,6 +3,7 @@ package WebProject.example.WebProject.softUni.services;
 import WebProject.example.WebProject.softUni.dtos.*;
 import WebProject.example.WebProject.softUni.model.Movie;
 import WebProject.example.WebProject.softUni.model.Review;
+import WebProject.example.WebProject.softUni.model.User;
 import WebProject.example.WebProject.softUni.repositories.ReviewRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -143,5 +144,9 @@ public class ReviewService {
 
     public List<Review> findALLReviewsByMovieId(long id) {
         return this.reviewRepository.findByMovieId(id);
+    }
+
+    public Optional<User> findUserByReviewId(Long reviewId) {
+        return this.reviewRepository.findUserByReviewId(reviewId);
     }
 }

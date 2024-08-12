@@ -13,13 +13,9 @@
 <body>
 <div th:replace="Fragments/Navbar"></div>
 <div id="mainBody">
-    <div th:if="${param.error == 'movieAlreadyInList'}" class="error-message">
-        <p>The movie is already in the list.</p>
+    <div th:if="${errorMessage != null}" class="alert alert-danger">
+        <p th:text="${errorMessage}"></p>
     </div>
-    <div th:if="${param.error == 'updateFailed'}" class="error-message">
-        <p>An error occurred while updating the list. Please try again.</p>
-    </div>
-
     <div class="movieList">
         <div th:if="${result.search != null and #lists.size(result.search) > 0}" th:each="movie : ${result.search}">
             <div id="movie">

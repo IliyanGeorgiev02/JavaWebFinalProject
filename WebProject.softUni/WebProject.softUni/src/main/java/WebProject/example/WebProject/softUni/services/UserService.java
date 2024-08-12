@@ -78,4 +78,8 @@ public class UserService {
     public Optional<User> findUserById(long id) {
         return this.userRepository.findById(id);
     }
+
+    public Optional<User> findUserByReviewId(Long reviewId) {
+        return this.userRepository.findUserByReviewId(reviewId);
+    }
 }

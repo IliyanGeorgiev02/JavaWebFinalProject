@@ -18,7 +18,7 @@
     <div id="lists">
         <div class="listBox" th:each="list : ${listData.lists}">
             <div class="movie-grid">
-                <div class="movie-frame" th:each="movie : ${list.movies}">
+                <div class="movie-frame" th:each="movie, iterStat : ${list.movies}" th:if="${iterStat.index < 4}">
                     <img id="poster" th:src="${movie.posterUrl}" alt="movie poster"/>
                 </div>
             </div>

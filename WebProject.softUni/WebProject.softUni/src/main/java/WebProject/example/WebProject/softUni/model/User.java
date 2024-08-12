@@ -5,7 +5,9 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -31,12 +33,12 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user")
     private List<Comment> comments;
     @OneToMany(mappedBy = "user",fetch = FetchType.EAGER)
-    private List<Review> reviews;
+    private Set<Review> reviews;
 
     public User() {
         this.lists=new ArrayList<>();
         this.comments = new ArrayList<>();
-        this.reviews = new ArrayList<>();
+        this.reviews = new HashSet<>();
     }
 
 
@@ -64,11 +66,11 @@ public class User extends BaseEntity {
         this.comments = comments;
     }
 
-    public List<Review> getReviews() {
+    public Set<Review> getReviews() {
         return reviews;
     }
 
-    public void setReviews(List<Review> reviews) {
+    public void setReviews(Set<Review> reviews) {
         this.reviews = reviews;
     }
 

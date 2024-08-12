@@ -39,7 +39,7 @@ public class Movie extends BaseEntity {
     private String website;
     @ManyToMany(mappedBy = "movies",fetch = FetchType.EAGER)
     private List<CustomList> customLists;
-    @OneToMany(mappedBy = "movie", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "movie", fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     private List<Review> reviews;
 
     public Movie() {
