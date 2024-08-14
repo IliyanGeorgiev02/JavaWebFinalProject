@@ -2,6 +2,7 @@ package webproject.example.webproject.softuni.controllers;
 
 import webproject.example.webproject.softuni.dtos.ListDto;
 import webproject.example.webproject.softuni.dtos.ListOfMoviesDto;
+import webproject.example.webproject.softuni.dtos.MovieFullInfoDto;
 import webproject.example.webproject.softuni.dtos.ReviewListDto;
 import webproject.example.webproject.softuni.model.CustomList;
 import webproject.example.webproject.softuni.model.Movie;
@@ -52,7 +53,8 @@ public class HomeController {
         ListOfMoviesDto listOfMoviesDto = this.movieService.mapMoviesToDto(allMovies);
         model.addAttribute("moviesData", listOfMoviesDto);
         Movie randomMovie = movieService.getSelectedMovie();
-        model.addAttribute("recommendation", randomMovie);
+        MovieFullInfoDto recommended = this.movieService.mapMovieShortInfo(randomMovie);
+        model.addAttribute("recommendation", recommended);
         return "home";
     }
 }

@@ -1,7 +1,4 @@
 package webproject.example.webproject.softuni.services;
-
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import webproject.example.webproject.softuni.dtos.ListOfMoviesDto;
 import webproject.example.webproject.softuni.dtos.MovieFullInfoDto;
 import webproject.example.webproject.softuni.model.Movie;
