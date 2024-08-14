@@ -53,8 +53,12 @@ public class HomeController {
         ListOfMoviesDto listOfMoviesDto = this.movieService.mapMoviesToDto(allMovies);
         model.addAttribute("moviesData", listOfMoviesDto);
         Movie randomMovie = movieService.getSelectedMovie();
-        MovieFullInfoDto recommended = this.movieService.mapMovieShortInfo(randomMovie);
-        model.addAttribute("recommendation", recommended);
+        if (randomMovie != null) {
+            MovieFullInfoDto recommended = this.movieService.mapMovieShortInfo(randomMovie);
+            model.addAttribute("recommendation", recommended);
+        } else {
+            model.addAttribute("recommendation", null);
+        }
         return "home";
     }
 }

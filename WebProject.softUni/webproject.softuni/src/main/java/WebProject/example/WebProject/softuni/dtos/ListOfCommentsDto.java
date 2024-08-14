@@ -12,4 +12,6 @@ public class ListOfCommentsDto {
     public void setComments(List<CommentsDto> comments) {
         this.comments = comments;
     }
+
+
 }

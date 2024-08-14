@@ -13,6 +13,7 @@ import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 
 import java.time.Year;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -366,11 +367,18 @@ public class ReviewServiceTest {
     @Test
     void mapReviewsToDto_mapsReviewsToReviewListDto() {
         Review review1 = new Review();
+        User user=new User();
+        Movie movie=new Movie();
+        movie.setYear(Year.parse("2012"));
+        user.setUsername("to6o");
         review1.setId(1L);
         review1.setReviewTitle("Excellent");
         review1.setReviewText("Loved it!");
         review1.setRating(5);
         review1.setLikes(20);
+        review1.setUser(user);
+        review1.setMovie(movie);
+        review1.setComments(new ArrayList<>());
 
         Review review2 = new Review();
         review2.setId(2L);
@@ -378,6 +386,9 @@ public class ReviewServiceTest {
         review2.setReviewText("It was alright.");
         review2.setRating(3);
         review2.setLikes(5);
+        review2.setUser(user);
+        review2.setMovie(movie);
+        review2.setComments(new ArrayList<>());
 
         List<Review> reviews = List.of(review1, review2);
 
