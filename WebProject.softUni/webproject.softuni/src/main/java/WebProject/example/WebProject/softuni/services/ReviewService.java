@@ -8,6 +8,7 @@ import webproject.example.webproject.softuni.repositories.ReviewRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -46,6 +47,7 @@ public class ReviewService {
         review.setLikes(0);
         review.setMovie(mappedMovie);
         review.setUser(this.userHelperService.getUser());
+        review.setCreated(LocalDate.now());
         return review;
     }
 
@@ -57,7 +59,7 @@ public class ReviewService {
         updateFieldIfNotBlank(newReviewData::getReviewTitle, review::setReviewTitle);
         updateFieldIfValidRating(newReviewData.getReviewRating(), review::setRating);
         updateFieldIfNotBlank(newReviewData::getReviewText, review::setReviewText);
-
+        review.setEdited(LocalDate.now());
         reviewRepository.save(review);
     }
 

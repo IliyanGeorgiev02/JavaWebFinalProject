@@ -25,17 +25,17 @@
 
             <label for="reviewTitle">Review title:</label>
             <input type="text" name="reviewTitle" id="reviewTitle" th:field="*{reviewTitle}"
-                    minlength="1" maxlength="255" placeholder="Enter review title"/>
+                    minlength="1" maxlength="255" placeholder="Enter review title" th:errorclass="'is-invalid alert-danger'"/>
             <small th:errors="*{reviewTitle}" id="reviewTitleError" class="bg-danger text-white rounded"></small>
 
             <label for="reviewRating">Review rating:</label>
             <input type="number" name="reviewRating" id="reviewRating" th:field="*{reviewRating}"
-                    min="1" max="100" placeholder="Enter rating between 1 and 100"/>
+                    min="1" max="100" placeholder="Enter rating between 1 and 100" th:errorclass="'is-invalid alert-danger'"/>
             <small th:errors="*{reviewRating}" id="reviewRatingError" class="bg-danger text-white rounded"></small>
 
             <label for="reviewText">Review text:</label>
             <textarea id="reviewText" name="reviewText" rows="12" cols="60" th:field="*{reviewText}"
-                       minlength="1" maxlength="1000" placeholder="Enter review text"></textarea>
+                       minlength="1" maxlength="1000" placeholder="Enter review text" th:errorclass="'is-invalid alert-danger'"></textarea>
             <small th:errors="*{reviewText}" id="reviewTextError" class="bg-danger text-white rounded"></small>
 
             <div id="formButtonDiv">

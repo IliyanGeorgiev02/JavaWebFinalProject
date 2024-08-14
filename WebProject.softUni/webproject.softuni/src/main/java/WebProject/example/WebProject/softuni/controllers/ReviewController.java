@@ -70,8 +70,6 @@ public class ReviewController {
     }
 
 
-
-
     @GetMapping("/AddReview")
     public String getAddReview(Model model, HttpSession httpSession) {
         AddReviewDto addReviewDto = (AddReviewDto) httpSession.getAttribute("reviewDetails");
@@ -132,7 +130,6 @@ public class ReviewController {
             model.addAttribute("addCommentDto", new AddCommentDto());
             model.addAttribute("commentsData", commentsData);
             model.addAttribute("currentUsername", userHelperService.getUserDetails().getUsername());
-
             return "Review";
         } else {
             model.addAttribute("reviewData", null);
@@ -140,14 +137,10 @@ public class ReviewController {
         }
     }
 
-
     @DeleteMapping("/Review/{id}")
-    public String deleteReview(@PathVariable("id") Long reviewId, Model model) {
-        Optional<Review> review = this.reviewService.findReviewById(reviewId);
-        if (review.isPresent()) {
-            Review presentReview = review.get();
-            this.reviewService.deleteReview(presentReview);
-        }
+    public String deleteReview(@PathVariable Long id) {
+        Optional<Review> review = this.reviewService.findReviewById(id);
+        review.ifPresent(reviewService::deleteReview);
         return "redirect:/Reviews";
     }
 

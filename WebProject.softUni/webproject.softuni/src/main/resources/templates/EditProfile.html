@@ -15,23 +15,23 @@
 <div th:replace="Fragments/Navbar"></div>
 <form id="form" th:action="@{/editProfile}" th:object="${profileData}" th:method="post" enctype="multipart/form-data">
     <label for="profile">Profile picture:</label>
-    <input type="file" name="profile" id="profile" th:field="*{profilePicture}" accept="image/jpeg, image/png" />
+    <input type="file" name="profile" id="profile" th:field="*{profilePicture}" accept="image/jpeg, image/png" th:errorclass="'is-invalid alert-danger'"/>
     <small id="profileError" class="error-message"></small>
 
     <label for="username">Username:</label>
-    <input type="text" name="username" id="username" th:field="*{username}" minlength="3" maxlength="30"  />
+    <input type="text" name="username" id="username" th:field="*{username}" minlength="3" maxlength="30"  th:errorclass="'is-invalid alert-danger'"/>
     <small id="usernameError" class="error-message"></small>
 
     <label for="FirstName">First name:</label>
-    <input type="text" name="FirstName" id="FirstName" th:field="*{firstName}" minlength="3" maxlength="30"  />
+    <input type="text" name="FirstName" id="FirstName" th:field="*{firstName}" minlength="3" maxlength="30"  th:errorclass="'is-invalid alert-danger'"/>
     <small id="firstNameError" class="error-message"></small>
 
     <label for="LastName">Last name:</label>
-    <input type="text" name="LastName" id="LastName" th:field="*{lastName}" minlength="3" maxlength="30"  />
+    <input type="text" name="LastName" id="LastName" th:field="*{lastName}" minlength="3" maxlength="30"  th:errorclass="'is-invalid alert-danger'"/>
     <small id="lastNameError" class="error-message"></small>
 
     <label for="Bio">Bio:</label>
-    <textarea name="Bio" rows="6" cols="35" id="Bio" th:field="*{bio}" maxlength="500"></textarea>
+    <textarea name="Bio" rows="6" cols="35" id="Bio" th:field="*{bio}" th:errorclass="'is-invalid alert-danger'"></textarea>
 
     <button type="submit">Update profile</button>
 </form>

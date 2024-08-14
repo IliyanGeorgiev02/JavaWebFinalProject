@@ -1,5 +1,7 @@
 package webproject.example.webproject.softuni.services;
 
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import webproject.example.webproject.softuni.dtos.ListOfMoviesDto;
 import webproject.example.webproject.softuni.dtos.MovieFullInfoDto;
 import webproject.example.webproject.softuni.model.Movie;
@@ -12,7 +14,9 @@ import java.time.Year;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 @Service
@@ -20,6 +24,8 @@ public class MovieService {
     private final MovieRepository movieRepository;
     private final ModelMapper modelMapper;
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy", Locale.ENGLISH);
+    private final Map<String, Movie> movieCache = new ConcurrentHashMap<>();
+
 
     public MovieService(MovieRepository movieRepository, ModelMapper modelMapper) {
         this.movieRepository = movieRepository;
@@ -89,5 +95,13 @@ public class MovieService {
 
     public Optional<Movie> findMovieByTitleAndYear(String title, Year year) {
         return this.movieRepository.findByTitleAndYear(title,year);
+    }
+
+    public void cacheSelectedMovie(Movie movie) {
+        movieCache.put("current", movie);
+    }
+
+    public Movie getSelectedMovie() {
+        return movieCache.get("current");
     }
 }

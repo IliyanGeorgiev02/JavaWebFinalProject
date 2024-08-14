@@ -8,6 +8,7 @@ import webproject.example.webproject.softuni.repositories.CustomListRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -31,6 +32,7 @@ public class ListService {
         mappedList.setLikes(0);
         User user = this.userHelperService.getUser();
         mappedList.setUser(user);
+        mappedList.setCreated(LocalDate.now());
         customListRepository.saveAndFlush(mappedList);
         return mappedList;
     }

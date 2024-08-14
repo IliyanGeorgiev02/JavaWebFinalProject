@@ -2,6 +2,7 @@ package webproject.example.webproject.softuni.model;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +16,10 @@ public class Review extends BaseEntity {
     private int rating;
     @Column(nullable = false)
     private int likes;
+    @Column(name = "created_date")
+    private LocalDate created;
+    @Column(name = "edited_date")
+    private LocalDate edited;
     @ManyToOne
     @JoinColumn(name = "movie_id", referencedColumnName = "id")
     private Movie movie;
@@ -23,6 +28,22 @@ public class Review extends BaseEntity {
     private User user;
     @OneToMany(mappedBy = "review", cascade = CascadeType.ALL)
     private List<Comment> comments;
+
+    public LocalDate getCreated() {
+        return created;
+    }
+
+    public void setCreated(LocalDate created) {
+        this.created = created;
+    }
+
+    public LocalDate getEdited() {
+        return edited;
+    }
+
+    public void setEdited(LocalDate edited) {
+        this.edited = edited;
+    }
 
     public Review() {
         this.comments = new ArrayList<>();

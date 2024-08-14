@@ -2,6 +2,7 @@ package webproject.example.webproject.softuni.model;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.util.*;
 
 @Entity
@@ -13,6 +14,8 @@ public class CustomList extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
+    @Column(name = "created_date")
+    private LocalDate created;
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "lists_movies", joinColumns = @JoinColumn(name = "list_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "movie_id", referencedColumnName = "id"))
@@ -23,6 +26,14 @@ public class CustomList extends BaseEntity {
     public CustomList() {
         this.movies = new HashSet<>();
         this.comments = new ArrayList<>();
+    }
+
+    public LocalDate getCreated() {
+        return created;
+    }
+
+    public void setCreated(LocalDate created) {
+        this.created = created;
     }
 
     public User getUser() {
