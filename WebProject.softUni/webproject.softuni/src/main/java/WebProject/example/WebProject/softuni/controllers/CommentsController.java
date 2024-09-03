@@ -1,5 +1,6 @@
 package webproject.example.webproject.softuni.controllers;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import webproject.example.webproject.softuni.dtos.AddCommentDto;
 import webproject.example.webproject.softuni.model.Comment;
 import webproject.example.webproject.softuni.model.CustomList;
@@ -71,5 +72,30 @@ public class CommentsController {
         this.commentsService.dislikeComment(commentId);
         return "redirect:/CustomList/" + id;
     }
+
+    @PostMapping("Review/Comments/{commentId}/{reviewId}/like")
+    public String likeReviewComment(@PathVariable("reviewId") Long reviewId, @PathVariable("commentId") Long commentId) {
+        this.commentsService.likeComment(commentId);
+        return "redirect:/Review/" + reviewId;
+    }
+
+    @PostMapping("Review/Comments/{commentId}/{reviewId}/dislike")
+    public String dislikeReviewComment(@PathVariable("reviewId") Long reviewId, @PathVariable("commentId") Long commentId) {
+        this.commentsService.dislikeComment(commentId);
+        return "redirect:/Review/" + reviewId;
+    }
+
+    @DeleteMapping("/CustomList/Delete/Comments/{commentId}/{listId}")
+    public String deleteCommentList(@PathVariable("commentId") Long commentId,@PathVariable("listId") Long id){
+        this.commentsService.deleteComment(commentId);
+        return "redirect:/CustomList/" + id;
+    }
+
+    @DeleteMapping("/Review/Delete/Comments/{commentId}/{reviewId}")
+    public String deleteCommentReview(@PathVariable("commentId") Long commentId,@PathVariable("reviewId") Long id){
+        this.commentsService.deleteComment(commentId);
+        return "redirect:/Review/" + id;
+    }
+
 
 }

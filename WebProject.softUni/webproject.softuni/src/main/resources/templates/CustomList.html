@@ -96,6 +96,13 @@
                             </button>
                         </form>
                     </div>
+                    <div id="deleteComment" th:if="${userHasRoleAdmin or listData.username == currentUsername or comment.username==currentUsername}">
+                        <form th:action="@{/CustomList/Delete/Comments/{commentId}/{listId}(commentId=${comment.id}, listId=${listData.id})}"
+                             th:method="post">
+                            <input type="hidden" name="_method" value="delete"/>
+                            <button type="submit">delete comment</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>

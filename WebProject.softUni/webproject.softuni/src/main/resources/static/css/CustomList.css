@@ -164,3 +164,10 @@ background-color:FireBrick;
   gap: 20px;
   justify-items: center;
 }
+#deleteComment>form>button{
+background-color:firebrick;
+border: 1px solid black;
+border-radius:20px;
+  margin-top:10px;
+
+}

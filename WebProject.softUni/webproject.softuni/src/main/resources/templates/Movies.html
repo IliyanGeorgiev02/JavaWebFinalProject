@@ -8,11 +8,11 @@
             href="https://fonts.googleapis.com/css2?family=REM:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
             rel="stylesheet"
     />
-    <title>Reviews</title>
+    <title>Movies</title>
 </head>
 <body>
 <div th:replace="Fragments/Navbar"></div>
-<h1>Movies :</h1>
+<h1>Movies:</h1>
 <hr/>
 <div class="movieList">
     <div class="movieRow" th:each="movie, iterStat : ${moviesData.movies}">

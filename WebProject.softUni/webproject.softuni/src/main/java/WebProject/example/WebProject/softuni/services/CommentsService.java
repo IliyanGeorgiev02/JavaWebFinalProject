@@ -1,5 +1,6 @@
 package webproject.example.webproject.softuni.services;
 
+import org.springframework.security.core.parameters.P;
 import webproject.example.webproject.softuni.dtos.CommentsDto;
 import webproject.example.webproject.softuni.dtos.ListOfCommentsDto;
 import webproject.example.webproject.softuni.model.Comment;
@@ -86,5 +87,10 @@ public class CommentsService {
 
     public List<Comment> findCommentByListId(long id) {
         return this.commentRepository.findAllByListId(id);
+    }
+
+    public void deleteComment(Long commentId) {
+        Optional<Comment> byId = this.commentRepository.findById(commentId);
+        byId.ifPresent(this.commentRepository::delete);
     }
 }

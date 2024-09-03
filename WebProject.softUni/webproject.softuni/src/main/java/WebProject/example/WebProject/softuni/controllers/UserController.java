@@ -68,11 +68,6 @@ public class UserController {
         return "redirect:/register";
     }
 
-    @GetMapping("/changePassword")
-    public String getChangePassword() {
-        return "ChangePassword";
-    }
-
     @GetMapping("/editProfile")
     public String editProfile(Model model) {
         model.addAttribute("profileData", new UserProfileDto());

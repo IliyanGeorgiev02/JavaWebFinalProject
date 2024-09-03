@@ -41,13 +41,14 @@ public class MovieController {
             model.addAttribute("reviewsData", reviewsData);
             return "Movie";
         }
-        return "Home";
+        model.addAttribute("movieData", null);
+        return "Movie";
     }
 
     @GetMapping("/Movies")
     public String getMoviesPage(Model model) {
         List<Movie> allMovies = this.movieService.findAllMovies();
-        ListOfMoviesDto listOfMovies=this.movieService.mapMoviesToDto(allMovies);
+        ListOfMoviesDto listOfMovies = this.movieService.mapMoviesToDto(allMovies);
         model.addAttribute("moviesData", listOfMovies);
         return "Movies";
     }

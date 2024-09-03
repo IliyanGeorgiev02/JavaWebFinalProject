@@ -89,6 +89,13 @@
                     </button>
                 </form>
             </div>
+            <div id="deleteComment" th:if="${userHasRoleAdmin or reviewData.username == currentUsername or comment.username==currentUsername}">
+                <form th:action="@{/Review/Delete/Comments/{commentId}/{reviewId}(commentId=${comment.id}, reviewId=${reviewData.id})}"
+                      th:method="post">
+                    <input type="hidden" name="_method" value="delete"/>
+                    <button type="submit">delete comment</button>
+                </form>
+            </div>
         </div>
     </div>
 </div>

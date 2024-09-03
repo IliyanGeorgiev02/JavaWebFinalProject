@@ -193,3 +193,10 @@ margin:5px;
   margin-left:10px;
   margin-top:5px;
   }
+  #deleteComment>form>button{
+  background-color:firebrick;
+  border: 1px solid black;
+  border-radius:20px;
+  margin-bottom:10px;
+  margin-left:10px;
+  }

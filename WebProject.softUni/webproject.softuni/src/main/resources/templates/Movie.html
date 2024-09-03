@@ -12,7 +12,10 @@
 </head>
 <body>
 <div th:replace="Fragments/Navbar"></div>
-<div id="mainInfo">
+<div th:if="${movieData == null}" class="alert alert-warning">
+    <p>No movie data available. The requested movie could not be found.</p>
+</div>
+<div id="mainInfo" th:if="${movieData != null}">
     <div id="poster">
         <img th:src="${movieData.posterUrl}" alt="Movie poster"/>
     </div>
@@ -33,8 +36,8 @@
         </ul>
     </div>
 </div>
-<h1>User reviews:</h1>
-<div id="reviews">
+<h1 th:if="${movieData != null}">User reviews:</h1>
+<div id="reviews" th:if="${movieData != null}">
     <div id="review" th:each="review : ${reviewsData.reviews}">
         <div class="review">
             <h1>
