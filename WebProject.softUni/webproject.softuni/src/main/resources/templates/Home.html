@@ -17,7 +17,7 @@
         <h1 th:text="#{home_view_recommended_movie}">Recommended movie for today</h1>
     </div>
     <hr th:if="${recommendation!=null}"/>
-    <div class="movie" th:if="${recommendation!=null}">
+    <div class="recommendation" th:if="${recommendation!=null}">
         <a th:href="@{/Movie/{id}(id=${recommendation.id})}">
             <img id="moviePoster" th:src="${recommendation.posterUrl}" alt="movie poster"/>
             <h3 th:text="${recommendation.title}">Movie Title</h3>
@@ -36,7 +36,6 @@
             <a th:href="@{/Movie/{id}(id=${movie.id})}">
                 <img id="moviePoster" th:src="${movie.posterUrl}" alt="movie poster"/>
                 <h3 th:text="${movie.title}">Movie Title</h3>
-                <h3 th:text="${movie.imdbRating}">Movie Rating</h3>
             </a>
         </div>
     </div>
@@ -90,6 +89,7 @@
                                         <span th:text="${review.likes}"></span>
                                     </button>
                                 </form>
+
                                 <form th:action="@{/Home/Review/{reviewId}/dislike(reviewId=${review.id})}"
                                       method="post">
                                     <button type="submit" class="image-button">

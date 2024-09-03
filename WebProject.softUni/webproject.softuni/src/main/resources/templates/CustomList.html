@@ -29,14 +29,21 @@
 
         <div id="mainBody">
             <div id="moviesContainer">
-                <div id="movieRow" th:each="movie : ${listData.movies}">
-                    <a th:href="@{/Movie/{id}(id=${movie.id})}">
-                        <div id="movie">
+                <div id="movieRow" th:each="movie, iterStat : ${listData.movies}">
+                    <div id="movie">
+                        <a th:href="@{/Movie/{id}(id=${movie.id})}">
                             <img th:src="${movie.posterUrl}" alt="movie poster"/>
-                            <h5 th:text="${movie.title}">Title</h5>
-                        </div>
-                    </a>
+                        </a>
+                        <h5 th:text="${movie.title}">Title</h5>
+                        <form th:if="${userHasRoleAdmin or listData.username == currentUsername}"
+                              th:action="@{/CustomList/Movie/Remove/{id}/{movieIndex}(id=${listData.id}, movieIndex=${iterStat.index})}"
+                              th:method="post">
+                            <button id="removeBtn" type="submit">Remove movie
+                            </button>
+                        </form>
+                    </div>
                 </div>
+
             </div>
             <div id="reviewButtons">
                 <form th:action="@{/CustomList/{listId}/like(listId=${listData.id})}" method="post">
@@ -96,9 +103,10 @@
                             </button>
                         </form>
                     </div>
-                    <div id="deleteComment" th:if="${userHasRoleAdmin or listData.username == currentUsername or comment.username==currentUsername}">
+                    <div id="deleteComment"
+                         th:if="${userHasRoleAdmin or listData.username == currentUsername or comment.username==currentUsername}">
                         <form th:action="@{/CustomList/Delete/Comments/{commentId}/{listId}(commentId=${comment.id}, listId=${listData.id})}"
-                             th:method="post">
+                              th:method="post">
                             <input type="hidden" name="_method" value="delete"/>
                             <button type="submit">delete comment</button>
                         </form>

@@ -10,6 +10,7 @@ import webproject.example.webproject.softuni.repositories.MovieRepository;
 import webproject.example.webproject.softuni.services.MovieService;
 
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Component
@@ -27,6 +28,7 @@ public class RandomMovieScheduler {
     @Scheduled(cron = "0 0 0 * * *")
     public void selectAndSaveRandomMovie() {
         List<Movie> movies = movieRepository.findAll();
+
         if (!movies.isEmpty()) {
             Movie randomMovie = movies.get(ThreadLocalRandom.current().nextInt(movies.size()));
             this.movieService.cacheSelectedMovie(randomMovie);

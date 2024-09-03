@@ -19,12 +19,12 @@ public class CustomList extends BaseEntity {
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "lists_movies", joinColumns = @JoinColumn(name = "list_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "movie_id", referencedColumnName = "id"))
-    private Set<Movie> movies;
+    private List<Movie> movies;
     @OneToMany(mappedBy = "customList", cascade = CascadeType.REMOVE, orphanRemoval = true,fetch = FetchType.EAGER)
     private List<Comment> comments;
 
     public CustomList() {
-        this.movies = new HashSet<>();
+        this.movies = new ArrayList<>();
         this.comments = new ArrayList<>();
     }
 
@@ -68,11 +68,11 @@ public class CustomList extends BaseEntity {
         this.description = description;
     }
 
-    public Set<Movie> getMovies() {
+    public List<Movie> getMovies() {
         return movies;
     }
 
-    public void setMovies(Set<Movie> movies) {
+    public void setMovies(List<Movie> movies) {
         this.movies = movies;
     }
 

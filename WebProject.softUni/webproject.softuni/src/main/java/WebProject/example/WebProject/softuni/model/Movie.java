@@ -229,13 +229,12 @@ public class Movie extends BaseEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
         Movie movie = (Movie) o;
-        return Objects.equals(title, movie.title) && Objects.equals(year, movie.year) && Objects.equals(audienceRating, movie.audienceRating) && Objects.equals(released, movie.released) && Objects.equals(runtime, movie.runtime) && Objects.equals(genre, movie.genre) && Objects.equals(director, movie.director) && Objects.equals(writers, movie.writers) && Objects.equals(actors, movie.actors) && Objects.equals(description, movie.description) && Objects.equals(languages, movie.languages) && Objects.equals(country, movie.country) && Objects.equals(awards, movie.awards) && Objects.equals(posterUrl, movie.posterUrl) && Objects.equals(imdbId, movie.imdbId) && Objects.equals(scores, movie.scores) && Objects.equals(type, movie.type) && Objects.equals(boxOffice, movie.boxOffice) && Objects.equals(production, movie.production) && Objects.equals(website, movie.website) && Objects.equals(customLists, movie.customLists) && Objects.equals(reviews, movie.reviews);
+        return Objects.equals(imdbId, movie.imdbId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), title, year, audienceRating, released, runtime, genre, director, writers, actors, description, languages, country, awards, posterUrl, imdbId, scores, type, boxOffice, production, website, customLists, reviews);
+        return Objects.hash(imdbId);
     }
 }

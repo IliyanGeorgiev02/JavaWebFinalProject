@@ -17,9 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.modelmapper.ModelMapper;
 
 import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
+import java.util.*;
 
 import org.slf4j.Logger;
 
@@ -130,11 +128,13 @@ public class ListController {
             redirectAttributes.addFlashAttribute("error", "Custom list not found");
             return "redirect:/ListOfMovies";
         }
+
         MovieFullInfoDto movieFullInfoDto = this.omdbService.searchByTitleAndYear(title, year);
         if (movieFullInfoDto == null) {
             redirectAttributes.addFlashAttribute("error", "Movie not found");
             return "redirect:/ListOfMovies";
         }
+
         Movie movie = this.movieService.mapMovie(movieFullInfoDto);
         Optional<Movie> existingMovie = this.movieService.findMovie(movie);
 
@@ -142,16 +142,21 @@ public class ListController {
             this.movieService.saveMovie(movie);
             existingMovie = Optional.of(movie);
         }
+
         Movie movieToUse = existingMovie.get();
         CustomList customList = listById.get();
+
         if (!customList.getMovies().contains(movieToUse)) {
-            customList.getMovies().add(movieToUse);
+            customList.getMovies().add(movieToUse);  
             this.listService.saveList(customList);
+            redirectAttributes.addFlashAttribute("message", "Movie added to the list");
         } else {
             redirectAttributes.addFlashAttribute("message", "The list already contains this movie");
         }
+
         return "redirect:/ListOfMovies";
     }
+
 
     @PostMapping("/CustomList/{listId}/like")
     public String likeList(@PathVariable("listId") Long listId, Model model) {
@@ -164,4 +169,33 @@ public class ListController {
         this.listService.dislikeList(listId);
         return "redirect:/CustomList/" + listId;
     }
+
+    @PostMapping("/CustomList/Movie/Remove/{id}/{movieIndex}")
+    public String removeMovieInList(@PathVariable("id") Long listId, @PathVariable("movieIndex") Long movieIndex) {
+        Optional<CustomList> listById = this.listService.findListById(listId);
+        if (listById.isEmpty()) {
+            return "redirect:/CustomList/" + listId;
+        }
+
+        CustomList customList = listById.get();
+        List<Movie> movieSet = customList.getMovies();
+        List<Movie> movieList = new ArrayList<>(movieSet);
+
+        int moviesCount = movieList.size();
+        int index = movieIndex.intValue();
+
+        if (index < 0 || index > moviesCount) {
+            return "redirect:/CustomList/" + listId;
+        }
+
+        movieList.remove(index);
+
+        List<Movie> updatedSet = new ArrayList<>(movieList);
+        customList.setMovies(updatedSet);
+
+        this.listService.saveList(customList);
+
+        return "redirect:/CustomList/" + listId;
+    }
+
 }

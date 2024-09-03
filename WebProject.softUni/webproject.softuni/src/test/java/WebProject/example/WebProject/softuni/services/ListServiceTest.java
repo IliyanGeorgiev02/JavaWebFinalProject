@@ -133,7 +133,7 @@ public class ListServiceTest {
         CustomList customList = createCustomList(1L, "List 1", "Description 1", 10);
         Movie movie1 = createMovie(1L, "Movie 1", "Poster1.jpg", "2022");
         Movie movie2 = createMovie(2L, "Movie 2", "Poster2.jpg", "2023");
-        customList.setMovies(Set.of(movie1, movie2));
+        customList.setMovies(List.of(movie1,movie2));
 
         DisplayListDto result = listService.convertToDisplayListDto(customList);
 
@@ -237,7 +237,7 @@ public class ListServiceTest {
         customList.setTitle(title);
         customList.setDescription(description);
         customList.setLikes(likes);
-        customList.setMovies(new HashSet<>());
+        customList.setMovies(new ArrayList<>());
         return customList;
     }
 
