@@ -10,7 +10,8 @@ import java.util.*;
 public class CustomList extends BaseEntity {
     private String title;
     private String description;
-    private int likes;
+    @OneToMany(mappedBy = "customList", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Like> likes;
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
@@ -26,6 +27,7 @@ public class CustomList extends BaseEntity {
     public CustomList() {
         this.movies = new ArrayList<>();
         this.comments = new ArrayList<>();
+        this.likes=new HashSet<>();
     }
 
     public LocalDate getCreated() {
@@ -44,11 +46,11 @@ public class CustomList extends BaseEntity {
         this.user = user;
     }
 
-    public int getLikes() {
+    public Set<Like> getLikes() {
         return likes;
     }
 
-    public void setLikes(int likes) {
+    public void setLikes(Set<Like> likes) {
         this.likes = likes;
     }
 
@@ -94,6 +96,10 @@ public class CustomList extends BaseEntity {
                 ", movies=" + movies +
                 ", comments=" + comments +
                 '}';
+    }
+
+    public int getLikesCount(){
+        return this.likes.size();
     }
 
     @Override

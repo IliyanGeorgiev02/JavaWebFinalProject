@@ -1,16 +1,21 @@
 package webproject.example.webproject.softuni.services;
 
+import org.springframework.security.core.parameters.P;
 import webproject.example.webproject.softuni.dtos.*;
+import webproject.example.webproject.softuni.model.Like;
 import webproject.example.webproject.softuni.model.Movie;
 import webproject.example.webproject.softuni.model.Review;
 import webproject.example.webproject.softuni.model.User;
+import webproject.example.webproject.softuni.repositories.LikeRepository;
 import webproject.example.webproject.softuni.repositories.ReviewRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -20,11 +25,14 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final UserHelperService userHelperService;
     private final ModelMapper modelMapper;
-
-    public ReviewService(ReviewRepository reviewRepository, UserHelperService userHelperService, ModelMapper modelMapper) {
+    private final LikeRepository likeRepository;
+    private final LikeService likeService;
+    public ReviewService(ReviewRepository reviewRepository, UserHelperService userHelperService, ModelMapper modelMapper, LikeRepository likeRepository, LikeService likeService) {
         this.reviewRepository = reviewRepository;
         this.userHelperService = userHelperService;
         this.modelMapper = modelMapper;
+        this.likeRepository = likeRepository;
+        this.likeService = likeService;
     }
 
     public List<Review> findALLReviews() {
@@ -44,7 +52,9 @@ public class ReviewService {
         review.setReviewTitle(addReviewDto.getReviewTitle());
         review.setReviewText(addReviewDto.getReviewText());
         review.setRating(addReviewDto.getReviewRating());
-        review.setLikes(0);
+        Like like=new Like();
+        this.likeRepository.save(like);
+        review.setLikes(new HashSet<>());
         review.setMovie(mappedMovie);
         review.setUser(this.userHelperService.getUser());
         review.setCreated(LocalDate.now());
@@ -76,26 +86,37 @@ public class ReviewService {
         }
     }
 
-    public void likeReview(Long reviewId) {
+    public void likeReview(Long reviewId, User user) {
         Optional<Review> byId = this.reviewRepository.findById(reviewId);
         if (byId.isPresent()) {
             Review review = byId.get();
-            review.setLikes(review.getLikes() + 1);
-            this.reviewRepository.save(review);
-        }
-    }
-
-    public void dislikeReview(Long reviewId) {
-        Optional<Review> byId = this.reviewRepository.findById(reviewId);
-        if (byId.isPresent()) {
-            Review review = byId.get();
-            int likes = review.getLikes();
-            if (likes - 1 >= 0) {
-                review.setLikes(review.getLikes() - 1);
+            boolean alreadyLiked = review.getLikes().stream()
+                    .anyMatch(like -> like.getLiked().equals(user));
+            if (!alreadyLiked) {
+                Like like = new Like();
+                like.setLiked(user);
+                like.setReview(review);
+                review.getLikes().add(like);
                 this.reviewRepository.save(review);
             }
         }
     }
+
+
+    public void dislikeReview(Long reviewId, User user) {
+        Optional<Review> byId = this.reviewRepository.findById(reviewId);
+        if (byId.isPresent()) {
+            Review review = byId.get();
+            Optional<Like> likeToRemove = review.getLikes().stream()
+                    .filter(like -> like.getLiked().equals(user))
+                    .findFirst();
+            if (likeToRemove.isPresent()) {
+                review.getLikes().remove(likeToRemove.get());
+                this.reviewRepository.save(review);
+            }
+        }
+    }
+
 
     public List<Review> findALLReviewsByUser(long id) {
         return this.reviewRepository.findByUserId(id);

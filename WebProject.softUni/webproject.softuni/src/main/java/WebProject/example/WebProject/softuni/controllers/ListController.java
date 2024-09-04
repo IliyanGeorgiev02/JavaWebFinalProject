@@ -1,5 +1,7 @@
 package webproject.example.webproject.softuni.controllers;
 
+import jakarta.persistence.Temporal;
+import jakarta.transaction.Transactional;
 import webproject.example.webproject.softuni.dtos.*;
 import webproject.example.webproject.softuni.model.Comment;
 import webproject.example.webproject.softuni.model.CustomList;
@@ -54,6 +56,7 @@ public class ListController {
         return "CustomList";
     }
 
+    @Transactional
     @GetMapping("/CustomList/{id}")
     public String viewListById(@PathVariable("id") Long id, Model model) {
         Optional<CustomList> customList = listService.findListById(id);
@@ -78,7 +81,6 @@ public class ListController {
         }
     }
 
-
     @PostMapping("/CreateList")
     public String createList(@Valid CreateListDto listDto, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
         if (!bindingResult.hasErrors()) {
@@ -90,6 +92,7 @@ public class ListController {
         return "redirect:/CreateList";
     }
 
+    @Transactional
     @GetMapping("/Lists")
     public String getLists(Model model) {
         if (!model.containsAttribute("findListDto")) {
@@ -147,7 +150,7 @@ public class ListController {
         CustomList customList = listById.get();
 
         if (!customList.getMovies().contains(movieToUse)) {
-            customList.getMovies().add(movieToUse);  
+            customList.getMovies().add(movieToUse);
             this.listService.saveList(customList);
             redirectAttributes.addFlashAttribute("message", "Movie added to the list");
         } else {
@@ -157,19 +160,21 @@ public class ListController {
         return "redirect:/ListOfMovies";
     }
 
-
+    @Transactional
     @PostMapping("/CustomList/{listId}/like")
     public String likeList(@PathVariable("listId") Long listId, Model model) {
-        this.listService.likeList(listId);
+        this.listService.likeList(listId,userHelperService.getUser());
         return "redirect:/CustomList/" + listId;
     }
 
+    @Transactional
     @PostMapping("/CustomList/{listId}/dislike")
     public String dislikeList(@PathVariable("listId") Long listId, Model model) {
-        this.listService.dislikeList(listId);
+        this.listService.dislikeList(listId,userHelperService.getUser());
         return "redirect:/CustomList/" + listId;
     }
 
+    @Transactional
     @PostMapping("/CustomList/Movie/Remove/{id}/{movieIndex}")
     public String removeMovieInList(@PathVariable("id") Long listId, @PathVariable("movieIndex") Long movieIndex) {
         Optional<CustomList> listById = this.listService.findListById(listId);

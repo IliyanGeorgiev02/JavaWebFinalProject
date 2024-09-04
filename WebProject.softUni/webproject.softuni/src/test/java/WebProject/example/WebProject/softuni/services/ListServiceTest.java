@@ -2,6 +2,7 @@ package webproject.example.webproject.softuni.services;
 
 import webproject.example.webproject.softuni.dtos.*;
 import webproject.example.webproject.softuni.model.CustomList;
+import webproject.example.webproject.softuni.model.Like;
 import webproject.example.webproject.softuni.model.Movie;
 import webproject.example.webproject.softuni.model.User;
 import webproject.example.webproject.softuni.repositories.CustomListRepository;
@@ -40,10 +41,10 @@ public class ListServiceTest {
     void likeList_whenListExists_thenLikesIncremented() {
         Long listId = 1L;
         CustomList customList = new CustomList();
-        customList.setLikes(5);
+        customList.setLikes(new HashSet<>());
 
         when(customListRepository.findById(listId)).thenReturn(Optional.of(customList));
-        listService.likeList(listId);
+        listService.likeList(listId,userHelperService.getUser());
         verify(customListRepository).findById(listId);
         verify(customListRepository).save(customList);
         assertEquals(6, customList.getLikes());
@@ -53,7 +54,7 @@ public class ListServiceTest {
     void likeList_whenListDoesNotExist_thenNoActionTaken() {
         Long listId = 1L;
         when(customListRepository.findById(listId)).thenReturn(Optional.empty());
-        listService.likeList(listId);
+        listService.likeList(listId,userHelperService.getUser());
         verify(customListRepository).findById(listId);
         verify(customListRepository, never()).save(any(CustomList.class));
     }
@@ -62,10 +63,10 @@ public class ListServiceTest {
     void dislikeList_whenListExistsAndLikesGreaterThanZero_thenLikesDecremented() {
         Long listId = 1L;
         CustomList customList = new CustomList();
-        customList.setLikes(5);
+        customList.setLikes(new HashSet<>());
 
         when(customListRepository.findById(listId)).thenReturn(Optional.of(customList));
-        listService.dislikeList(listId);
+        listService.dislikeList(listId,userHelperService.getUser());
         verify(customListRepository).findById(listId);
         verify(customListRepository).save(customList);
         assertEquals(4, customList.getLikes());
@@ -75,10 +76,10 @@ public class ListServiceTest {
     void dislikeList_whenListExistsAndLikesZero_thenNoActionTaken() {
         Long listId = 1L;
         CustomList customList = new CustomList();
-        customList.setLikes(0);
+        customList.setLikes(new HashSet<>());
 
         when(customListRepository.findById(listId)).thenReturn(Optional.of(customList));
-        listService.dislikeList(listId);
+        listService.dislikeList(listId,userHelperService.getUser());
         verify(customListRepository).findById(listId);
         verify(customListRepository, never()).save(any(CustomList.class));
         assertEquals(0, customList.getLikes());
@@ -88,7 +89,7 @@ public class ListServiceTest {
     void dislikeList_whenListDoesNotExist_thenNoActionTaken() {
         Long listId = 1L;
         when(customListRepository.findById(listId)).thenReturn(Optional.empty());
-        listService.dislikeList(listId);
+        listService.dislikeList(listId,userHelperService.getUser());
         verify(customListRepository).findById(listId);
         verify(customListRepository, never()).save(any(CustomList.class));
     }
@@ -236,7 +237,7 @@ public class ListServiceTest {
         customList.setId(id);
         customList.setTitle(title);
         customList.setDescription(description);
-        customList.setLikes(likes);
+        customList.setLikes(new HashSet<>());
         customList.setMovies(new ArrayList<>());
         return customList;
     }

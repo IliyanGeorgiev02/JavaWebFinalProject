@@ -1,15 +1,14 @@
 package webproject.example.webproject.softuni.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "comments")
 public class Comment extends BaseEntity {
     private String text;
-    private int likes;
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
@@ -19,8 +18,15 @@ public class Comment extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "custom_list_id", referencedColumnName = "id")
     private CustomList customList;
+    @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Like> likes;
 
     public Comment() {
+        this.likes = new HashSet<>();
+    }
+
+    public int getLikesCount() {
+        return this.likes.size();
     }
 
     public CustomList getCustomList() {
@@ -48,11 +54,11 @@ public class Comment extends BaseEntity {
         this.text = text;
     }
 
-    public int getLikes() {
+    public Set<Like> getLikes() {
         return likes;
     }
 
-    public void setLikes(int likes) {
+    public void setLikes(Set<Like> likes) {
         this.likes = likes;
     }
 

@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import webproject.example.webproject.softuni.services.UserHelperService;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,11 +23,13 @@ public class MovieController {
     private final MovieService movieService;
     private final ReviewService reviewService;
     private final ModelMapper modelMapper;
+    private final UserHelperService userHelperService;
 
-    public MovieController(MovieService movieService, ReviewService reviewService, ModelMapper modelMapper) {
+    public MovieController(MovieService movieService, ReviewService reviewService, ModelMapper modelMapper, UserHelperService userHelperService) {
         this.movieService = movieService;
         this.reviewService = reviewService;
         this.modelMapper = modelMapper;
+        this.userHelperService = userHelperService;
     }
 
     @GetMapping("/Movie/{id}")
@@ -55,13 +58,13 @@ public class MovieController {
 
     @PostMapping("Review/{reviewId}/{movieId}/like")
     public String likeHomeReview(@PathVariable("reviewId") Long reviewId, @PathVariable("movieId") Long movieId) {
-        this.reviewService.likeReview(reviewId);
+        this.reviewService.likeReview(reviewId,userHelperService.getUser());
         return "redirect:/Movie/" + movieId;
     }
 
     @PostMapping("Review/{reviewId}/{movieId}/dislike")
     public String dislikeHomeReview(@PathVariable("reviewId") Long reviewId, @PathVariable("movieId") Long movieId) {
-        this.reviewService.dislikeReview(reviewId);
+        this.reviewService.dislikeReview(reviewId,userHelperService.getUser());
         return "redirect:/Movie/" + movieId;
     }
 }

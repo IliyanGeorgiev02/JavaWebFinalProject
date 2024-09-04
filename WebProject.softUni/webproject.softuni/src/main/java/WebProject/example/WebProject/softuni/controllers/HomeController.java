@@ -1,5 +1,6 @@
 package webproject.example.webproject.softuni.controllers;
 
+import jakarta.transaction.Transactional;
 import webproject.example.webproject.softuni.dtos.ListDto;
 import webproject.example.webproject.softuni.dtos.ListOfMoviesDto;
 import webproject.example.webproject.softuni.dtos.MovieFullInfoDto;
@@ -28,20 +29,21 @@ public class HomeController {
         this.listService = listService;
         this.reviewService = reviewService;
     }
-
+    @Transactional
     @GetMapping("/home")
     public String getHome(Model model) {
         List<CustomList> allLists = listService.findAllLists();
         List<CustomList> sortedLists = allLists.stream()
-                .sorted(Comparator.comparing(CustomList::getLikes).reversed())
+                .sorted(Comparator.comparing(CustomList::getLikesCount))
                 .limit(4)
                 .toList();
+
         ListDto listDto = this.listService.mapCustomListsToListDto(sortedLists);
         model.addAttribute("listData", listDto);
 
         List<Review> allReviews = reviewService.findALLReviews();
         List<Review> sortedReviews = allReviews.stream()
-                .sorted(Comparator.comparing(Review::getLikes).reversed())
+                .sorted(Comparator.comparing(Review::getLikesCount).reversed())
                 .limit(4)
                 .toList();
         ReviewListDto reviewListDto = this.reviewService.mapReviewsToDto(sortedReviews);

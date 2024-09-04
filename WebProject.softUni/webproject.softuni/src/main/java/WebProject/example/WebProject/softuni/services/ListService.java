@@ -1,16 +1,16 @@
 package webproject.example.webproject.softuni.services;
 
 import webproject.example.webproject.softuni.dtos.*;
-import webproject.example.webproject.softuni.model.CustomList;
-import webproject.example.webproject.softuni.model.Movie;
-import webproject.example.webproject.softuni.model.User;
+import webproject.example.webproject.softuni.model.*;
 import webproject.example.webproject.softuni.repositories.CustomListRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 
@@ -20,16 +20,17 @@ public class ListService {
     private final ModelMapper modelMapper;
     private final CustomListRepository customListRepository;
     private final UserHelperService userHelperService;
-
-    public ListService(ModelMapper modelMapper, CustomListRepository customListRepository, UserHelperService userHelperService) {
+    private final LikeService likeService;
+    public ListService(ModelMapper modelMapper, CustomListRepository customListRepository, UserHelperService userHelperService, LikeService likeService) {
         this.modelMapper = modelMapper;
         this.customListRepository = customListRepository;
         this.userHelperService = userHelperService;
+        this.likeService = likeService;
     }
 
     public CustomList addList(CreateListDto listDto) {
         CustomList mappedList = this.modelMapper.map(listDto, CustomList.class);
-        mappedList.setLikes(0);
+        mappedList.setLikes(new HashSet<>());
         User user = this.userHelperService.getUser();
         mappedList.setUser(user);
         mappedList.setCreated(LocalDate.now());
@@ -65,23 +66,32 @@ public class ListService {
         this.customListRepository.saveAndFlush(customList);
     }
 
-    public void likeList(Long listId) {
+    public void likeList(Long listId, User user) {
         Optional<CustomList> byId = this.customListRepository.findById(listId);
         if (byId.isPresent()) {
-            CustomList customList = byId.get();
-            customList.setLikes(customList.getLikes() + 1);
-            customListRepository.save(customList);
+            CustomList list = byId.get();
+            boolean alreadyLiked = list.getLikes().stream()
+                    .anyMatch(like -> like.getLiked().equals(user));
+            if (!alreadyLiked) {
+                Like like = new Like();
+                like.setLiked(user);
+                like.setCustomList(list);
+                list.getLikes().add(like);
+                this.customListRepository.save(list);
+            }
         }
     }
 
-    public void dislikeList(Long listId) {
+    public void dislikeList(Long listId, User user) {
         Optional<CustomList> byId = this.customListRepository.findById(listId);
         if (byId.isPresent()) {
-            CustomList customList = byId.get();
-            int likes = customList.getLikes();
-            if (likes - 1 >= 0) {
-                customList.setLikes(customList.getLikes() - 1);
-                customListRepository.save(customList);
+            CustomList list = byId.get();
+            Optional<Like> likeToRemove = list.getLikes().stream()
+                    .filter(like -> like.getLiked().equals(user))
+                    .findFirst();
+            if (likeToRemove.isPresent()) {
+                list.getLikes().remove(likeToRemove.get());
+                this.customListRepository.save(list);
             }
         }
     }
@@ -104,7 +114,7 @@ public class ListService {
         DisplayListDto displayListDto = new DisplayListDto();
         displayListDto.setTitle(customList.getTitle());
         displayListDto.setDescription(customList.getDescription());
-        displayListDto.setLikes(customList.getLikes());
+        displayListDto.setLikes(customList.getLikes().size());
         displayListDto.setId(customList.getId());
         List<DisplayMovieInListDto> movieDtos = customList.getMovies().stream()
                 .map(this::convertToDisplayMovieInListDto)

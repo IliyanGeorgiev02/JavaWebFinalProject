@@ -3,10 +3,7 @@ package webproject.example.webproject.softuni.model;
 import jakarta.persistence.*;
 import webproject.example.webproject.softuni.model.enums.UserRoleEnum;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "users")
@@ -22,24 +19,34 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private String email;
     private String bio;
-    @Column(name = "profile_Picture", nullable = true)
+    @Column(name = "profile_Picture")
     private String profilePicture;
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private UserRoleEnum role;
-    @OneToMany(mappedBy = "user",fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user")
     private List<CustomList> lists;
     @OneToMany(mappedBy = "user")
     private List<Comment> comments;
-    @OneToMany(mappedBy = "user",fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user")
     private Set<Review> reviews;
+    @OneToMany(mappedBy = "liked")
+    private Set<Like> likes;
 
     public User() {
         this.lists=new ArrayList<>();
         this.comments = new ArrayList<>();
         this.reviews = new HashSet<>();
+        this.likes=new HashSet<>();
     }
 
+    public Set<Like> getLikes() {
+        return likes;
+    }
+
+    public void setLikes(Set<Like> likes) {
+        this.likes = likes;
+    }
 
     public List<CustomList> getLists() {
         return lists;
@@ -127,5 +134,19 @@ public class User extends BaseEntity {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        User user = (User) o;
+        return Objects.equals(username, user.username) && Objects.equals(password, user.password) && Objects.equals(firstName, user.firstName) && Objects.equals(lastName, user.lastName) && Objects.equals(email, user.email) && Objects.equals(bio, user.bio) && Objects.equals(profilePicture, user.profilePicture) && role == user.role && Objects.equals(lists, user.lists) && Objects.equals(comments, user.comments) && Objects.equals(reviews, user.reviews) && Objects.equals(likes, user.likes);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), username, password, firstName, lastName, email, bio, profilePicture, role, lists, comments, reviews, likes);
     }
 }

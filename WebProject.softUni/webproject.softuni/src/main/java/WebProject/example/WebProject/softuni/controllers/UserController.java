@@ -1,5 +1,6 @@
 package webproject.example.webproject.softuni.controllers;
 
+import jakarta.transaction.Transactional;
 import webproject.example.webproject.softuni.dtos.*;
 import webproject.example.webproject.softuni.model.CustomList;
 import webproject.example.webproject.softuni.model.Review;
@@ -97,6 +98,7 @@ public class UserController {
         return "redirect:/User/" + userProfileDto.getId();
     }
 
+    @Transactional
     @GetMapping("/User/{id}")
     public String getUserProfile(Model model, @PathVariable("id") long id) {
         Optional<User> userById = userService.findUserById(id);

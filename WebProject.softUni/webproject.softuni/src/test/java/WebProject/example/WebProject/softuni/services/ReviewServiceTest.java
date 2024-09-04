@@ -1,6 +1,7 @@
 package webproject.example.webproject.softuni.services;
 
 import webproject.example.webproject.softuni.dtos.*;
+import webproject.example.webproject.softuni.model.Like;
 import webproject.example.webproject.softuni.model.Movie;
 import webproject.example.webproject.softuni.model.Review;
 import webproject.example.webproject.softuni.model.User;
@@ -13,9 +14,7 @@ import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 
 import java.time.Year;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -118,12 +117,12 @@ public class ReviewServiceTest {
     void likeReview_whenReviewExists_thenIncrementsLikes() {
         Long reviewId = 1L;
         Review review = new Review();
-        review.setLikes(5);
+        review.setLikes(new HashSet<>());
 
         when(reviewRepository.findById(reviewId)).thenReturn(Optional.of(review));
         when(reviewRepository.save(review)).thenReturn(review);
 
-        reviewService.likeReview(reviewId);
+        reviewService.likeReview(reviewId,userHelperService.getUser());
 
         assertEquals(6, review.getLikes());
         verify(reviewRepository, times(1)).findById(reviewId);
@@ -136,7 +135,7 @@ public class ReviewServiceTest {
 
         when(reviewRepository.findById(reviewId)).thenReturn(Optional.empty());
 
-        reviewService.likeReview(reviewId);
+        reviewService.likeReview(reviewId,userHelperService.getUser());
 
         verify(reviewRepository, times(1)).findById(reviewId);
         verify(reviewRepository, never()).save(any(Review.class));
@@ -146,12 +145,16 @@ public class ReviewServiceTest {
     void dislikeReview_whenReviewExistsAndLikesGreaterThanZero_thenDecrementsLikes() {
         Long reviewId = 1L;
         Review review = new Review();
-        review.setLikes(5);
+        Like like =new Like();
+        Set<User> likes=new HashSet<>();
+        likes.add(new User());
+        likes.add(new User());
+        review.setLikes(new HashSet<>());
 
         when(reviewRepository.findById(reviewId)).thenReturn(Optional.of(review));
         when(reviewRepository.save(review)).thenReturn(review);
 
-        reviewService.dislikeReview(reviewId);
+        reviewService.dislikeReview(reviewId,userHelperService.getUser());
 
         assertEquals(4, review.getLikes());
         verify(reviewRepository, times(1)).findById(reviewId);
@@ -162,12 +165,12 @@ public class ReviewServiceTest {
     void dislikeReview_whenReviewExistsAndLikesZero_thenNoNegativeLikes() {
         Long reviewId = 1L;
         Review review = new Review();
-        review.setLikes(0);
+        review.setLikes(new HashSet<>());
 
         when(reviewRepository.findById(reviewId)).thenReturn(Optional.of(review));
         when(reviewRepository.save(review)).thenReturn(review);
 
-        reviewService.dislikeReview(reviewId);
+        reviewService.dislikeReview(reviewId,userHelperService.getUser());
 
         assertEquals(0, review.getLikes());
         verify(reviewRepository, times(1)).findById(reviewId);
@@ -180,7 +183,7 @@ public class ReviewServiceTest {
 
         when(reviewRepository.findById(reviewId)).thenReturn(Optional.empty());
 
-        reviewService.dislikeReview(reviewId);
+        reviewService.dislikeReview(reviewId,userHelperService.getUser());
 
         verify(reviewRepository, times(1)).findById(reviewId);
         verify(reviewRepository, never()).save(any(Review.class));
@@ -330,7 +333,7 @@ public class ReviewServiceTest {
         review.setReviewTitle("Amazing movie");
         review.setReviewText("Really enjoyed it.");
         review.setRating(5);
-        review.setLikes(10);
+        review.setLikes(new HashSet<>());
 
         Movie movie = new Movie();
         movie.setTitle("The Matrix");
@@ -351,7 +354,7 @@ public class ReviewServiceTest {
         expectedDto.setReviewTitle(review.getReviewTitle());
         expectedDto.setReviewText(review.getReviewText());
         expectedDto.setRating(review.getRating());
-        expectedDto.setLikes(review.getLikes());
+        expectedDto.setLikes(review.getLikes().size());
         expectedDto.setUsername(user.getUsername());
         expectedDto.setPosterUrl(movie.getPosterUrl());
         expectedDto.setUserId(user.getId());
@@ -375,7 +378,7 @@ public class ReviewServiceTest {
         review1.setReviewTitle("Excellent");
         review1.setReviewText("Loved it!");
         review1.setRating(5);
-        review1.setLikes(20);
+        review1.setLikes(new HashSet<>());
         review1.setUser(user);
         review1.setMovie(movie);
         review1.setComments(new ArrayList<>());
@@ -385,7 +388,7 @@ public class ReviewServiceTest {
         review2.setReviewTitle("Okay");
         review2.setReviewText("It was alright.");
         review2.setRating(3);
-        review2.setLikes(5);
+        review2.setLikes(new HashSet<>());
         review2.setUser(user);
         review2.setMovie(movie);
         review2.setComments(new ArrayList<>());
@@ -397,14 +400,14 @@ public class ReviewServiceTest {
         dto1.setReviewTitle(review1.getReviewTitle());
         dto1.setReviewText(review1.getReviewText());
         dto1.setRating(review1.getRating());
-        dto1.setLikes(review1.getLikes());
+        dto1.setLikes(review1.getLikes().size());
 
         ReviewFullInfoDto dto2 = new ReviewFullInfoDto();
         dto2.setId(review2.getId());
         dto2.setReviewTitle(review2.getReviewTitle());
         dto2.setReviewText(review2.getReviewText());
         dto2.setRating(review2.getRating());
-        dto2.setLikes(review2.getLikes());
+        dto2.setLikes(review2.getLikes().size());
 
         ReviewListDto expectedDto = new ReviewListDto();
         expectedDto.setReviews(List.of(dto1, dto2));

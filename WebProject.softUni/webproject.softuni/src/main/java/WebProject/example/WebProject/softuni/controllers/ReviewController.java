@@ -1,10 +1,8 @@
 package webproject.example.webproject.softuni.controllers;
 
+import jakarta.transaction.Transactional;
 import webproject.example.webproject.softuni.dtos.*;
-import webproject.example.webproject.softuni.model.Comment;
-import webproject.example.webproject.softuni.model.Movie;
-import webproject.example.webproject.softuni.model.Review;
-import webproject.example.webproject.softuni.model.User;
+import webproject.example.webproject.softuni.model.*;
 import webproject.example.webproject.softuni.model.enums.UserRoleEnum;
 import webproject.example.webproject.softuni.services.*;
 import jakarta.servlet.http.HttpSession;
@@ -19,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.Year;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -115,6 +114,7 @@ public class ReviewController {
         return "redirect:/Review/" + review.getId();
     }
 
+    @Transactional
     @GetMapping("/Review/{id}")
     public String getReview(@PathVariable("id") Long reviewId, Model model) {
         Optional<Review> review = this.reviewService.findReviewById(reviewId);
@@ -172,6 +172,7 @@ public class ReviewController {
         return "redirect:/Review/" + reviewId;
     }
 
+    @Transactional
     @GetMapping("/Reviews")
     public String getReviews(Model model) {
         List<Review> allReviews = this.reviewService.findALLReviews();
@@ -188,27 +189,30 @@ public class ReviewController {
         return "Reviews";
     }
 
+    @Transactional
     @PostMapping("Review/{reviewId}/like")
     public String likeReview(@PathVariable("reviewId") Long reviewId) {
-        this.reviewService.likeReview(reviewId);
+        this.reviewService.likeReview(reviewId,userHelperService.getUser());
         return "redirect:/Review/" + reviewId;
     }
 
+    @Transactional
     @PostMapping("Review/{reviewId}/dislike")
     public String dislikeReview(@PathVariable("reviewId") Long reviewId) {
-        this.reviewService.dislikeReview(reviewId);
+        this.reviewService.dislikeReview(reviewId,userHelperService.getUser());
         return "redirect:/Review/" + reviewId;
     }
 
+    @Transactional
     @PostMapping("Home/Review/{reviewId}/like")
     public String likeHomeReview(@PathVariable("reviewId") Long reviewId) {
-        this.reviewService.likeReview(reviewId);
+        this.reviewService.likeReview(reviewId,userHelperService.getUser());
         return "redirect:/home";
     }
-
+    @Transactional
     @PostMapping("Home/Review/{reviewId}/dislike")
     public String dislikeHomeReview(@PathVariable("reviewId") Long reviewId) {
-        this.reviewService.dislikeReview(reviewId);
+        this.reviewService.dislikeReview(reviewId,userHelperService.getUser());
         return "redirect:/home";
     }
 
@@ -220,7 +224,7 @@ public class ReviewController {
         }
         Review review = reviewById.get();
         Comment mappedComment = this.modelMapper.map(addCommentDto, Comment.class);
-        mappedComment.setLikes(0);
+        mappedComment.setLikes(new HashSet<>());
         mappedComment.setReview(review);
         mappedComment.setUser(userHelperService.getUser());
         this.commentsService.addComment(mappedComment);

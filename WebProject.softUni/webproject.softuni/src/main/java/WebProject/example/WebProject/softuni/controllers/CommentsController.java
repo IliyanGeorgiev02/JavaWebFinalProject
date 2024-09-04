@@ -1,9 +1,12 @@
 package webproject.example.webproject.softuni.controllers;
 
+import jakarta.transaction.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import webproject.example.webproject.softuni.dtos.AddCommentDto;
 import webproject.example.webproject.softuni.model.Comment;
 import webproject.example.webproject.softuni.model.CustomList;
+import webproject.example.webproject.softuni.model.Like;
+import webproject.example.webproject.softuni.model.User;
 import webproject.example.webproject.softuni.services.CommentsService;
 import webproject.example.webproject.softuni.services.ListService;
 import webproject.example.webproject.softuni.services.UserHelperService;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 
+import java.util.HashSet;
 import java.util.Optional;
 
 @Controller
@@ -41,7 +45,7 @@ public class CommentsController {
         CustomList customList = listById.get();
         Comment mappedComment = this.modelMapper.map(addCommentDto, Comment.class);
 
-        mappedComment.setLikes(0);
+        mappedComment.setLikes(new HashSet<>());
         mappedComment.setCustomList(customList);
         mappedComment.setUser(userHelperService.getUser());
 
@@ -49,39 +53,45 @@ public class CommentsController {
         return "redirect:/CustomList/" + id;
     }
 
+    @Transactional
     @PostMapping("Home/Comments/{commentId}/like")
     public String likeHomeComment(@PathVariable("commentId") Long commentId) {
-        this.commentsService.likeComment(commentId);
+        this.commentsService.likeComment(commentId,userHelperService.getUser());
         return "redirect:/home";
     }
 
+    @Transactional
     @PostMapping("Home/Comments/{commentId}/dislike")
     public String dislikeHomeComment(@PathVariable("commentId") Long commentId) {
-        this.commentsService.dislikeComment(commentId);
+        this.commentsService.dislikeComment(commentId,userHelperService.getUser());
         return "redirect:/home";
     }
 
+    @Transactional
     @PostMapping("List/Comments/{commentId}/{listId}/like")
     public String likeListComment(@PathVariable("commentId") Long commentId, @PathVariable("listId") Long id) {
-        this.commentsService.likeComment(commentId);
+        this.commentsService.likeComment(commentId,userHelperService.getUser());
         return "redirect:/CustomList/" + id;
     }
 
+    @Transactional
     @PostMapping("List/Comments/{commentId}/{listId}/dislike")
     public String dislikeListComment(@PathVariable("commentId") Long commentId, @PathVariable("listId") Long id) {
-        this.commentsService.dislikeComment(commentId);
+        this.commentsService.dislikeComment(commentId,userHelperService.getUser());
         return "redirect:/CustomList/" + id;
     }
 
+    @Transactional
     @PostMapping("Review/Comments/{commentId}/{reviewId}/like")
     public String likeReviewComment(@PathVariable("reviewId") Long reviewId, @PathVariable("commentId") Long commentId) {
-        this.commentsService.likeComment(commentId);
+        this.commentsService.likeComment(commentId,userHelperService.getUser());
         return "redirect:/Review/" + reviewId;
     }
 
+    @Transactional
     @PostMapping("Review/Comments/{commentId}/{reviewId}/dislike")
     public String dislikeReviewComment(@PathVariable("reviewId") Long reviewId, @PathVariable("commentId") Long commentId) {
-        this.commentsService.dislikeComment(commentId);
+        this.commentsService.dislikeComment(commentId,userHelperService.getUser());
         return "redirect:/Review/" + reviewId;
     }
 

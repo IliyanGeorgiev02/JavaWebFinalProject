@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "reviews")
@@ -14,8 +16,8 @@ public class Review extends BaseEntity {
     @Column(name = "review_text", nullable = false)
     private String reviewText;
     private int rating;
-    @Column(nullable = false)
-    private int likes;
+    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Like> likes;
     @Column(name = "created_date")
     private LocalDate created;
     @Column(name = "edited_date")
@@ -28,6 +30,10 @@ public class Review extends BaseEntity {
     private User user;
     @OneToMany(mappedBy = "review", cascade = CascadeType.ALL)
     private List<Comment> comments;
+
+    public int getLikesCount(){
+        return this.likes.size();
+    }
 
     public LocalDate getCreated() {
         return created;
@@ -47,6 +53,7 @@ public class Review extends BaseEntity {
 
     public Review() {
         this.comments = new ArrayList<>();
+        this.likes=new HashSet<>();
     }
 
     public Movie getMovie() {
@@ -90,11 +97,11 @@ public class Review extends BaseEntity {
         this.rating = rating;
     }
 
-    public int getLikes() {
+    public Set<Like> getLikes() {
         return likes;
     }
 
-    public void setLikes(int likes) {
+    public void setLikes(Set<Like> likes) {
         this.likes = likes;
     }
 

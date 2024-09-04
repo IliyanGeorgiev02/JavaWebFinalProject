@@ -3,6 +3,7 @@ package webproject.example.webproject.softuni.services;
 import webproject.example.webproject.softuni.dtos.CommentsDto;
 import webproject.example.webproject.softuni.dtos.ListOfCommentsDto;
 import webproject.example.webproject.softuni.model.Comment;
+import webproject.example.webproject.softuni.model.Like;
 import webproject.example.webproject.softuni.model.User;
 import webproject.example.webproject.softuni.repositories.CommentRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,6 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,6 +22,9 @@ import static org.mockito.Mockito.*;
 public class CommentsServiceTest {
     @Mock
     private CommentRepository commentRepository;
+
+    @Mock
+    private UserHelperService userHelperService;
 
     @InjectMocks
     private CommentsService commentsService;
@@ -41,9 +46,9 @@ public class CommentsServiceTest {
     void likeComment_whenCommentExists_thenIncreasesLikes() {
         Long commentId = 1L;
         Comment comment = new Comment();
-        comment.setLikes(5);
+        comment.setLikes(new HashSet<>());
         when(commentRepository.findById(commentId)).thenReturn(Optional.of(comment));
-        commentsService.likeComment(commentId);
+        commentsService.likeComment(commentId,userHelperService.getUser());
         verify(commentRepository, times(1)).findById(commentId);
         verify(commentRepository, times(1)).save(comment);
         assertEquals(6, comment.getLikes(), "The number of likes should be incremented by 1");
@@ -53,7 +58,7 @@ public class CommentsServiceTest {
     void likeComment_whenCommentDoesNotExist_thenDoesNothing() {
         Long commentId = 1L;
         when(commentRepository.findById(commentId)).thenReturn(Optional.empty());
-        commentsService.likeComment(commentId);
+        commentsService.likeComment(commentId,userHelperService.getUser());
         verify(commentRepository, times(1)).findById(commentId);
         verify(commentRepository, never()).save(any(Comment.class));
     }
@@ -62,9 +67,9 @@ public class CommentsServiceTest {
     void dislikeComment_whenCommentExistsAndLikesGreaterThanZero_thenDecreasesLikes() {
         Long commentId = 1L;
         Comment comment = new Comment();
-        comment.setLikes(5);
+        comment.setLikes(new HashSet<>());
         when(commentRepository.findById(commentId)).thenReturn(Optional.of(comment));
-        commentsService.dislikeComment(commentId);
+        commentsService.dislikeComment(commentId,userHelperService.getUser());
         verify(commentRepository, times(1)).findById(commentId);
         verify(commentRepository, times(1)).save(comment);
         assertEquals(4, comment.getLikes(), "The number of likes should be decremented by 1");
@@ -74,9 +79,9 @@ public class CommentsServiceTest {
     void dislikeComment_whenCommentExistsAndLikesZero_thenDoesNotDecreaseLikesBelowZero() {
         Long commentId = 1L;
         Comment comment = new Comment();
-        comment.setLikes(0);
+        comment.setLikes(new HashSet<>());
         when(commentRepository.findById(commentId)).thenReturn(Optional.of(comment));
-        commentsService.dislikeComment(commentId);
+        commentsService.dislikeComment(commentId,userHelperService.getUser());
         verify(commentRepository, times(1)).findById(commentId);
         verify(commentRepository, times(1)).save(comment);
         assertEquals(0, comment.getLikes(), "The number of likes should not go below zero");
@@ -86,7 +91,7 @@ public class CommentsServiceTest {
     void dislikeComment_whenCommentDoesNotExist_thenDoesNothing() {
         Long commentId = 1L;
         when(commentRepository.findById(commentId)).thenReturn(Optional.empty());
-        commentsService.dislikeComment(commentId);
+        commentsService.dislikeComment(commentId,userHelperService.getUser());
         verify(commentRepository, times(1)).findById(commentId);
         verify(commentRepository, never()).save(any(Comment.class));
     }
@@ -158,7 +163,7 @@ public class CommentsServiceTest {
         Comment comment1 = new Comment();
         comment1.setId(1L);
         comment1.setText("Comment 1");
-        comment1.setLikes(10);
+        comment1.setLikes(new HashSet<>());
         User user1 = new User();
         user1.setUsername("user1");
         comment1.setUser(user1);
@@ -166,7 +171,7 @@ public class CommentsServiceTest {
         Comment comment2 = new Comment();
         comment2.setId(2L);
         comment2.setText("Comment 2");
-        comment2.setLikes(5);
+        comment2.setLikes(new HashSet<>());
         User user2 = new User();
         user2.setUsername("user2");
         comment2.setUser(user2);
