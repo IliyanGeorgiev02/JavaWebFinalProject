@@ -181,6 +181,7 @@ public class ReviewController {
         return "Reviews";
     }
 
+    @Transactional
     @GetMapping("/Reviews/{username}")
     public String getReviewsByUsername(@PathVariable("username") String username, Model model) {
         List<Review> allReviewsByUsername = this.userService.findAllReviewsByUser(username);

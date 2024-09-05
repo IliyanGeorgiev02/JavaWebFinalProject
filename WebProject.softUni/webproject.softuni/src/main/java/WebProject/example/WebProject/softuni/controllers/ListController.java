@@ -45,7 +45,9 @@ public class ListController {
 
     @GetMapping("/CreateList")
     public String getCreateList(Model model) {
-        model.addAttribute("listDto", new CreateListDto());
+        if (!model.containsAttribute("listDto")) {
+            model.addAttribute("listDto", new CreateListDto());
+        }
         return "CreateList";
     }
 
@@ -87,7 +89,7 @@ public class ListController {
             CustomList mappedList = this.listService.addList(listDto);
             return "redirect:/CustomList/" + mappedList.getId();
         }
-        redirectAttributes.addFlashAttribute("listData", listDto);
+        redirectAttributes.addFlashAttribute("listDto", listDto);
         redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.listDto", bindingResult);
         return "redirect:/CreateList";
     }
@@ -163,14 +165,14 @@ public class ListController {
     @Transactional
     @PostMapping("/CustomList/{listId}/like")
     public String likeList(@PathVariable("listId") Long listId, Model model) {
-        this.listService.likeList(listId,userHelperService.getUser());
+        this.listService.likeList(listId, userHelperService.getUser());
         return "redirect:/CustomList/" + listId;
     }
 
     @Transactional
     @PostMapping("/CustomList/{listId}/dislike")
     public String dislikeList(@PathVariable("listId") Long listId, Model model) {
-        this.listService.dislikeList(listId,userHelperService.getUser());
+        this.listService.dislikeList(listId, userHelperService.getUser());
         return "redirect:/CustomList/" + listId;
     }
 

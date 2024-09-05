@@ -34,13 +34,11 @@ public class HomeController {
     public String getHome(Model model) {
         List<CustomList> allLists = listService.findAllLists();
         List<CustomList> sortedLists = allLists.stream()
-                .sorted(Comparator.comparing(CustomList::getLikesCount))
+                .sorted(Comparator.comparing(CustomList::getLikesCount).reversed())
                 .limit(4)
                 .toList();
-
         ListDto listDto = this.listService.mapCustomListsToListDto(sortedLists);
         model.addAttribute("listData", listDto);
-
         List<Review> allReviews = reviewService.findALLReviews();
         List<Review> sortedReviews = allReviews.stream()
                 .sorted(Comparator.comparing(Review::getLikesCount).reversed())

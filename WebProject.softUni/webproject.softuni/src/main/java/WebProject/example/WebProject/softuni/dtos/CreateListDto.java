@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Size;
 
 public class CreateListDto {
     @NotBlank
-    @Size(min = 3, max = 20)
+    @Size(min = 3, max = 50)
     private String title;
     @NotBlank
     @Size(min = 3, max = 100)
