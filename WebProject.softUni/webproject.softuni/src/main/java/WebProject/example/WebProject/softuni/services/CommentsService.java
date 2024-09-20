@@ -1,26 +1,37 @@
 package webproject.example.webproject.softuni.services;
+
+import org.modelmapper.ModelMapper;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import webproject.example.webproject.softuni.clients.ReviewClient;
+import webproject.example.webproject.softuni.dtos.AddCommentDto;
 import webproject.example.webproject.softuni.dtos.CommentsDto;
 import webproject.example.webproject.softuni.dtos.ListOfCommentsDto;
+import webproject.example.webproject.softuni.dtos.ReviewFullInfoDto;
 import webproject.example.webproject.softuni.model.Comment;
 import webproject.example.webproject.softuni.model.Like;
-import webproject.example.webproject.softuni.model.Review;
 import webproject.example.webproject.softuni.model.User;
 import webproject.example.webproject.softuni.repositories.CommentRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 public class CommentsService {
     private final CommentRepository commentRepository;
-    private final LikeService likeService;
+    private final ModelMapper modelMapper;
+    private final ReviewClient reviewClient;
+    private final UserHelperService userHelperService;
 
-    public CommentsService(CommentRepository commentRepository, LikeService likeService) {
+    public CommentsService(CommentRepository commentRepository, ModelMapper modelMapper, ReviewClient reviewClient, UserHelperService userHelperService) {
         this.commentRepository = commentRepository;
-        this.likeService = likeService;
+        this.modelMapper = modelMapper;
+        this.reviewClient = reviewClient;
+        this.userHelperService = userHelperService;
     }
 
     public void addComment(Comment mappedComment) {
@@ -105,5 +116,19 @@ public class CommentsService {
     public void deleteComment(Long commentId) {
         Optional<Comment> byId = this.commentRepository.findById(commentId);
         byId.ifPresent(this.commentRepository::delete);
+    }
+
+    @PostMapping("/Review/{reviewId}")
+    public String postComment(@ModelAttribute("addCommentDto") AddCommentDto addCommentDto, @PathVariable("reviewId") long id) {
+        Optional<ReviewFullInfoDto> reviewById = this.reviewClient.getReviewById(id);
+        if (reviewById.isEmpty()) {
+            return "redirect:/home";
+        }
+        Comment mappedComment = this.modelMapper.map(addCommentDto, Comment.class);
+        mappedComment.setLikes(new HashSet<>());
+        mappedComment.setReviewId(id);
+        mappedComment.setUser(userHelperService.getUser());
+        addComment(mappedComment);
+        return "redirect:/Review/" + id;
     }
 }

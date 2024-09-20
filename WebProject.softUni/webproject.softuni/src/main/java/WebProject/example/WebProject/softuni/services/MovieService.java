@@ -1,4 +1,5 @@
 package webproject.example.webproject.softuni.services;
+
 import webproject.example.webproject.softuni.dtos.ListOfMoviesDto;
 import webproject.example.webproject.softuni.dtos.MovieFullInfoDto;
 import webproject.example.webproject.softuni.model.Movie;
@@ -40,7 +41,7 @@ public class MovieService {
     public Movie mapMovie(MovieFullInfoDto movieFullInfoDto) {
         Movie mappedMovie;
         mappedMovie = this.modelMapper.map(movieFullInfoDto, Movie.class);
-        mappedMovie.setReleased(LocalDate.parse(movieFullInfoDto.getReleaseDate(),formatter));
+        mappedMovie.setReleased(LocalDate.parse(movieFullInfoDto.getReleaseDate(), formatter));
         mappedMovie.setYear(Year.parse(movieFullInfoDto.getYear()));
         mappedMovie.setWriters(movieFullInfoDto.getWriter());
         mappedMovie.setAudienceRating(movieFullInfoDto.getRatings().toString());
@@ -56,6 +57,7 @@ public class MovieService {
     public Optional<Movie> findMovieById(long id) {
         return this.movieRepository.findById(id);
     }
+
     public MovieFullInfoDto mapMovieShortInfo(Movie movie) {
         MovieFullInfoDto mappedMovie = this.modelMapper.map(movie, MovieFullInfoDto.class);
         mappedMovie.setPlot(movie.getDescription());
@@ -91,7 +93,7 @@ public class MovieService {
     }
 
     public Optional<Movie> findMovieByTitleAndYear(String title, Year year) {
-        return this.movieRepository.findByTitleAndYear(title,year);
+        return this.movieRepository.findByTitleAndYear(title, year);
     }
 
     public void cacheSelectedMovie(Movie movie) {
@@ -100,5 +102,10 @@ public class MovieService {
 
     public Movie getSelectedMovie() {
         return movieCache.get("current");
+    }
+
+    public String findByReviewId(Long reviewId) {
+        Movie byReviewId = movieRepository.findByReviewId(reviewId);
+        return byReviewId.getTitle() + "," + byReviewId.getReleased() + "," + byReviewId.getPosterUrl()+","+byReviewId.getId();
     }
 }

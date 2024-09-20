@@ -4,7 +4,6 @@ import webproject.example.webproject.softuni.controllers.MovieController;
 import webproject.example.webproject.softuni.dtos.RegisterUserDto;
 import webproject.example.webproject.softuni.dtos.UserProfileDto;
 import webproject.example.webproject.softuni.model.CustomList;
-import webproject.example.webproject.softuni.model.Review;
 import webproject.example.webproject.softuni.model.User;
 import webproject.example.webproject.softuni.model.enums.UserRoleEnum;
 import webproject.example.webproject.softuni.repositories.UserRepository;
@@ -71,15 +70,17 @@ public class UserService {
         return lists;
     }
 
-    public List<Review> findAllReviewsByUser(String username) {
-        return this.userRepository.findAllReviewsByUser(username);
-    }
 
     public Optional<User> findUserById(long id) {
         return this.userRepository.findById(id);
     }
 
-    public Optional<User> findUserByReviewId(Long reviewId) {
-        return this.userRepository.findUserByReviewId(reviewId);
+
+    public Optional<User> findUserByUsername(String username) {
+        return this.userRepository.findByUsername(username);
+    }
+
+    public void saveUser(User user) {
+        this.userRepository.save(user);
     }
 }

@@ -28,16 +28,17 @@ public class User extends BaseEntity {
     private List<CustomList> lists;
     @OneToMany(mappedBy = "user")
     private List<Comment> comments;
-    @OneToMany(mappedBy = "user")
-    private Set<Review> reviews;
+    @Column
+    @ElementCollection
+    private Set<Long> review_ids;
     @OneToMany(mappedBy = "liked")
     private Set<Like> likes;
 
     public User() {
-        this.lists=new ArrayList<>();
+        this.lists = new ArrayList<>();
         this.comments = new ArrayList<>();
-        this.reviews = new HashSet<>();
-        this.likes=new HashSet<>();
+        this.review_ids = new HashSet<>();
+        this.likes = new HashSet<>();
     }
 
     public Set<Like> getLikes() {
@@ -72,12 +73,12 @@ public class User extends BaseEntity {
         this.comments = comments;
     }
 
-    public Set<Review> getReviews() {
-        return reviews;
+    public Set<Long> getReview_ids() {
+        return review_ids;
     }
 
-    public void setReviews(Set<Review> reviews) {
-        this.reviews = reviews;
+    public void setReview_ids(Set<Long> review_ids) {
+        this.review_ids = review_ids;
     }
 
     public String getUsername() {
@@ -142,11 +143,11 @@ public class User extends BaseEntity {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         User user = (User) o;
-        return Objects.equals(username, user.username) && Objects.equals(password, user.password) && Objects.equals(firstName, user.firstName) && Objects.equals(lastName, user.lastName) && Objects.equals(email, user.email) && Objects.equals(bio, user.bio) && Objects.equals(profilePicture, user.profilePicture) && role == user.role && Objects.equals(lists, user.lists) && Objects.equals(comments, user.comments) && Objects.equals(reviews, user.reviews) && Objects.equals(likes, user.likes);
+        return Objects.equals(username, user.username) && Objects.equals(password, user.password) && Objects.equals(firstName, user.firstName) && Objects.equals(lastName, user.lastName) && Objects.equals(email, user.email) && Objects.equals(bio, user.bio) && Objects.equals(profilePicture, user.profilePicture) && role == user.role && Objects.equals(lists, user.lists) && Objects.equals(comments, user.comments) && Objects.equals(review_ids, user.review_ids) && Objects.equals(likes, user.likes);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), username, password, firstName, lastName, email, bio, profilePicture, role, lists, comments, reviews, likes);
+        return Objects.hash(super.hashCode(), username, password, firstName, lastName, email, bio, profilePicture, role, lists, comments, review_ids, likes);
     }
 }

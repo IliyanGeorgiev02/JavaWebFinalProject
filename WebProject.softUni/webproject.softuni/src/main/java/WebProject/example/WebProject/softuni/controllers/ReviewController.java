@@ -1,13 +1,14 @@
 package webproject.example.webproject.softuni.controllers;
 
 import jakarta.transaction.Transactional;
+import org.modelmapper.ModelMapper;
+import webproject.example.webproject.softuni.clients.ReviewClient;
 import webproject.example.webproject.softuni.dtos.*;
 import webproject.example.webproject.softuni.model.*;
 import webproject.example.webproject.softuni.model.enums.UserRoleEnum;
 import webproject.example.webproject.softuni.services.*;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
-import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -16,8 +17,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.LocalDate;
 import java.time.Year;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,21 +26,21 @@ import java.util.Optional;
 public class ReviewController {
     private final OmdbService omdbService;
     private static final Logger logger = LoggerFactory.getLogger(MovieController.class);
-    private final ReviewService reviewService;
-    private final UserService userService;
     private final MovieService movieService;
-    private final ModelMapper modelMapper;
     private final UserHelperService userHelperService;
     private final CommentsService commentsService;
+    private final ReviewClient reviewClient;
+    private final UserService userService;
+    private final ModelMapper modelMapper;
 
-    public ReviewController(OmdbService omdbService, ReviewService reviewService, UserService userService, MovieService movieService, ModelMapper modelMapper, UserHelperService userHelperService, CommentsService commentsService) {
+    public ReviewController(OmdbService omdbService, MovieService movieService, UserHelperService userHelperService, CommentsService commentsService, ReviewClient reviewClient, UserService userService, ModelMapper modelMapper) {
         this.omdbService = omdbService;
-        this.reviewService = reviewService;
-        this.userService = userService;
         this.movieService = movieService;
-        this.modelMapper = modelMapper;
         this.userHelperService = userHelperService;
         this.commentsService = commentsService;
+        this.reviewClient = reviewClient;
+        this.userService = userService;
+        this.modelMapper = modelMapper;
     }
 
     @PostMapping("/AddReview")
@@ -47,24 +48,24 @@ public class ReviewController {
                                 @RequestParam("year") String year,
                                 HttpSession httpSession,
                                 RedirectAttributes redirectAttributes) {
-        Optional<Movie> movieOpt = this.movieService.findMovieByTitleAndYear(title, Year.parse(year));
 
-        if (movieOpt.isPresent()) {
-            Movie movie = movieOpt.get();
-            User user = this.userHelperService.getUser();
-            boolean hasReviewed = user.getReviews().stream()
-                    .anyMatch(review -> review.getMovie().getImdbId().equals(movie.getImdbId()));
 
-            if (hasReviewed) {
-                redirectAttributes.addFlashAttribute("errorMessage", "You have already reviewed this movie.");
-                return "redirect:/ListOfMovies";
-            }
+        User user = this.userHelperService.getUser();
+
+        List<ReviewFullInfoDto> userReviews = reviewClient.getReviewsByUserId(user.getId());
+        boolean hasReviewed = userReviews.stream()
+                .anyMatch(review -> review.getMovieTitle().equals(title) && Year.parse(review.getMovieRelease().substring(0, 4)).equals(Year.parse(year)));
+
+        if (hasReviewed) {
+            redirectAttributes.addFlashAttribute("errorMessage", "You have already reviewed this movie.");
+            return "redirect:/ListOfMovies";
         }
+
         AddReviewDto addReviewDto = new AddReviewDto();
         addReviewDto.setMovieTitle(title);
         addReviewDto.setMovieYear(year);
+        addReviewDto.setUserId(user.getId());
         httpSession.setAttribute("reviewDetails", addReviewDto);
-
         return "redirect:/AddReview";
     }
 
@@ -84,6 +85,7 @@ public class ReviewController {
         return "AddReview";
     }
 
+    @Transactional
     @PostMapping("/Review")
     public String postReview(@Valid @ModelAttribute("reviewDetails") AddReviewDto addReviewDto,
                              BindingResult bindingResult,
@@ -95,6 +97,7 @@ public class ReviewController {
             return "redirect:/AddReview";
         }
 
+        // Step 1: Find or map the movie from external service
         MovieFullInfoDto movieFullInfoDto = this.omdbService.searchByTitleAndYear(addReviewDto.getMovieTitle(), addReviewDto.getMovieYear());
         Movie mappedMovie = this.movieService.mapMovie(movieFullInfoDto);
 
@@ -106,26 +109,44 @@ public class ReviewController {
         }
 
         Movie movieToUse = existingMovie.get();
+        addReviewDto.setUserId(this.userHelperService.getUser().getId());
+        ReviewFullInfoDto reviewFullInfoDto = this.modelMapper.map(addReviewDto, ReviewFullInfoDto.class);
+        reviewFullInfoDto.setMovieRelease(String.valueOf(movieToUse.getReleased()));
+        reviewFullInfoDto.setPosterUrl(movieToUse.getPosterUrl());
+        reviewFullInfoDto.setDirector(movieToUse.getDirector());
+        reviewFullInfoDto.setUsername(this.userHelperService.getUser().getUsername());
+        reviewFullInfoDto.setMovieId(movieToUse.getId());
+        // Step 2: Create the Review using the ReviewClient (instead of directly using reviewService)
+        try {
+            ReviewFullInfoDto createdReview = this.reviewClient.createReview(reviewFullInfoDto);  // This sends the review to the Review API
+            movieToUse.getReviewsIds().add(createdReview.getId());
+            this.movieService.saveMovie(movieToUse);
+            this.userHelperService.getUser().getReview_ids().add(createdReview.getId());
+            this.userService.saveUser(userHelperService.getUser());
+            this.movieService.saveMovie(mappedMovie);
+            // Step 3: Redirect to the newly created review's page using the ID from the response
+            redirectAttributes.addFlashAttribute("reviewData", createdReview);
+            return "redirect:/Review/" + createdReview.getId();
 
-        Review review = this.reviewService.mapReview(addReviewDto, movieToUse);
-        this.reviewService.saveReview(review);
-
-        redirectAttributes.addFlashAttribute("reviewData", review);
-        return "redirect:/Review/" + review.getId();
+        } catch (Exception e) {
+            // Step 4: Handle errors appropriately
+            redirectAttributes.addFlashAttribute("message", "An error occurred while posting the review: " + e.getMessage());
+            return "redirect:/AddReview";
+        }
     }
+
 
     @Transactional
     @GetMapping("/Review/{id}")
     public String getReview(@PathVariable("id") Long reviewId, Model model) {
-        Optional<Review> review = this.reviewService.findReviewById(reviewId);
+        Optional<ReviewFullInfoDto> reviewById = this.reviewClient.getReviewById(reviewId);
         User user = this.userHelperService.getUser();
-        if (review.isPresent()) {
-            Review reviewData = review.get();
+        if (reviewById.isPresent()) {
+            ReviewFullInfoDto reviewFullInfoDto = reviewById.get();
             boolean isAdmin = user.getRole().equals(UserRoleEnum.ADMIN);
-            ReviewFullInfoDto mappedReview = this.reviewService.mapReviewData(reviewData);
-            List<Comment> reviewComments = this.commentsService.findByReviewId(reviewData.getId());
+            List<Comment> reviewComments = this.commentsService.findByReviewId(reviewFullInfoDto.getId());
             ListOfCommentsDto commentsData = this.commentsService.mapCommentsToListOfCommentsDto(reviewComments);
-            model.addAttribute("reviewData", mappedReview);
+            model.addAttribute("reviewData", reviewFullInfoDto);
             model.addAttribute("userHasRoleAdmin", isAdmin);
             model.addAttribute("addCommentDto", new AddCommentDto());
             model.addAttribute("commentsData", commentsData);
@@ -139,15 +160,13 @@ public class ReviewController {
 
     @DeleteMapping("/Review/{id}")
     public String deleteReview(@PathVariable Long id) {
-        Optional<Review> review = this.reviewService.findReviewById(id);
-        review.ifPresent(reviewService::deleteReview);
+        this.reviewClient.deleteReview(id);
         return "redirect:/Reviews";
     }
 
-
     @GetMapping("/EditReview/{id}")
     public String getEditReview(@PathVariable("id") Long reviewId, Model model) {
-        Optional<Review> review = this.reviewService.findReviewById(reviewId);
+        Optional<ReviewFullInfoDto> review = this.reviewClient.getReviewById(reviewId);
         if (review.isPresent()) {
             model.addAttribute("reviewData", review.get());
             model.addAttribute("newReviewData", new EditReviewDto());
@@ -162,21 +181,25 @@ public class ReviewController {
                              @Valid @ModelAttribute("newReviewData") EditReviewDto newReviewData,
                              BindingResult bindingResult,
                              RedirectAttributes redirectAttributes) {
-        Review existingReview = reviewService.findReviewById(reviewId).orElseThrow(() -> new RuntimeException("Review not found"));
+        Optional<ReviewFullInfoDto> existingReview = reviewClient.getReviewById(reviewId);
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("newReviewData", newReviewData);
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.newReviewData", bindingResult);
             return "redirect:/EditReview/" + reviewId;
         }
-        reviewService.updateReview(newReviewData, existingReview);
+        if (existingReview.isPresent()) {
+            ReviewFullInfoDto reviewFullInfoDto = existingReview.get();
+            reviewClient.updateReview(newReviewData, reviewFullInfoDto);
+        }
         return "redirect:/Review/" + reviewId;
     }
+
 
     @Transactional
     @GetMapping("/Reviews")
     public String getReviews(Model model) {
-        List<Review> allReviews = this.reviewService.findALLReviews();
-        ReviewListDto reviewListDto = this.reviewService.mapReviewsToDto(allReviews);
+        List<ReviewFullInfoDto> allReviews = this.reviewClient.getALLReviews();
+        ReviewListDto reviewListDto = this.reviewClient.mapReviewsToDto(allReviews);
         model.addAttribute("ReviewsData", reviewListDto);
         return "Reviews";
     }
@@ -184,8 +207,10 @@ public class ReviewController {
     @Transactional
     @GetMapping("/Reviews/{username}")
     public String getReviewsByUsername(@PathVariable("username") String username, Model model) {
-        List<Review> allReviewsByUsername = this.userService.findAllReviewsByUser(username);
-        ReviewListDto reviewListDto = this.reviewService.mapReviewsToDto(allReviewsByUsername);
+        Optional<User> userByUsername = this.userService.findUserByUsername(username);
+        User user = userByUsername.get();
+        List<ReviewFullInfoDto> allReviewsByUsername = this.reviewClient.getReviewsByUserId(user.getId());
+        ReviewListDto reviewListDto = this.reviewClient.mapReviewsToDto(allReviewsByUsername);
         model.addAttribute("ReviewsData", reviewListDto);
         return "Reviews";
     }
@@ -193,42 +218,28 @@ public class ReviewController {
     @Transactional
     @PostMapping("Review/{reviewId}/like")
     public String likeReview(@PathVariable("reviewId") Long reviewId) {
-        this.reviewService.likeReview(reviewId,userHelperService.getUser());
+        this.reviewClient.likeReview(reviewId, userHelperService.getUser().getId());
         return "redirect:/Review/" + reviewId;
     }
 
     @Transactional
     @PostMapping("Review/{reviewId}/dislike")
     public String dislikeReview(@PathVariable("reviewId") Long reviewId) {
-        this.reviewService.dislikeReview(reviewId,userHelperService.getUser());
+        this.reviewClient.dislikeReview(reviewId, userHelperService.getUser().getId());
         return "redirect:/Review/" + reviewId;
     }
 
     @Transactional
     @PostMapping("Home/Review/{reviewId}/like")
     public String likeHomeReview(@PathVariable("reviewId") Long reviewId) {
-        this.reviewService.likeReview(reviewId,userHelperService.getUser());
-        return "redirect:/home";
-    }
-    @Transactional
-    @PostMapping("Home/Review/{reviewId}/dislike")
-    public String dislikeHomeReview(@PathVariable("reviewId") Long reviewId) {
-        this.reviewService.dislikeReview(reviewId,userHelperService.getUser());
+        this.reviewClient.likeReview(reviewId, userHelperService.getUser().getId());
         return "redirect:/home";
     }
 
-    @PostMapping("/Review/{reviewId}")
-    public String postComment(@ModelAttribute("addCommentDto") AddCommentDto addCommentDto, @PathVariable("reviewId") long id) {
-        Optional<Review> reviewById = this.reviewService.findReviewById(id);
-        if (reviewById.isEmpty()) {
-            return "redirect:/home";
-        }
-        Review review = reviewById.get();
-        Comment mappedComment = this.modelMapper.map(addCommentDto, Comment.class);
-        mappedComment.setLikes(new HashSet<>());
-        mappedComment.setReview(review);
-        mappedComment.setUser(userHelperService.getUser());
-        this.commentsService.addComment(mappedComment);
-        return "redirect:/Review/" + id;
+    @Transactional
+    @PostMapping("Home/Review/{reviewId}/dislike")
+    public String dislikeHomeReview(@PathVariable("reviewId") Long reviewId) {
+        this.reviewClient.dislikeReview(reviewId, userHelperService.getUser().getId());
+        return "redirect:/home";
     }
 }

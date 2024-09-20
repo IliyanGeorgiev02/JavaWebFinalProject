@@ -15,6 +15,15 @@ public class AddReviewDto {
     private String movieTitle;
     @NotBlank
     private String movieYear;
+    private long userId ;
+
+    public long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(long userId) {
+        this.userId = userId;
+    }
 
     public String getMovieTitle() {
         return movieTitle;

@@ -5,6 +5,7 @@ public class ReviewFullInfoDto {
     private long id;
     private String movieTitle;
     private String movieRelease;
+    private String director;
     private String reviewTitle;
     private String reviewText;
     private int rating;
@@ -12,6 +13,23 @@ public class ReviewFullInfoDto {
     private String username;
     private String posterUrl;
     private long userId;
+    private long movieId;
+
+    public String getDirector() {
+        return director;
+    }
+
+    public void setDirector(String director) {
+        this.director = director;
+    }
+
+    public long getMovieId() {
+        return movieId;
+    }
+
+    public void setMovieId(long movieId) {
+        this.movieId = movieId;
+    }
 
     public long getUserId() {
         return userId;

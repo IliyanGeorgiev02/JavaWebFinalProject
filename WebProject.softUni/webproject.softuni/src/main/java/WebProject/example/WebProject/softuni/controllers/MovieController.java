@@ -1,12 +1,12 @@
 package webproject.example.webproject.softuni.controllers;
 
+import webproject.example.webproject.softuni.clients.ReviewClient;
 import webproject.example.webproject.softuni.dtos.ListOfMoviesDto;
 import webproject.example.webproject.softuni.dtos.MovieFullInfoDto;
+import webproject.example.webproject.softuni.dtos.ReviewFullInfoDto;
 import webproject.example.webproject.softuni.dtos.ReviewListDto;
 import webproject.example.webproject.softuni.model.Movie;
-import webproject.example.webproject.softuni.model.Review;
 import webproject.example.webproject.softuni.services.MovieService;
-import webproject.example.webproject.softuni.services.ReviewService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,15 +21,13 @@ import java.util.Optional;
 @Controller
 public class MovieController {
     private final MovieService movieService;
-    private final ReviewService reviewService;
-    private final ModelMapper modelMapper;
     private final UserHelperService userHelperService;
+    private final ReviewClient reviewClient;
 
-    public MovieController(MovieService movieService, ReviewService reviewService, ModelMapper modelMapper, UserHelperService userHelperService) {
+    public MovieController(MovieService movieService, UserHelperService userHelperService, ReviewClient reviewClient) {
         this.movieService = movieService;
-        this.reviewService = reviewService;
-        this.modelMapper = modelMapper;
         this.userHelperService = userHelperService;
+        this.reviewClient = reviewClient;
     }
 
     @GetMapping("/Movie/{id}")
@@ -38,8 +36,8 @@ public class MovieController {
         if (movieById.isPresent()) {
             Movie movie = movieById.get();
             MovieFullInfoDto mappedMovie = this.movieService.mapMovieShortInfo(movie);
-            List<Review> allReviewsByMovieId = this.reviewService.findALLReviewsByMovieId(id);
-            ReviewListDto reviewsData = this.reviewService.mapReviewsToDto(allReviewsByMovieId);
+            List<ReviewFullInfoDto> allReviewsByMovieId = this.reviewClient.findALLReviewsByMovieId(id);
+            ReviewListDto reviewsData = this.reviewClient.mapReviewsToDto(allReviewsByMovieId);
             model.addAttribute("movieData", mappedMovie);
             model.addAttribute("reviewsData", reviewsData);
             return "Movie";
@@ -58,13 +56,13 @@ public class MovieController {
 
     @PostMapping("Review/{reviewId}/{movieId}/like")
     public String likeHomeReview(@PathVariable("reviewId") Long reviewId, @PathVariable("movieId") Long movieId) {
-        this.reviewService.likeReview(reviewId,userHelperService.getUser());
+        this.reviewClient.likeReview(reviewId,userHelperService.getUser().getId());
         return "redirect:/Movie/" + movieId;
     }
 
     @PostMapping("Review/{reviewId}/{movieId}/dislike")
     public String dislikeHomeReview(@PathVariable("reviewId") Long reviewId, @PathVariable("movieId") Long movieId) {
-        this.reviewService.dislikeReview(reviewId,userHelperService.getUser());
+        this.reviewClient.dislikeReview(reviewId,userHelperService.getUser().getId());
         return "redirect:/Movie/" + movieId;
     }
 }

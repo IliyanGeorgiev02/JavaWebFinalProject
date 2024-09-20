@@ -12,9 +12,8 @@ public class Comment extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
-    @ManyToOne
-    @JoinColumn(name = "review_id", referencedColumnName = "id")
-    private Review review;
+    @Column(name = "review_id")
+    private long reviewId;
     @ManyToOne
     @JoinColumn(name = "custom_list_id", referencedColumnName = "id")
     private CustomList customList;
@@ -37,14 +36,13 @@ public class Comment extends BaseEntity {
         this.customList = customList;
     }
 
-    public Review getReview() {
-        return review;
+    public long getReviewId() {
+        return reviewId;
     }
 
-    public void setReview(Review review) {
-        this.review = review;
+    public void setReviewId(long reviewId) {
+        this.reviewId = reviewId;
     }
-
 
     public String getText() {
         return text;

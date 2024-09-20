@@ -1,12 +1,11 @@
 package webproject.example.webproject.softuni.controllers;
 
 import jakarta.transaction.Transactional;
+import webproject.example.webproject.softuni.clients.ReviewClient;
 import webproject.example.webproject.softuni.dtos.*;
 import webproject.example.webproject.softuni.model.CustomList;
-import webproject.example.webproject.softuni.model.Review;
 import webproject.example.webproject.softuni.model.User;
 import webproject.example.webproject.softuni.services.ListService;
-import webproject.example.webproject.softuni.services.ReviewService;
 import webproject.example.webproject.softuni.services.UserHelperService;
 import webproject.example.webproject.softuni.services.UserService;
 import jakarta.validation.Valid;
@@ -29,14 +28,14 @@ public class UserController {
     private final UserHelperService userHelperService;
     private final ModelMapper modelMapper;
     private final ListService listService;
-    private final ReviewService reviewService;
+    private final ReviewClient reviewClient;
 
-    public UserController(UserService userService, UserHelperService userHelperService, ModelMapper modelMapper, ListService listService, ReviewService reviewService) {
+    public UserController(UserService userService, UserHelperService userHelperService, ModelMapper modelMapper, ListService listService, ReviewClient reviewClient) {
         this.userService = userService;
         this.userHelperService = userHelperService;
         this.modelMapper = modelMapper;
         this.listService = listService;
-        this.reviewService = reviewService;
+        this.reviewClient = reviewClient;
     }
 
     @GetMapping("/login")
@@ -106,8 +105,8 @@ public class UserController {
             User user = userById.get();
             DisplayUserDto mappedUser = this.modelMapper.map(user, DisplayUserDto.class);
             List<CustomList> listsByUser = this.listService.findListsByUser(user.getId());
-            List<Review> reviews = this.reviewService.findALLReviewsByUser(user.getId());
-            DisplayReviewDto mappedReviews = this.reviewService.mapReviewsToDisplayReviewDto(reviews);
+            List<ReviewFullInfoDto> reviews = this.reviewClient.getReviewsByUserId(user.getId());
+            DisplayReviewDto mappedReviews = this.reviewClient.mapReviewsToDisplayReviewDto(reviews);
             ListDto mappedLists = this.listService.mapCustomListsToListDto(listsByUser);
             model.addAttribute("userData", mappedUser);
             model.addAttribute("reviewsData", mappedReviews);

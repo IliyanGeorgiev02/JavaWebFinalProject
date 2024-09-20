@@ -12,7 +12,6 @@ public class MovieReviewInfoDto {
     private String reviewRating;
     private String reviewText;
 
-    //     new MovieReviewInfoDto("Movie Title", "Director", "posterUrl", "Review Title", "5")
 
 
     public MovieReviewInfoDto() {

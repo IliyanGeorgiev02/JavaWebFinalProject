@@ -20,12 +20,10 @@ public class ListService {
     private final ModelMapper modelMapper;
     private final CustomListRepository customListRepository;
     private final UserHelperService userHelperService;
-    private final LikeService likeService;
-    public ListService(ModelMapper modelMapper, CustomListRepository customListRepository, UserHelperService userHelperService, LikeService likeService) {
+    public ListService(ModelMapper modelMapper, CustomListRepository customListRepository, UserHelperService userHelperService) {
         this.modelMapper = modelMapper;
         this.customListRepository = customListRepository;
         this.userHelperService = userHelperService;
-        this.likeService = likeService;
     }
 
     public CustomList addList(CreateListDto listDto) {

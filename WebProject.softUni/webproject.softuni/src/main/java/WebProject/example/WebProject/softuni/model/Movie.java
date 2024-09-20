@@ -4,9 +4,7 @@ import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.time.Year;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
 @Table(name = "movies")
@@ -37,14 +35,15 @@ public class Movie extends BaseEntity {
     private String boxOffice;
     private String production;
     private String website;
-    @ManyToMany(mappedBy = "movies",fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "movies", fetch = FetchType.EAGER)
     private List<CustomList> customLists;
-    @OneToMany(mappedBy = "movie", fetch = FetchType.EAGER)
-    private List<Review> reviews;
+    @ElementCollection
+    @Column(name = "review_id")
+    private Set<Long> reviewsIds;
 
     public Movie() {
         this.customLists = new ArrayList<>();
-        this.reviews = new ArrayList<>();
+        this.reviewsIds = new HashSet<>();
     }
 
     public LocalDate getReleased() {
@@ -217,12 +216,12 @@ public class Movie extends BaseEntity {
         this.customLists = customLists;
     }
 
-    public List<Review> getReviews() {
-        return reviews;
+    public Set<Long> getReviewsIds() {
+        return reviewsIds;
     }
 
-    public void setReviews(List<Review> reviews) {
-        this.reviews = reviews;
+    public void setReviewsIds(Set<Long> reviewsIds) {
+        this.reviewsIds = reviewsIds;
     }
 
     @Override

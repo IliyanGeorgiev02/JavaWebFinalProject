@@ -1,9 +1,6 @@
 package webproject.example.webproject.softuni.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.util.Objects;
 
@@ -14,9 +11,8 @@ public class Like extends BaseEntity {
     @ManyToOne()
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User liked;
-    @ManyToOne
-    @JoinColumn(name = "review_id", referencedColumnName = "id")
-    private Review review;
+    @Column(name = "review_id")
+    private Long reviewId;
     @ManyToOne
     @JoinColumn(name = "customList_id", referencedColumnName = "id")
     private CustomList customList;
@@ -46,12 +42,12 @@ public class Like extends BaseEntity {
         return Objects.hash(super.hashCode(), liked);
     }
 
-    public Review getReview() {
-        return review;
+    public Long getReviewId() {
+        return reviewId;
     }
 
-    public void setReview(Review review) {
-        this.review = review;
+    public void setReviewId(Long reviewId) {
+        this.reviewId = reviewId;
     }
 
     public CustomList getCustomList() {

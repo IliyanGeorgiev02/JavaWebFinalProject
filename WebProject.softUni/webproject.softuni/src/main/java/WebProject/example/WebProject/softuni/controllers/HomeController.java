@@ -1,16 +1,12 @@
 package webproject.example.webproject.softuni.controllers;
 
 import jakarta.transaction.Transactional;
-import webproject.example.webproject.softuni.dtos.ListDto;
-import webproject.example.webproject.softuni.dtos.ListOfMoviesDto;
-import webproject.example.webproject.softuni.dtos.MovieFullInfoDto;
-import webproject.example.webproject.softuni.dtos.ReviewListDto;
+import webproject.example.webproject.softuni.clients.ReviewClient;
+import webproject.example.webproject.softuni.dtos.*;
 import webproject.example.webproject.softuni.model.CustomList;
 import webproject.example.webproject.softuni.model.Movie;
-import webproject.example.webproject.softuni.model.Review;
 import webproject.example.webproject.softuni.services.ListService;
 import webproject.example.webproject.softuni.services.MovieService;
-import webproject.example.webproject.softuni.services.ReviewService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,13 +18,14 @@ import java.util.List;
 public class HomeController {
     private final MovieService movieService;
     private final ListService listService;
-    private final ReviewService reviewService;
+    private final ReviewClient reviewClient;
 
-    public HomeController(MovieService movieService, ListService listService, ReviewService reviewService) {
+    public HomeController(MovieService movieService, ListService listService, ReviewClient reviewClient) {
         this.movieService = movieService;
         this.listService = listService;
-        this.reviewService = reviewService;
+        this.reviewClient = reviewClient;
     }
+
     @Transactional
     @GetMapping("/home")
     public String getHome(Model model) {
@@ -39,19 +36,22 @@ public class HomeController {
                 .toList();
         ListDto listDto = this.listService.mapCustomListsToListDto(sortedLists);
         model.addAttribute("listData", listDto);
-        List<Review> allReviews = reviewService.findALLReviews();
-        List<Review> sortedReviews = allReviews.stream()
-                .sorted(Comparator.comparing(Review::getLikesCount).reversed())
+
+        List<ReviewFullInfoDto> allReviews = reviewClient.getALLReviews();
+        List<ReviewFullInfoDto> sortedReviews = allReviews.stream()
+                .sorted(Comparator.comparing(ReviewFullInfoDto::getLikes).reversed())
                 .limit(4)
                 .toList();
-        ReviewListDto reviewListDto = this.reviewService.mapReviewsToDto(sortedReviews);
+        ReviewListDto reviewListDto = this.reviewClient.mapReviewsToDto(sortedReviews);
         model.addAttribute("reviewsData", reviewListDto);
+
         List<Movie> allMovies = this.movieService.findAllMovies();
-        allMovies.sort(Comparator.comparingInt((Movie m) -> m.getReviews().size())
+        allMovies.sort(Comparator.comparingInt((Movie m) -> m.getReviewsIds().size())
                 .thenComparingInt(m -> m.getCustomLists().size())
                 .reversed());
         ListOfMoviesDto listOfMoviesDto = this.movieService.mapMoviesToDto(allMovies);
         model.addAttribute("moviesData", listOfMoviesDto);
+
         Movie randomMovie = movieService.getSelectedMovie();
         if (randomMovie != null) {
             MovieFullInfoDto recommended = this.movieService.mapMovieShortInfo(randomMovie);
@@ -59,6 +59,8 @@ public class HomeController {
         } else {
             model.addAttribute("recommendation", null);
         }
+
         return "home";
     }
+
 }
