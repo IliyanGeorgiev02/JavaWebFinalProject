@@ -59,7 +59,7 @@
         <h3>Add a comment</h3>
         <hr>
     </div>
-    <form th:object="${addCommentDto}" th:method="post" th:action="@{/Review/{id}(id=${reviewData.id})}" id="form">
+    <form th:object="${addCommentDto}" th:method="post" th:action="@{/Review/AddComment/{id}(id=${reviewData.id})}" id="form">
         <div id="addComment">
             <input type="text" placeholder="Add a comment" th:field="*{text}"/>
             <button type="submit">Add comment</button>

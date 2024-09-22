@@ -4,12 +4,16 @@ import jakarta.transaction.Transactional;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientResponseException;
 import webproject.example.webproject.softuni.dtos.*;
+import webproject.example.webproject.softuni.model.Comment;
+import webproject.example.webproject.softuni.model.User;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -139,5 +143,16 @@ public class ReviewClient {
         return reviewListDto;
     }
 
+    public boolean postComment(Long reviewId, Long commentId) {
+        String url = reviewServiceUrl + "/review/comment/" + reviewId + "/" + commentId;
+
+        Boolean result = this.restClient.post()
+                .uri(url)
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .body(Boolean.class);
+
+        return result != null && result;
+    }
 
 }

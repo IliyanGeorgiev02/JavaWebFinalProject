@@ -21,7 +21,7 @@
             <input type="hidden" name="_method" value="PUT">
             <input type="hidden" name="reviewId" th:value="${reviewData.id}">
 
-            <h1 th:text="${reviewData.movie.title}"></h1>
+            <h1 th:text="${reviewData.movieTitle}"></h1>
 
             <label for="reviewTitle">Review title:</label>
             <input type="text" name="reviewTitle" id="reviewTitle" th:field="*{reviewTitle}"

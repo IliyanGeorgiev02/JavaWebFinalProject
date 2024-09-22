@@ -34,8 +34,8 @@ public class CommentsService {
         this.userHelperService = userHelperService;
     }
 
-    public void addComment(Comment mappedComment) {
-        this.commentRepository.saveAndFlush(mappedComment);
+    public Comment addComment(Comment mappedComment) {
+       return this.commentRepository.saveAndFlush(mappedComment);
     }
 
 
@@ -118,17 +118,5 @@ public class CommentsService {
         byId.ifPresent(this.commentRepository::delete);
     }
 
-    @PostMapping("/Review/{reviewId}")
-    public String postComment(@ModelAttribute("addCommentDto") AddCommentDto addCommentDto, @PathVariable("reviewId") long id) {
-        Optional<ReviewFullInfoDto> reviewById = this.reviewClient.getReviewById(id);
-        if (reviewById.isEmpty()) {
-            return "redirect:/home";
-        }
-        Comment mappedComment = this.modelMapper.map(addCommentDto, Comment.class);
-        mappedComment.setLikes(new HashSet<>());
-        mappedComment.setReviewId(id);
-        mappedComment.setUser(userHelperService.getUser());
-        addComment(mappedComment);
-        return "redirect:/Review/" + id;
-    }
+
 }
