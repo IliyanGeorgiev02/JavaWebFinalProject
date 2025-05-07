@@ -29,7 +29,7 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user")
     private List<Comment> comments;
     @Column
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private Set<Long> review_ids;
     @OneToMany(mappedBy = "liked")
     private Set<Like> likes;

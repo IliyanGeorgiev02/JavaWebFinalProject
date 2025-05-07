@@ -33,7 +33,6 @@ public class ReviewClient {
         });
     }
 
-    @Transactional
     public ReviewFullInfoDto createReview(ReviewFullInfoDto reviewFullInfoDto) {
         String url = reviewServiceUrl + "/review/save";
         return restClient.post().uri(url).accept(MediaType.APPLICATION_JSON).body(reviewFullInfoDto).retrieve().body(ReviewFullInfoDto.class);

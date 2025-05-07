@@ -37,7 +37,7 @@ public class Movie extends BaseEntity {
     private String website;
     @ManyToMany(mappedBy = "movies", fetch = FetchType.EAGER)
     private List<CustomList> customLists;
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @Column(name = "review_id")
     private Set<Long> reviewsIds;
 

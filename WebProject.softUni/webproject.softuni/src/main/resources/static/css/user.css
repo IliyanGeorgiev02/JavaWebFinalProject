@@ -135,7 +135,6 @@ border-radius:10px;
   }
 #trendingLists {
   display: flex;
-  align-items: center;
   justify-content: space-evenly;
 }
 .movie-grid {
@@ -149,9 +148,9 @@ border-radius:10px;
 
 .movie-grid img {
     width: 100%;
-    height: auto;
-     border: 2px solid black;
-      border-radius: 10px;
+    height: 150px;
+    border: 2px solid black;
+    border-radius: 10px;
 }
 .listContents>img{
  border: 2px solid black;

@@ -12,12 +12,10 @@ body {
 }
 
 #lists {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  flex-direction:column;
-  margin: 0 auto;h
+  display: grid;
+  grid-template-columns: repeat(4, 300px);
+  gap: 50px;
+  margin: 0 auto;
 }
 
 #frame > img {
@@ -73,4 +71,9 @@ body {
 #poster{
 border:1px solid black;
 border-radius:10px;
+}
+#mainBody {
+  display: flex;
+  justify-content: center;
+  padding: 40px 20px;
 }

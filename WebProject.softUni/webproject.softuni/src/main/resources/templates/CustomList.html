@@ -34,7 +34,8 @@
                         <a th:href="@{/Movie/{id}(id=${movie.id})}">
                             <img th:src="${movie.posterUrl}" alt="movie poster"/>
                         </a>
-                        <h5 th:text="${movie.title}">Title</h5>
+                        <h5 th:text="${movie.title}"></h5>
+                        <h5 th:text="${movie.year}"></h5>
                         <form th:if="${userHasRoleAdmin or listData.username == currentUsername}"
                               th:action="@{/CustomList/Movie/Remove/{id}/{movieIndex}(id=${listData.id}, movieIndex=${iterStat.index})}"
                               th:method="post">

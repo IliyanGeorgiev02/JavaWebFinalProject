@@ -17,7 +17,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.time.LocalDate;
 import java.time.Year;
 import java.util.List;
 import java.util.Optional;
@@ -32,8 +31,9 @@ public class ReviewController {
     private final ReviewClient reviewClient;
     private final UserService userService;
     private final ModelMapper modelMapper;
+    private final MovieController movieController;
 
-    public ReviewController(OmdbService omdbService, MovieService movieService, UserHelperService userHelperService, CommentsService commentsService, ReviewClient reviewClient, UserService userService, ModelMapper modelMapper) {
+    public ReviewController(OmdbService omdbService, MovieService movieService, UserHelperService userHelperService, CommentsService commentsService, ReviewClient reviewClient, UserService userService, ModelMapper modelMapper, MovieController movieController) {
         this.omdbService = omdbService;
         this.movieService = movieService;
         this.userHelperService = userHelperService;
@@ -41,6 +41,7 @@ public class ReviewController {
         this.reviewClient = reviewClient;
         this.userService = userService;
         this.modelMapper = modelMapper;
+        this.movieController = movieController;
     }
 
     @PostMapping("/AddReview")
@@ -85,7 +86,6 @@ public class ReviewController {
         return "AddReview";
     }
 
-    @Transactional
     @PostMapping("/Review")
     public String postReview(@Valid @ModelAttribute("reviewDetails") AddReviewDto addReviewDto,
                              BindingResult bindingResult,
@@ -123,7 +123,6 @@ public class ReviewController {
             this.movieService.saveMovie(movieToUse);
             this.userHelperService.getUser().getReview_ids().add(createdReview.getId());
             this.userService.saveUser(userHelperService.getUser());
-            this.movieService.saveMovie(mappedMovie);
             // Step 3: Redirect to the newly created review's page using the ID from the response
             redirectAttributes.addFlashAttribute("reviewData", createdReview);
             return "redirect:/Review/" + createdReview.getId();

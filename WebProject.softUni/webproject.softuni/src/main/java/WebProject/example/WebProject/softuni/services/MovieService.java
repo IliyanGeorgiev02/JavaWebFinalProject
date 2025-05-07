@@ -1,8 +1,11 @@
 package webproject.example.webproject.softuni.services;
 
+import jakarta.transaction.Transactional;
 import webproject.example.webproject.softuni.dtos.ListOfMoviesDto;
 import webproject.example.webproject.softuni.dtos.MovieFullInfoDto;
+import webproject.example.webproject.softuni.dtos.ReviewFullInfoDto;
 import webproject.example.webproject.softuni.model.Movie;
+import webproject.example.webproject.softuni.model.User;
 import webproject.example.webproject.softuni.repositories.MovieRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -23,11 +26,12 @@ public class MovieService {
     private final ModelMapper modelMapper;
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy", Locale.ENGLISH);
     private final Map<String, Movie> movieCache = new ConcurrentHashMap<>();
+    private final UserService userService;
 
-
-    public MovieService(MovieRepository movieRepository, ModelMapper modelMapper) {
+    public MovieService(MovieRepository movieRepository, ModelMapper modelMapper, UserService userService) {
         this.movieRepository = movieRepository;
         this.modelMapper = modelMapper;
+        this.userService = userService;
     }
 
     public Movie saveMovie(Movie mappedMovie) {
@@ -107,5 +111,14 @@ public class MovieService {
     public String findByReviewId(Long reviewId) {
         Movie byReviewId = movieRepository.findByReviewId(reviewId);
         return byReviewId.getTitle() + "," + byReviewId.getReleased() + "," + byReviewId.getPosterUrl()+","+byReviewId.getId();
+    }
+
+    @Transactional
+    public void handleLocalUpdates(Movie movie, ReviewFullInfoDto createdReview, User user, Movie mappedMovie) {
+        movie.getReviewsIds().add(createdReview.getId());
+        user.getReview_ids().add(createdReview.getId());
+        this.movieRepository.saveAndFlush(movie);
+        this.userService.saveUser(user);
+        this.movieRepository.saveAndFlush(mappedMovie);
     }
 }

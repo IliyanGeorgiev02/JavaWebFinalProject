@@ -205,4 +205,11 @@ public class ListController {
         return "redirect:/CustomList/" + listId;
     }
 
+    @Transactional
+    @GetMapping("/Lists/{username}")
+    public String getListsByUsername(Model model,@PathVariable("username") String username) {
+        List<CustomList> listsByUsername = this.listService.findListByUsername(username);
+
+        return "lists";
+    }
 }

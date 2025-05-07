@@ -1,7 +1,9 @@
 package webproject.example.webproject.softuni.config.cloudinary;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
+@Component
 @ConfigurationProperties(prefix="cloudinary")
 public class CloudinaryConfigProperties {
     private String cloudName;

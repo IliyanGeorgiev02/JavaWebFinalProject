@@ -28,10 +28,9 @@
         <h1 id="username" th:text="${userData.username}">Username</h1>
         <h1 id="names" th:text="${userData.firstName} + ' ' + ${userData.lastName}">Full Name</h1>
         <h3 id="bio" th:text="${userData.bio}">Bio</h3>
-
+        <h3>Lists</h3>
+        <hr/>
         <div class="movieLists" th:if="${listsData.lists != null and listsData.lists.size() > 0}">
-            <h3>Lists</h3>
-            <hr/>
             <div id="trendingLists">
                 <div class="listBox" th:each="list, iter : ${listsData.lists}" th:if="${iter.index < 4}">
                     <div class="movie-grid" th:if="${list.movies != null and list.movies.size() > 0}">
@@ -50,6 +49,12 @@
                 </div>
             </div>
         </div>
+        <div th:if="${listsData.lists  == null or listsData.lists.size() == 0}">
+            <p>User has no lists.</p>
+        </div>
+        <a th:href="@{/Lists/{username}(username=${userData.username})}">
+            <button class="viewAll">View all</button>
+        </a>
         <h3>Recently reviewed</h3>
         <hr/>
         <div class="movieList" th:if="${reviewsData.reviews != null and reviewsData.reviews.size() > 0}">
@@ -62,10 +67,14 @@
                 </div>
             </div>
         </div>
+        <div th:if="${reviewsData.reviews == null or reviewsData.reviews.size() == 0}">
+            <p>User has no reviews.</p>
+        </div>
         <a th:href="@{/Reviews/{username}(username=${userData.username})}">
             <button class="viewAll">View all</button>
         </a>
     </div>
+
 </div>
 </body>
 </html>
